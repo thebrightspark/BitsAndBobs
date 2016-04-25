@@ -1,0 +1,21 @@
+//Use '§' for text formatting
+
+//Items
+
+item.itemLifeStick.name=Life Stick
+item.itemLiftStick.name.disco=Disco Stick
+item.itemLifeStick.tooltip.1=Held hearts:
+item.itemLifeStick.tooltip.2=§2Right Click §rto heal health
+item.itemLifeStick.tooltip.3=§eShift Right Click §rto store health
+item.itemLifeStick.tooltip.disco=§6§oLet me take a ride on your disco stick
+
+//Blocks
+
+tile.fakeBeacon.name=Aesthetic Beacon
+
+//Generic
+
+tooltip.shift=Hold SHIFT for extra info
+
+//Misc
+

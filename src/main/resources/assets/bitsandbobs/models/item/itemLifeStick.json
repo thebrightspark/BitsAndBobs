@@ -1,0 +1,6 @@
+{
+	"parent": "bitsandbobs:item/itemToolDefault",
+	"textures": {
+		"layer0": "BitsAndBobs:items/itemLifeStick"
+	}
+}
