@@ -1,13 +1,17 @@
 package com.brightspark.bitsandbobs;
 
 import com.brightspark.bitsandbobs.gui.GuiHandler;
+import com.brightspark.bitsandbobs.handler.ConfigHandler;
 import com.brightspark.bitsandbobs.init.BABBlocks;
 import com.brightspark.bitsandbobs.init.BABItems;
 import com.brightspark.bitsandbobs.init.BABRecipes;
 import com.brightspark.bitsandbobs.init.BABTileEntities;
+import com.brightspark.bitsandbobs.reference.Config;
 import com.brightspark.bitsandbobs.reference.Reference;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -40,6 +44,45 @@ public class BitsAndBobs
     public void preInit(FMLPreInitializationEvent event)
     {
         //Initialize item, blocks and configs here
+
+        ConfigHandler.init(event.getSuggestedConfigurationFile());
+        MinecraftForge.EVENT_BUS.register(new ConfigHandler());
+        //Create mapping for valid healing block items with fuel values
+        for(int i = 0; i < Config.healingBlockValidFuel.length; i++)
+        {
+            String[] entry = Config.healingBlockValidFuel[i].split(",");
+            //2 values -> Item ID and fuel value
+            if(entry.length == 2)
+            {
+                Item item = Item.getByNameOrId(entry[0]);
+                if(item == null) continue;
+                int value = -1;
+                try
+                {
+                    value = Integer.parseInt(entry[1]);
+                }
+                catch(NumberFormatException e) {}
+                if(value < 1) continue;
+                Config.healingBlockValidFuelStacks.put(new ItemStack(item), value);
+            }
+            //3 values -> Item ID, Item metadata and fuel value
+            else if(entry.length == 3)
+            {
+                Item item = Item.getByNameOrId(entry[0]);
+                if(item == null) continue;
+                int meta = -1;
+                int value = -1;
+                try
+                {
+                    meta = Integer.parseInt(entry[1]);
+                    value = Integer.parseInt(entry[2]);
+                }
+                catch(NumberFormatException e) {}
+                if(meta < 0 || value < 1) continue;
+                Config.healingBlockValidFuelStacks.put(new ItemStack(item, 1, meta), value);
+            }
+        }
+        //LogHelper.info("Generated ItemStack map: (" + Config.healingBlockValidFuelStacks.size() + " values)\n" + Config.healingBlockValidFuelStacks.toString());
 
         BABItems.init();
         BABBlocks.init();

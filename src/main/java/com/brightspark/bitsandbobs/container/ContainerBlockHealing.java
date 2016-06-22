@@ -74,7 +74,7 @@ public class ContainerBlockHealing extends Container
                 slotObject.onSlotChange(stackInSlot, stack);
             }
             //If slot Inventory
-            else if (slot >= slotInvStart && slot <= slotInvStart+36 && stackInSlot.getItem().equals(TileHealing.inputItem))
+            else if (slot >= slotInvStart && slot <= slotInvStart+36 && TileHealing.isValidItem(stackInSlot))
             {
                 if (!this.mergeItemStack(stackInSlot, 0, 1, false))
                     return null;

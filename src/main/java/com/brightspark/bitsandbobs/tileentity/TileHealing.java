@@ -1,16 +1,13 @@
 package com.brightspark.bitsandbobs.tileentity;
 
+import com.brightspark.bitsandbobs.reference.Config;
 import com.brightspark.bitsandbobs.reference.Names;
 import com.brightspark.bitsandbobs.util.Common;
 import com.brightspark.bitsandbobs.util.LogHelper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -22,11 +19,6 @@ public class TileHealing extends TileEntity implements ITickable, ISidedInventor
 {
     private String customName;
 
-    /**
-     * The Item which can be put into the block
-     * TODO: Later make this a configurable whitelist
-     */
-    public static Item inputItem = Items.golden_apple;
     private ItemStack inputStack;
 
     private boolean addingFuel = false;
@@ -42,21 +34,17 @@ public class TileHealing extends TileEntity implements ITickable, ISidedInventor
      */
     public static boolean isValidItem(ItemStack stack)
     {
-        return stack.getItem().equals(inputItem);
+        return getFuelForItem(stack) > 0;
     }
 
     public static int getFuelForItem(ItemStack stack)
     {
-        if(!isValidItem(stack)) return 0;
-        int meta = stack.getMetadata();
-        switch(meta)
-        {
-            case 1:
-                return 18;
-            case 0:
-            default:
-                return 2;
-        }
+        if(Config.healingBlockValidFuelStacks.containsKey(stack))
+            return Config.healingBlockValidFuelStacks.get(stack);
+        for(ItemStack configStack : Config.healingBlockValidFuelStacks.keySet())
+            if(configStack.isItemEqual(stack))
+                return Config.healingBlockValidFuelStacks.get(configStack);
+        return 0;
     }
 
     public void readFromNBT(NBTTagCompound tag)
@@ -132,7 +120,7 @@ public class TileHealing extends TileEntity implements ITickable, ISidedInventor
                 LogHelper.info("Player Pos: " + p.getPosition().toString() + "      Should Heal: " + p.shouldHeal());
                 LogHelper.info("Fuel: " + fuel);
                 //Check to see if player is standing in blockspace above block and if need healing
-                if(fuel > 0 && p.shouldHeal())
+                if(fuel > 0 && p.shouldHeal() && !p.capabilities.isCreativeMode)
                 {
                     if(worldObj.isRemote)
                         Common.spawnTwirlEffect(worldObj, p);
