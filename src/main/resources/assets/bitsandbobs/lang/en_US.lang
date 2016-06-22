@@ -1,16 +1,18 @@
-//Use '§' for text formatting
-
 //Items
 
 item.itemLifeStick.name=Life Stick
-item.itemLiftStick.name.disco=Disco Stick
+item.itemLiftStick.disco=Disco Stick
 item.itemLifeStick.tooltip.1=Held hearts:
-item.itemLifeStick.tooltip.2=§2Right Click §rto heal health
-item.itemLifeStick.tooltip.3=§eShift Right Click §rto store health
-item.itemLifeStick.tooltip.disco=§6§oLet me take a ride on your disco stick
+item.itemLifeStick.tooltip.2.1=Right Click
+item.itemLifeStick.tooltip.2.2= to heal health
+item.itemLifeStick.tooltip.3.1=Shift Right Click
+item.itemLifeStick.tooltip.3.2= to store health
+item.itemLifeStick.tooltip.disco=Let me take a ride on your disco stick
+item.itemLifeStick.tooltip.watching=I'm watching you Jason...
 
 //Blocks
 
+tile.blockHealing.name=Healing Block
 tile.fakeBeacon.name=Aesthetic Beacon
 
 //Generic

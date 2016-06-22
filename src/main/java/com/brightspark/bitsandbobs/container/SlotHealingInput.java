@@ -15,6 +15,6 @@ public class SlotHealingInput extends Slot
 
     public boolean isItemValid(ItemStack stack)
     {
-        return stack.getItem().equals(TileHealing.inputItem);
+        return TileHealing.isValidItem(stack);
     }
 }

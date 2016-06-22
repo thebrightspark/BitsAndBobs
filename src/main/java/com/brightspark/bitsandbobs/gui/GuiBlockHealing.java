@@ -1,9 +1,12 @@
 package com.brightspark.bitsandbobs.gui;
 
+import com.brightspark.bitsandbobs.container.ContainerBlockHealing;
 import com.brightspark.bitsandbobs.init.BABBlocks;
 import com.brightspark.bitsandbobs.reference.Reference;
+import com.brightspark.bitsandbobs.tileentity.TileHealing;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
@@ -12,12 +15,14 @@ import org.lwjgl.opengl.GL11;
 public class GuiBlockHealing extends GuiContainer
 {
     public static final ResourceLocation guiImage = new ResourceLocation(Reference.GUI_TEXTURE_DIR + "guiBlockHealing.png");
+    private TileHealing te;
 
     public GuiBlockHealing(InventoryPlayer invPlayer, World world, int x, int y, int z)
     {
-        super(new ContainerHammerCraft(invPlayer, world, x, y, z));
+        super(new ContainerBlockHealing(invPlayer, (TileHealing) world.getTileEntity(new BlockPos(x, y, z))));
         this.xSize = 184;
         this.ySize = 219;
+        te = (TileHealing) world.getTileEntity(new BlockPos(x, y, z));
     }
 
     @Override
@@ -35,7 +40,10 @@ public class GuiBlockHealing extends GuiContainer
     protected void drawGuiContainerForegroundLayer(int p_146979_1_, int p_146979_2_)
     {
         //Draw text
-        this.fontRendererObj.drawString(StatCollector.translateToLocal(BABBlocks.blockHealing.getUnlocalizedName() + ".name"), 12, 6, 4210752);
-        this.fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 12, this.ySize - 92, 4210752);
+        fontRendererObj.drawString(StatCollector.translateToLocal(BABBlocks.blockHealing.getUnlocalizedName() + ".name"), 8, 6, 4210752);
+        fontRendererObj.drawString("Fuel:", 77, 50, 0);
+        String fuelString = Integer.toString(te.getFuelAmount());
+        fontRendererObj.drawString(fuelString, 88 - (fontRendererObj.getStringWidth(fuelString) / 2), 61, 0);
+        fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, 73, 4210752);
     }
 }

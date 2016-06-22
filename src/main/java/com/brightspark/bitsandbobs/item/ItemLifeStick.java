@@ -121,12 +121,14 @@ public class ItemLifeStick extends ItemBasic
         list.add(text + Float.toString(hearts));
         list.add("");
         if(player.getDisplayNameString().equals("alxnns1"))
-            list.add(StatCollector.translateToLocal(tooltip + "disco"));
+            list.add(EnumChatFormatting.GOLD + "" + EnumChatFormatting.ITALIC + StatCollector.translateToLocal(tooltip + "disco"));
         else
         {
-            list.add(StatCollector.translateToLocal(tooltip + "2"));
-            list.add(StatCollector.translateToLocal(tooltip + "3"));
+            list.add(EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocal(tooltip + "2.1") + EnumChatFormatting.RESET + StatCollector.translateToLocal(tooltip + "2.2"));
+            list.add(EnumChatFormatting.YELLOW + StatCollector.translateToLocal(tooltip + "3.1") + EnumChatFormatting.RESET + StatCollector.translateToLocal(tooltip + "3.2"));
         }
+        if(player.getDisplayNameString().equals("8BrickDMG"))
+            list.add(EnumChatFormatting.BLACK + StatCollector.translateToLocal(tooltip + "watching"));
     }
 
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected)

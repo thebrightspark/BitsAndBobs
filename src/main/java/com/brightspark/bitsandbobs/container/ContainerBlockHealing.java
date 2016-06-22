@@ -8,9 +8,6 @@ import net.minecraft.item.ItemStack;
 
 public class ContainerBlockHealing extends Container
 {
-    private ItemStack fuelSlot = new ItemStack();
-    private short fuelAmount = 0;
-    private short fuelMax = 32000;
     private ISidedInventory inventory;
 
     private int invStartX = 8;
@@ -21,7 +18,7 @@ public class ContainerBlockHealing extends Container
         inventory = tileEntity;
 
         //Add the slots
-        this.addSlotToContainer(new SlotHealingInput(invPlayer, 0, 79, 11));
+        this.addSlotToContainer(new SlotHealingInput(tileEntity, 0, 79, 19));
 
         bindPlayerInventory(invPlayer);
     }

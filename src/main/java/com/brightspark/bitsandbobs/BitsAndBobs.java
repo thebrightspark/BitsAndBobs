@@ -1,5 +1,6 @@
 package com.brightspark.bitsandbobs;
 
+import com.brightspark.bitsandbobs.gui.GuiHandler;
 import com.brightspark.bitsandbobs.init.BABBlocks;
 import com.brightspark.bitsandbobs.init.BABItems;
 import com.brightspark.bitsandbobs.init.BABRecipes;
@@ -11,6 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
 @Mod(modid=Reference.MOD_ID, name=Reference.MOD_NAME, version=Reference.VERSION)
@@ -56,6 +58,8 @@ public class BitsAndBobs
 
         BABRecipes.init();
         BABTileEntities.init();
+
+        NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
     }
 
     @Mod.EventHandler
