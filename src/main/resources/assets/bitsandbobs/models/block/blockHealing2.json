@@ -1,0 +1,12 @@
+{
+	"parent": "block/cube",
+	"textures": {
+		"particle": "bitsandbobs:blocks/blockHealing2Side",
+		"down": "bitsandbobs:blocks/blockHealing2Bottom",
+		"up": "bitsandbobs:blocks/blockHealing2Top",
+		"north": "bitsandbobs:blocks/blockHealing2Side",
+		"east": "bitsandbobs:blocks/blockHealing2Side",
+		"south": "bitsandbobs:blocks/blockHealing2Side",
+		"west": "bitsandbobs:blocks/blockHealing2Side"
+	}
+}

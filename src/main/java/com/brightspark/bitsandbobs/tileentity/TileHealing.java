@@ -17,17 +17,21 @@ import java.util.List;
 
 public class TileHealing extends TileEntity implements ITickable, ISidedInventory
 {
-    private String customName;
-
-    private ItemStack inputStack;
-
-    private boolean addingFuel = false;
     private static final String KEY_FUEL = "fuel";
     private static final String KEY_HAS_ITEM = "hasItem";
-    private static final int fuelMax = 1000;
+
+    private String customName;
+    private ItemStack inputStack;
+    private boolean addingFuel = false;
+    private final int ticks;
+    private final int fuelMax;
     private int fuel = 0;
 
-    public TileHealing() {}
+    public TileHealing(int maxFuelStorage, int ticksBetweenChecks)
+    {
+        fuelMax = maxFuelStorage;
+        ticks = ticksBetweenChecks;
+    }
 
     /**
      * Returns whether the given stack is a valid input for this block
@@ -105,7 +109,7 @@ public class TileHealing extends TileEntity implements ITickable, ISidedInventor
                 inputStack = null;
         }
 
-        if(worldObj.getTotalWorldTime() % 20L == 0L) //Check every second
+        if(worldObj.getTotalWorldTime() % ticks == 0) //Check every so many ticks (20 ticks for first healing block)
         {
             //Check fuel slot
             if(inputStack != null && inputStack.stackSize > 0)

@@ -1,5 +1,6 @@
 package com.brightspark.bitsandbobs.gui;
 
+import com.brightspark.bitsandbobs.block.BlockHealing;
 import com.brightspark.bitsandbobs.container.ContainerBlockHealing;
 import com.brightspark.bitsandbobs.init.BABBlocks;
 import com.brightspark.bitsandbobs.tileentity.TileHealing;
@@ -17,7 +18,7 @@ public class GuiHandler implements IGuiHandler
         Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
 
         //Server side - returns instance of the container
-        if(block == BABBlocks.blockHealing)
+        if(block instanceof BlockHealing)
             return new ContainerBlockHealing(player.inventory, (TileHealing) world.getTileEntity(new BlockPos(x, y, z)));
         return null;
     }
@@ -28,7 +29,7 @@ public class GuiHandler implements IGuiHandler
         Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
 
         //Client side - returns intance of the gui
-        if(block == BABBlocks.blockHealing)
+        if(block instanceof BlockHealing)
             return new GuiBlockHealing(player.inventory, world, x, y, z);
         return null;
     }

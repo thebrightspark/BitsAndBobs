@@ -13,6 +13,7 @@ item.itemLifeStick.tooltip.watching=I'm watching you Jason...
 //Blocks
 
 tile.blockHealing.name=Healing Block
+tile.blockHealing2.name=Fast Healing Block
 tile.fakeBeacon.name=Aesthetic Beacon
 
 //Generic

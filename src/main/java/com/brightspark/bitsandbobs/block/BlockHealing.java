@@ -14,17 +14,22 @@ import net.minecraft.world.World;
 
 public class BlockHealing extends BlockContainer
 {
-    public BlockHealing()
+    private final int ticks;
+    private final int fuelMax;
+
+    public BlockHealing(String name, int maxFuelStorage, int ticksBetweenChecks)
     {
         super(Material.rock);
         setCreativeTab(BitsAndBobs.BAB_TAB);
-        setUnlocalizedName(Names.Blocks.HEALING);
+        setUnlocalizedName(name);
+        fuelMax = maxFuelStorage;
+        ticks = ticksBetweenChecks;
     }
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta)
     {
-        return new TileHealing();
+        return new TileHealing(fuelMax, ticks);
     }
 
     //Return 3 for standard block models

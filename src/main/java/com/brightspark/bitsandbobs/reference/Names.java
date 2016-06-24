@@ -10,5 +10,6 @@ public class Names
     public static class Blocks
     {
         public static final String HEALING = "blockHealing";
+        public static final String HEALING_2 = "blockHealing2";
     }
 }
