@@ -2,6 +2,7 @@ package com.brightspark.bitsandbobs;
 
 import com.brightspark.bitsandbobs.gui.GuiHandler;
 import com.brightspark.bitsandbobs.handler.ConfigHandler;
+import com.brightspark.bitsandbobs.handler.EntityEventHandler;
 import com.brightspark.bitsandbobs.init.BABBlocks;
 import com.brightspark.bitsandbobs.init.BABItems;
 import com.brightspark.bitsandbobs.init.BABRecipes;
@@ -83,6 +84,8 @@ public class BitsAndBobs
             }
         }
         //LogHelper.info("Generated ItemStack map: (" + Config.healingBlockValidFuelStacks.size() + " values)\n" + Config.healingBlockValidFuelStacks.toString());
+
+        MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 
         BABItems.init();
         BABBlocks.init();
