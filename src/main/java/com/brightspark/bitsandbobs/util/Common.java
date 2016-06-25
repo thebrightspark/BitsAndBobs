@@ -1,20 +1,21 @@
 package com.brightspark.bitsandbobs.util;
 
-import com.brightspark.bitsandbobs.entity.TrailingFX;
+import com.brightspark.bitsandbobs.entity.ParticleTrailing;
 import com.brightspark.bitsandbobs.reference.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityFX;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ItemModelMesherForge;
+import net.minecraftforge.client.model.ModelLoader;
 
 public class Common
 {
     private static Minecraft mc = Minecraft.getMinecraft();
-    private static ItemModelMesherForge m = (ItemModelMesherForge) mc.getRenderItem().getItemModelMesher();
+
     //Register a model
     public static void regModel(Item item)
     {
@@ -28,18 +29,18 @@ public class Common
     //Register a model with meta
     public static void regModel(Item item, int meta)
     {
-        String itemName = item.getUnlocalizedName();
-        LogHelper.info("Registering texture " + Reference.ITEM_TEXTURE_DIR + itemName.substring(itemName.indexOf(".") + 1));
-        m.register(item, meta, new ModelResourceLocation(Reference.ITEM_TEXTURE_DIR + itemName.substring(itemName.indexOf(".") + 1), "inventory"));
+        LogHelper.info("Registering texture for " + item.getRegistryName());
+        //m.register(item, meta, new BABModelResLoc(Reference.ITEM_TEXTURE_DIR + itemName));
+        ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName(), "inventory"));
     }
 
-    public static void spawnEffect(EntityFX effect)
+    public static void spawnEffect(Particle particle)
     {
-        mc.effectRenderer.addEffect(effect);
+        mc.effectRenderer.addEffect(particle);
     }
 
     public static void spawnTwirlEffect(World world, Entity entity)
     {
-        spawnEffect(new TrailingFX(world, entity, 6, 82, 160).setChildRGBColour(0.6f, 1f, 0.6f));
+        spawnEffect(new ParticleTrailing(world, entity, 6, 82, 160).setChildRGBColour(0.6f, 1f, 0.6f));
     }
 }

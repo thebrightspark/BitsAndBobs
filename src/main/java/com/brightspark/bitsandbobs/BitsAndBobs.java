@@ -86,18 +86,18 @@ public class BitsAndBobs
 
         BABItems.init();
         BABBlocks.init();
-    }
-
-    @Mod.EventHandler
-    public void init(FMLInitializationEvent event)
-    {
-        //Initialize textures/models, GUIs, tile entities, recipies, event handlers here
 
         if(event.getSide() == Side.CLIENT)
         {
             BABItems.regModels();
             BABBlocks.regModels();
         }
+    }
+
+    @Mod.EventHandler
+    public void init(FMLInitializationEvent event)
+    {
+        //Initialize textures/models, GUIs, tile entities, recipies, event handlers here
 
         BABRecipes.init();
         BABTileEntities.init();

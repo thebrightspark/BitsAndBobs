@@ -10,8 +10,12 @@ item.itemLifeStick.tooltip.3.2= to store health
 item.itemLifeStick.tooltip.disco=Let me take a ride on your disco stick
 item.itemLifeStick.tooltip.watching=I'm watching you Jason...
 
+item.itemDebug.name=Debug Item
+item.itemBloodPrismarine.name=Blood Prismarine
+
 //Blocks
 
+tile.blockStellarEgg.name=Stellar Egg
 tile.blockHealing.name=Healing Block
 tile.blockHealing2.name=Fast Healing Block
 tile.fakeBeacon.name=Aesthetic Beacon

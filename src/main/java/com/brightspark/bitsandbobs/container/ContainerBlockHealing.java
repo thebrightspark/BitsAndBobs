@@ -5,10 +5,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerBlockHealing extends Container
 {
     private ISidedInventory inventory;
+    private int fuel;
 
     private int invStartX = 8;
     private int invStartY = 84;
@@ -23,15 +26,42 @@ public class ContainerBlockHealing extends Container
         bindPlayerInventory(invPlayer);
     }
 
+    @Override
     public boolean canInteractWith(EntityPlayer player)
     {
         return inventory.isUseableByPlayer(player);
     }
 
-    public void onCraftGuiOpened(ICrafting listener)
+    @Override
+    public void addListener(IContainerListener listener)
     {
-        super.onCraftGuiOpened(listener);
+        super.addListener(listener);
         listener.sendAllWindowProperties(this, inventory);
+    }
+
+    /**
+     * Looks for changes made in the container, sends them to every listener.
+     */
+    @Override
+    public void detectAndSendChanges()
+    {
+        super.detectAndSendChanges();
+
+        for (int i = 0; i < this.listeners.size(); ++i)
+        {
+            IContainerListener icontainerlistener = this.listeners.get(i);
+            if (this.fuel != this.inventory.getField(0))
+                icontainerlistener.sendProgressBarUpdate(this, 0, this.inventory.getField(0));
+        }
+
+        this.fuel = this.inventory.getField(0);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void updateProgressBar(int id, int data)
+    {
+        this.inventory.setField(id, data);
     }
 
     protected void bindPlayerInventory(InventoryPlayer inventoryPlayer)
@@ -53,6 +83,7 @@ public class ContainerBlockHealing extends Container
     /**
      * What happens when you shift-click a slot
      */
+    @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slot)
     {
         ItemStack stack = null;

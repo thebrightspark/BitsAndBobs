@@ -5,10 +5,10 @@ import com.brightspark.bitsandbobs.init.BABBlocks;
 import com.brightspark.bitsandbobs.reference.Reference;
 import com.brightspark.bitsandbobs.tileentity.TileHealing;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 
@@ -40,10 +40,10 @@ public class GuiBlockHealing extends GuiContainer
     protected void drawGuiContainerForegroundLayer(int p_146979_1_, int p_146979_2_)
     {
         //Draw text
-        fontRendererObj.drawString(StatCollector.translateToLocal(BABBlocks.blockHealing.getUnlocalizedName() + ".name"), 8, 6, 4210752);
+        fontRendererObj.drawString(I18n.format(BABBlocks.blockHealing.getUnlocalizedName() + ".name"), 8, 6, 4210752);
         fontRendererObj.drawString("Fuel:", 77, 50, 0);
         String fuelString = Integer.toString(te.getFuelAmount());
         fontRendererObj.drawString(fuelString, 88 - (fontRendererObj.getStringWidth(fuelString) / 2), 61, 0);
-        fontRendererObj.drawString(StatCollector.translateToLocal("container.inventory"), 8, 73, 4210752);
+        fontRendererObj.drawString(I18n.format("container.inventory"), 8, 73, 4210752);
     }
 }

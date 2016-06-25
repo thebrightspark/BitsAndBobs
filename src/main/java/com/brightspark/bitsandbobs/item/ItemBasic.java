@@ -9,5 +9,6 @@ public class ItemBasic extends Item
     {
         setCreativeTab(BitsAndBobs.BAB_TAB);
         setUnlocalizedName(itemName);
+        setRegistryName(itemName);
     }
 }

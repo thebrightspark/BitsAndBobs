@@ -1,7 +1,7 @@
 package com.brightspark.bitsandbobs.util;
 
 import com.brightspark.bitsandbobs.reference.Reference;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 
 public class BABModelResLoc extends ModelResourceLocation
 {

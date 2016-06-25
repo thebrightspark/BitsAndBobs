@@ -1,36 +1,54 @@
 package com.brightspark.bitsandbobs.tileentity;
 
+import com.brightspark.bitsandbobs.container.ContainerBlockHealing;
 import com.brightspark.bitsandbobs.reference.Config;
 import com.brightspark.bitsandbobs.reference.Names;
+import com.brightspark.bitsandbobs.reference.Reference;
 import com.brightspark.bitsandbobs.util.Common;
 import com.brightspark.bitsandbobs.util.LogHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.IInteractionObject;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
-public class TileHealing extends TileEntity implements ITickable, ISidedInventory
+public class TileHealing extends TileEntity implements ITickable, ISidedInventory, IInteractionObject
 {
     private static final String KEY_FUEL = "fuel";
+    private static final String KEY_FUEL_MAX = "fuelMax";
+    private static final String KEY_TICKS = "ticks";
     private static final String KEY_HAS_ITEM = "hasItem";
 
     private String customName;
     private ItemStack inputStack;
     private boolean addingFuel = false;
-    private final int ticks;
-    private final int fuelMax;
+    private int ticks;
+    private int fuelMax;
     private int fuel = 0;
 
-    public TileHealing(int maxFuelStorage, int ticksBetweenChecks)
+    public TileHealing() {}
+
+    public void setFuelMax(int fuelMax)
     {
-        fuelMax = maxFuelStorage;
-        ticks = ticksBetweenChecks;
+        this.fuelMax = fuelMax;
+    }
+
+    public void setTicksBetweenChecks(int ticks)
+    {
+        this.ticks = ticks;
     }
 
     /**
@@ -51,39 +69,53 @@ public class TileHealing extends TileEntity implements ITickable, ISidedInventor
         return 0;
     }
 
+    @Override
     public void readFromNBT(NBTTagCompound tag)
     {
         super.readFromNBT(tag);
         fuel = tag.getInteger(KEY_FUEL);
+        fuelMax = tag.getInteger(KEY_FUEL_MAX);
+        ticks = tag.getInteger(KEY_TICKS);
         if(tag.hasKey(KEY_HAS_ITEM))
             inputStack = ItemStack.loadItemStackFromNBT(tag);
     }
 
-    public void writeToNBT(NBTTagCompound tag)
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound tag)
     {
         super.writeToNBT(tag);
         tag.setInteger(KEY_FUEL, fuel);
+        tag.setInteger(KEY_FUEL_MAX, fuelMax);
+        tag.setInteger(KEY_TICKS, ticks);
         if(inputStack != null)
         {
             tag.setBoolean(KEY_HAS_ITEM, true);
             inputStack.writeToNBT(tag);
         }
+        return tag;
+    }
+
+    @Override
+    public NBTTagCompound getUpdateTag()
+    {
+        return this.writeToNBT(new NBTTagCompound());
     }
 
     /**
      * Use this to send data about the block. In this case, the NBTTagCompound.
      */
-    public Packet getDescriptionPacket()
+    @Override
+    @Nullable
+    public SPacketUpdateTileEntity getUpdatePacket()
     {
-        NBTTagCompound nbt = new NBTTagCompound();
-        writeToNBT(nbt);
-        return new S35PacketUpdateTileEntity(pos, 0, nbt);
+        return new SPacketUpdateTileEntity(this.pos, 0, this.getUpdateTag());
     }
 
     /**
      * Use this to update the block when a packet is received.
      */
-    public void onDataPacket(net.minecraft.network.NetworkManager net, net.minecraft.network.play.server.S35PacketUpdateTileEntity pkt)
+    @Override
+    public void onDataPacket(net.minecraft.network.NetworkManager net, net.minecraft.network.play.server.SPacketUpdateTileEntity pkt)
     {
         readFromNBT(pkt.getNbtCompound());
     }
@@ -100,7 +132,6 @@ public class TileHealing extends TileEntity implements ITickable, ISidedInventor
                 {
                     fuel += fuelToAdd;
                     inputStack.stackSize--;
-                    LogHelper.info("Adding Fuel -> New: " + fuel);
                 }
             }
             else
@@ -112,7 +143,7 @@ public class TileHealing extends TileEntity implements ITickable, ISidedInventor
         if(worldObj.getTotalWorldTime() % ticks == 0) //Check every so many ticks (20 ticks for first healing block)
         {
             //Check fuel slot
-            if(inputStack != null && inputStack.stackSize > 0)
+            if(!worldObj.isRemote && inputStack != null && inputStack.stackSize > 0)
                 addingFuel = true;
 
             //Heal players!
@@ -121,8 +152,6 @@ public class TileHealing extends TileEntity implements ITickable, ISidedInventor
             List<EntityPlayer> players = worldObj.getEntitiesWithinAABB(EntityPlayer.class, area);
             for(EntityPlayer p : players)
             {
-                LogHelper.info("Player Pos: " + p.getPosition().toString() + "      Should Heal: " + p.shouldHeal());
-                LogHelper.info("Fuel: " + fuel);
                 //Check to see if player is standing in blockspace above block and if need healing
                 if(fuel > 0 && p.shouldHeal() && !p.capabilities.isCreativeMode)
                 {
@@ -130,7 +159,6 @@ public class TileHealing extends TileEntity implements ITickable, ISidedInventor
                         Common.spawnTwirlEffect(worldObj, p);
                     else
                     {
-                        LogHelper.info(">>>> Healing: " + p.getDisplayNameString());
                         p.heal(2); //Heal 1 heart
                         fuel--; //Reduce fuel in block
                     }
@@ -139,7 +167,7 @@ public class TileHealing extends TileEntity implements ITickable, ISidedInventor
         }
 
         this.markDirty();
-        worldObj.markBlockForUpdate(this.getPos());
+        worldObj.scheduleUpdate(this.getPos(), this.getBlockType(), 2);
     }
 
     public int getFuelAmount()
@@ -165,9 +193,9 @@ public class TileHealing extends TileEntity implements ITickable, ISidedInventor
     }
 
     @Override
-    public IChatComponent getDisplayName()
+    public ITextComponent getDisplayName()
     {
-        return hasCustomName() ? new ChatComponentText(getName()) : new ChatComponentTranslation(getName(), new Object[0]);
+        return hasCustomName() ? new TextComponentString(getName()) : new TextComponentTranslation(getName(), new Object[0]);
     }
 
     @Override
@@ -264,21 +292,36 @@ public class TileHealing extends TileEntity implements ITickable, ISidedInventor
     @Override
     public int getField(int id)
     {
-        return 0;
+        return id == 0 ? fuel : 0;
     }
 
     @Override
-    public void setField(int id, int value) {}
+    public void setField(int id, int value)
+    {
+        if(id == 0) fuel = value;
+    }
 
     @Override
     public int getFieldCount()
     {
-        return 0;
+        return 1;
     }
 
     @Override
     public void clear()
     {
         inputStack = null;
+    }
+
+    @Override
+    public Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn)
+    {
+        return new ContainerBlockHealing(playerInventory, this);
+    }
+
+    @Override
+    public String getGuiID()
+    {
+        return Reference.MOD_ID + ":" + this.blockType.getUnlocalizedName().substring(6);
     }
 }

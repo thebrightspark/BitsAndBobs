@@ -13,6 +13,7 @@ public class SlotHealingInput extends Slot
         super(inventoryIn, index, xPosition, yPosition);
     }
 
+    @Override
     public boolean isItemValid(ItemStack stack)
     {
         return TileHealing.isValidItem(stack);

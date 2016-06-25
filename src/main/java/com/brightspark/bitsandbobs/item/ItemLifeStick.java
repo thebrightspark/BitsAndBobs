@@ -2,12 +2,13 @@ package com.brightspark.bitsandbobs.item;
 
 import com.brightspark.bitsandbobs.util.NBTHelper;
 import com.brightspark.bitsandbobs.reference.Names;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.*;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -25,6 +26,7 @@ public class ItemLifeStick extends ItemBasic
         setMaxStackSize(1);
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public boolean isFull3D()
     {
@@ -45,19 +47,20 @@ public class ItemLifeStick extends ItemBasic
             NBTHelper.setFloat(stack, STORAGE, storage + amount);
     }
 
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer entityplayer)
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand)
     {
         float storage = NBTHelper.getFloat(stack, STORAGE);
-        if(entityplayer.isSneaking())
+        if(player.isSneaking())
         {
             if(storage < STORAGE_MAX)
             {
                 //Store health
-                if(entityplayer.attackEntityFrom(DamageSource.generic, 2))
+                if(player.attackEntityFrom(DamageSource.generic, 2))
                 {
                     addToStorage(stack, 1);
-                    float rand = (float) ((Math.random() / 2) + 1.75);
-                    entityplayer.worldObj.playSoundAtEntity(entityplayer, "random.orb", 0.5F, rand);
+                    float rand = (float) ((Math.random() / 2f) + 1.5f);
+                    world.playSound(null, player.getPosition(), SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.NEUTRAL, 0.5f, rand);
                 }
             }
         }
@@ -66,32 +69,31 @@ public class ItemLifeStick extends ItemBasic
             if(NBTHelper.getFloat(stack, STORAGE) > 0)
             {
                 //Get health
-                float health = entityplayer.getHealth();
-                float maxHealth = entityplayer.getMaxHealth();
+                float health = player.getHealth();
+                float maxHealth = player.getMaxHealth();
                 if(health < maxHealth && storage > 0)
                 {
-                    entityplayer.worldObj.playSoundAtEntity(entityplayer, "random.levelup", 0.5F, 2.0F);
+                    world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.NEUTRAL, 0.5f, 2.0f);
                     float toHeal = maxHealth - health; //Amount to heal
                     if(storage < toHeal)
                     {
                         //If less storage than health
-                        entityplayer.heal(storage);
+                        player.heal(storage);
                         NBTHelper.setFloat(stack, STORAGE, 0);
                     }
                     else
                     {
                         //If enough storage to heal
-                        entityplayer.heal(toHeal);
+                        player.heal(toHeal);
                         NBTHelper.setFloat(stack, STORAGE, storage - toHeal);
                     }
                 }
             }
         }
-        return stack;
+        return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
     }
 
-
-
+    @Override
     @SideOnly(Side.CLIENT)
     public boolean hasEffect(ItemStack is)
     {
@@ -99,42 +101,44 @@ public class ItemLifeStick extends ItemBasic
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4)
     {
         String tooltip = getUnlocalizedName() + ".tooltip.";
         float hearts = NBTHelper.getFloat(itemStack, STORAGE);
         hearts = hearts / 2;
-        String text = StatCollector.translateToLocal(tooltip + "1") + " ";
+        String text = I18n.format(tooltip + "1") + " ";
         if(hearts >= STORAGE_MAX/2)
         {
-            text = text + EnumChatFormatting.GREEN;
+            text = text + TextFormatting.GREEN;
         }
         else if(hearts <= STORAGE_MAX/2)
         {
-            text = text + EnumChatFormatting.RED;
+            text = text + TextFormatting.RED;
         }
         else
         {
-            text = text + EnumChatFormatting.GOLD;
+            text = text + TextFormatting.GOLD;
         }
         list.add(text + Float.toString(hearts));
         list.add("");
         if(player.getDisplayNameString().equals("alxnns1"))
-            list.add(EnumChatFormatting.GOLD + "" + EnumChatFormatting.ITALIC + StatCollector.translateToLocal(tooltip + "disco"));
+            list.add(TextFormatting.GOLD + "" + TextFormatting.ITALIC + I18n.format(tooltip + "disco"));
         else
         {
-            list.add(EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocal(tooltip + "2.1") + EnumChatFormatting.RESET + StatCollector.translateToLocal(tooltip + "2.2"));
-            list.add(EnumChatFormatting.YELLOW + StatCollector.translateToLocal(tooltip + "3.1") + EnumChatFormatting.RESET + StatCollector.translateToLocal(tooltip + "3.2"));
+            list.add(TextFormatting.DARK_GREEN + I18n.format(tooltip + "2.1") + TextFormatting.RESET + I18n.format(tooltip + "2.2"));
+            list.add(TextFormatting.YELLOW + I18n.format(tooltip + "3.1") + TextFormatting.RESET + I18n.format(tooltip + "3.2"));
         }
         if(player.getDisplayNameString().equals("8BrickDMG"))
-            list.add(EnumChatFormatting.BLACK + StatCollector.translateToLocal(tooltip + "watching"));
+            list.add(TextFormatting.BLACK + I18n.format(tooltip + "watching"));
     }
 
+    @Override
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected)
     {
         if(entityIn instanceof EntityPlayer && ((EntityPlayer) entityIn).getDisplayNameString().equals("alxnns1"))
-            stack.setStackDisplayName(EnumChatFormatting.GOLD + StatCollector.translateToLocal(getUnlocalizedName() + ".disco"));
+            stack.setStackDisplayName(TextFormatting.GOLD + I18n.format(getUnlocalizedName() + ".disco"));
         else if(stack.hasDisplayName())
             stack.clearCustomName();
     }

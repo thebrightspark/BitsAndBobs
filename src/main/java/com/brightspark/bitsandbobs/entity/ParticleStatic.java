@@ -1,15 +1,17 @@
 package com.brightspark.bitsandbobs.entity;
 
-import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-public class StaticFX extends EntityFX
+public class ParticleStatic extends Particle
 {
     private Entity attachedEntity;
     private double relX, relY, relZ;
+    private boolean isNoClip;
 
-    public StaticFX(World world, Entity entity, double relativeX, double relativeY, double relativeZ, int maxAge, int textureIndex)
+    public ParticleStatic(World world, Entity entity, double relativeX, double relativeY, double relativeZ, int maxAge, int textureIndex)
     {
         this(world, entity.posX + relativeX, entity.posY + relativeY, entity.posZ + relativeZ, maxAge, textureIndex);
         attachedEntity = entity;
@@ -18,13 +20,13 @@ public class StaticFX extends EntityFX
         relZ = relativeZ;
     }
 
-    public StaticFX(World world, double x, double y, double z, int maxAge, int textureIndex)
+    public ParticleStatic(World world, double x, double y, double z, int maxAge, int textureIndex)
     {
         super(world, x, y, z);
         motionX = motionY = motionZ = 0;
         particleMaxAge = maxAge;
+        isNoClip = true;
         setParticleTextureIndex(textureIndex);
-        noClip = true;
     }
 
     /**
@@ -35,7 +37,7 @@ public class StaticFX extends EntityFX
      * @param relativeZ Z position relative to attached entity
      * @return StaticFX entity
      */
-    public StaticFX setTrackedPos(Entity entity, double relativeX, double relativeY, double relativeZ)
+    public ParticleStatic setTrackedPos(Entity entity, double relativeX, double relativeY, double relativeZ)
     {
         attachedEntity = entity;
         relX = relativeX;
@@ -51,12 +53,24 @@ public class StaticFX extends EntityFX
      * @param b Blue colour
      * @return StaticFX entity
      */
-    public StaticFX setRBG(float r, float g, float b)
+    public ParticleStatic setRBG(float r, float g, float b)
     {
         super.setRBGColorF(r, g, b);
         return this;
     }
 
+    /**
+     * Sets whether this particle should move through blocks.
+     * @param noClip
+     * @return This particle.
+     */
+    public ParticleStatic setNoClip(boolean noClip)
+    {
+        isNoClip = noClip;
+        return this;
+    }
+
+    @Override
     public void onUpdate()
     {
         this.prevPosX = this.posX;
@@ -64,19 +78,11 @@ public class StaticFX extends EntityFX
         this.prevPosZ = this.posZ;
 
         if (this.particleAge++ >= this.particleMaxAge)
-        {
-            this.setDead();
-        }
+            this.setExpired();
 
         if(attachedEntity != null)
-        {
-            //Move entity
-            moveEntity(motionX, motionY, motionZ);
-
-            //Calculate motion to get to new position
-            motionX = attachedEntity.posX + relX - posX;
-            motionY = attachedEntity.posY + relY - posY;
-            motionZ = attachedEntity.posZ + relZ - posZ;
-        }
+            setPosition(attachedEntity.posX + relX,
+                        attachedEntity.posY + relY,
+                        attachedEntity.posZ + relZ);
     }
 }

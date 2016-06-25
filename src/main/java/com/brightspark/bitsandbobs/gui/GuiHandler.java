@@ -2,11 +2,10 @@ package com.brightspark.bitsandbobs.gui;
 
 import com.brightspark.bitsandbobs.block.BlockHealing;
 import com.brightspark.bitsandbobs.container.ContainerBlockHealing;
-import com.brightspark.bitsandbobs.init.BABBlocks;
 import com.brightspark.bitsandbobs.tileentity.TileHealing;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
