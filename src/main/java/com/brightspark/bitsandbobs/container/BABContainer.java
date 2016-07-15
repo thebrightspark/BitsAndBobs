@@ -54,8 +54,6 @@ public class BABContainer extends Container
     protected void bindPlayerInventory(InventoryPlayer inventoryPlayer)
     {
         slotInvStart = inventorySlots.size();
-        LogHelper.info("Inv slots starting at id " + slotInvStart);
-        LogHelper.info("Inv slots position start -> x:" + invStartX + "   y:" + invStartY);
 
         for (int i = 0; i < 3; i++)
         {

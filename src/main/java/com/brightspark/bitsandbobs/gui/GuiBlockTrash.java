@@ -40,8 +40,7 @@ public class GuiBlockTrash extends GuiContainer
     @Override
     protected void drawGuiContainerForegroundLayer(int p_146979_1_, int p_146979_2_)
     {
-        //TODO: Finish GuiBlockTrash
         fontRendererObj.drawString(I18n.format(BABBlocks.blockTrash.getUnlocalizedName() + ".name"), 8, 6, 4210752);
-        fontRendererObj.drawString(I18n.format("container.inventory"), 8, 73, 4210752);
+        fontRendererObj.drawString(I18n.format("container.inventory"), 8, 70, 4210752);
     }
 }
