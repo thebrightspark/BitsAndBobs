@@ -2,6 +2,7 @@ package com.brightspark.bitsandbobs.init;
 
 import com.brightspark.bitsandbobs.block.BlockHealing;
 import com.brightspark.bitsandbobs.block.BlockStellarEgg;
+import com.brightspark.bitsandbobs.block.BlockTrash;
 import com.brightspark.bitsandbobs.item.ItemBlockBasic;
 import com.brightspark.bitsandbobs.util.Common;
 import com.brightspark.bitsandbobs.reference.Names;
@@ -15,6 +16,7 @@ public class BABBlocks
     public static BlockHealing blockHealing = new BlockHealing(Names.Blocks.HEALING, 1000, 20);
     public static BlockHealing blockHealing2 = new BlockHealing(Names.Blocks.HEALING_2, 2000, 5);
     public static BlockStellarEgg blockStellarEgg = new BlockStellarEgg();
+    public static BlockTrash blockTrash = new BlockTrash();
 
     private static void regBlock(Block block)
     {
@@ -27,6 +29,7 @@ public class BABBlocks
         regBlock(blockHealing);
         regBlock(blockHealing2);
         regBlock(blockStellarEgg);
+        regBlock(blockTrash);
     }
 
     public static void regModels()
@@ -34,5 +37,6 @@ public class BABBlocks
         Common.regModel(blockHealing);
         Common.regModel(blockHealing2);
         Common.regModel(blockStellarEgg);
+        Common.regModel(blockTrash);
     }
 }

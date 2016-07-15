@@ -15,5 +15,6 @@ public class BABRecipes
         GameRegistry.addRecipe(new ItemStack(BABBlocks.blockHealing), new Object[] {"qsq", "sds", "qsq", 'q', Blocks.QUARTZ_BLOCK, 's', BABItems.lifeStick, 'd', Blocks.DRAGON_EGG});
         GameRegistry.addRecipe(new ItemStack(BABBlocks.blockStellarEgg), new Object[] {"sss", "sds", "sss", 's', Items.NETHER_STAR, 'd', Blocks.DRAGON_EGG});
         GameRegistry.addRecipe(new ItemStack(BABBlocks.blockHealing2), new Object[] {"php", "hdh", "php", 'h', BABBlocks.blockHealing2, 'p', BABItems.itemBloodPrismarine, 'd', BABBlocks.blockStellarEgg});
+        //GameRegistry.addRecipe(new ItemStack(BABBlocks.blockTrash), new Object[] {"shs", "s s", "sls", 's', "stone", 'h', Blocks.HOPPER, 'l', Items.LAVA_BUCKET});
     }
 }

@@ -15,5 +15,6 @@ public class Names
         public static final String HEALING = "blockHealing";
         public static final String HEALING_2 = "blockHealing2";
         public static final String STELLAR_EGG = "blockStellarEgg";
+        public static final String TRASH = "blockTrash";
     }
 }

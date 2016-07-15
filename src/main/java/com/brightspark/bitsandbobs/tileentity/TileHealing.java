@@ -2,37 +2,27 @@ package com.brightspark.bitsandbobs.tileentity;
 
 import com.brightspark.bitsandbobs.container.ContainerBlockHealing;
 import com.brightspark.bitsandbobs.reference.Config;
-import com.brightspark.bitsandbobs.reference.Names;
 import com.brightspark.bitsandbobs.reference.Reference;
 import com.brightspark.bitsandbobs.util.Common;
-import com.brightspark.bitsandbobs.util.LogHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IInteractionObject;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
-public class TileHealing extends TileEntity implements ITickable, ISidedInventory, IInteractionObject
+public class TileHealing extends BABTileEntity implements ITickable, IInteractionObject
 {
     private static final String KEY_FUEL = "fuel";
     private static final String KEY_FUEL_MAX = "fuelMax";
     private static final String KEY_TICKS = "ticks";
     private static final String KEY_HAS_ITEM = "hasItem";
 
-    private String customName;
     private ItemStack inputStack;
     private boolean addingFuel = false;
     private int ticks;
@@ -54,7 +44,8 @@ public class TileHealing extends TileEntity implements ITickable, ISidedInventor
     /**
      * Returns whether the given stack is a valid input for this block
      */
-    public static boolean isValidItem(ItemStack stack)
+    @Override
+    public boolean isValidItem(ItemStack stack)
     {
         return getFuelForItem(stack) > 0;
     }
@@ -93,31 +84,6 @@ public class TileHealing extends TileEntity implements ITickable, ISidedInventor
             inputStack.writeToNBT(tag);
         }
         return tag;
-    }
-
-    @Override
-    public NBTTagCompound getUpdateTag()
-    {
-        return this.writeToNBT(new NBTTagCompound());
-    }
-
-    /**
-     * Use this to send data about the block. In this case, the NBTTagCompound.
-     */
-    @Override
-    @Nullable
-    public SPacketUpdateTileEntity getUpdatePacket()
-    {
-        return new SPacketUpdateTileEntity(this.pos, 0, this.getUpdateTag());
-    }
-
-    /**
-     * Use this to update the block when a packet is received.
-     */
-    @Override
-    public void onDataPacket(net.minecraft.network.NetworkManager net, net.minecraft.network.play.server.SPacketUpdateTileEntity pkt)
-    {
-        readFromNBT(pkt.getNbtCompound());
     }
 
     @Override
@@ -173,29 +139,6 @@ public class TileHealing extends TileEntity implements ITickable, ISidedInventor
     public int getFuelAmount()
     {
         return fuel;
-    }
-
-    @Override
-    public String getName()
-    {
-        return this.hasCustomName() ? customName : Names.Blocks.HEALING;
-    }
-
-    @Override
-    public boolean hasCustomName()
-    {
-        return customName != null && customName.length() > 0;
-    }
-
-    public void setName(String name)
-    {
-        customName = name;
-    }
-
-    @Override
-    public ITextComponent getDisplayName()
-    {
-        return hasCustomName() ? new TextComponentString(getName()) : new TextComponentTranslation(getName(), new Object[0]);
     }
 
     @Override
@@ -269,12 +212,6 @@ public class TileHealing extends TileEntity implements ITickable, ISidedInventor
     public int getInventoryStackLimit()
     {
         return 64;
-    }
-
-    @Override
-    public boolean isUseableByPlayer(EntityPlayer player)
-    {
-        return this.worldObj.getTileEntity(this.pos) == this && player.getDistanceSq((double)this.pos.getX() + 0.5D, (double)this.pos.getY() + 0.5D, (double)this.pos.getZ() + 0.5D) <= 64.0D;
     }
 
     @Override
