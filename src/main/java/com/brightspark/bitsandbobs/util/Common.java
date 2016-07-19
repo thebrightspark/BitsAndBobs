@@ -1,5 +1,6 @@
 package com.brightspark.bitsandbobs.util;
 
+import com.brightspark.bitsandbobs.BitsAndBobs;
 import com.brightspark.bitsandbobs.entity.ParticleTrailing;
 import com.brightspark.bitsandbobs.reference.Reference;
 import net.minecraft.block.Block;
@@ -11,6 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ItemModelMesherForge;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class Common
 {

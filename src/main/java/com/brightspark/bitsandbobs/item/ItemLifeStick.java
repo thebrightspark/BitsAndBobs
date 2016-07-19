@@ -17,12 +17,14 @@ import java.util.List;
 
 public class ItemLifeStick extends ItemBasic
 {
+    private final String TOOLTIP;
     private static final String STORAGE = "storage";
     private static final float STORAGE_MAX = 40;
 
     public ItemLifeStick()
     {
         super(Names.Items.LIFE_STICK);
+        TOOLTIP = getUnlocalizedName() + ".tooltip.";
         setMaxStackSize(1);
     }
 
@@ -66,7 +68,7 @@ public class ItemLifeStick extends ItemBasic
         }
         else
         {
-            if(NBTHelper.getFloat(stack, STORAGE) > 0)
+            if(storage > 0)
             {
                 //Get health
                 float health = player.getHealth();
@@ -105,10 +107,9 @@ public class ItemLifeStick extends ItemBasic
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4)
     {
-        String tooltip = getUnlocalizedName() + ".tooltip.";
         float hearts = NBTHelper.getFloat(itemStack, STORAGE);
         hearts = hearts / 2;
-        String text = I18n.format(tooltip + "1") + " ";
+        String text = I18n.format(TOOLTIP + "1") + " ";
         if(hearts >= STORAGE_MAX/2)
         {
             text = text + TextFormatting.GREEN;
@@ -124,14 +125,14 @@ public class ItemLifeStick extends ItemBasic
         list.add(text + Float.toString(hearts));
         list.add("");
         if(player.getDisplayNameString().equals("alxnns1"))
-            list.add(TextFormatting.GOLD + "" + TextFormatting.ITALIC + I18n.format(tooltip + "disco"));
+            list.add(TextFormatting.GOLD + "" + TextFormatting.ITALIC + I18n.format(TOOLTIP + "disco"));
         else
         {
-            list.add(TextFormatting.DARK_GREEN + I18n.format(tooltip + "2.1") + TextFormatting.RESET + I18n.format(tooltip + "2.2"));
-            list.add(TextFormatting.YELLOW + I18n.format(tooltip + "3.1") + TextFormatting.RESET + I18n.format(tooltip + "3.2"));
+            list.add(TextFormatting.DARK_GREEN + I18n.format(TOOLTIP + "2.1") + TextFormatting.RESET + I18n.format(TOOLTIP + "2.2"));
+            list.add(TextFormatting.YELLOW + I18n.format(TOOLTIP + "3.1") + TextFormatting.RESET + I18n.format(TOOLTIP + "3.2"));
         }
         if(player.getDisplayNameString().equals("8BrickDMG"))
-            list.add(TextFormatting.BLACK + I18n.format(tooltip + "watching"));
+            list.add(TextFormatting.BLACK + I18n.format(TOOLTIP + "watching"));
     }
 
     @Override

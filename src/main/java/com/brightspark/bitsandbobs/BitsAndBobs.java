@@ -3,10 +3,8 @@ package com.brightspark.bitsandbobs;
 import com.brightspark.bitsandbobs.gui.GuiHandler;
 import com.brightspark.bitsandbobs.handler.ConfigHandler;
 import com.brightspark.bitsandbobs.handler.EntityEventHandler;
-import com.brightspark.bitsandbobs.init.BABBlocks;
-import com.brightspark.bitsandbobs.init.BABItems;
-import com.brightspark.bitsandbobs.init.BABRecipes;
-import com.brightspark.bitsandbobs.init.BABTileEntities;
+import com.brightspark.bitsandbobs.init.*;
+import com.brightspark.bitsandbobs.message.MessageSpawnPlayerGhost;
 import com.brightspark.bitsandbobs.reference.Config;
 import com.brightspark.bitsandbobs.reference.Reference;
 import net.minecraft.creativetab.CreativeTabs;
@@ -18,6 +16,7 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
 @Mod(modid=Reference.MOD_ID, name=Reference.MOD_NAME, version=Reference.VERSION)
@@ -31,7 +30,7 @@ public class BitsAndBobs
         @Override
         public Item getTabIconItem()
         {
-            return BABItems.lifeStick;
+            return BABItems.itemLifeStick;
         }
 
         @Override
@@ -40,6 +39,8 @@ public class BitsAndBobs
             return Reference.MOD_NAME;
         }
     };
+
+    public static SimpleNetworkWrapper NETWORK_STRING;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
@@ -87,14 +88,17 @@ public class BitsAndBobs
 
         MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 
+        NETWORK_STRING = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
+        NETWORK_STRING.registerMessage(MessageSpawnPlayerGhost.Handler.class, MessageSpawnPlayerGhost.class, 0, Side.SERVER);
+
         BABItems.init();
         BABBlocks.init();
-
         if(event.getSide() == Side.CLIENT)
         {
             BABItems.regModels();
             BABBlocks.regModels();
         }
+        BABEntities.init(event.getSide() == Side.CLIENT);
     }
 
     @Mod.EventHandler

@@ -10,6 +10,11 @@ public class ParticleDisappearingStatic extends ParticleStatic
         super(world, entity, relativeX, relativeY, relativeZ, maxAge, textureIndex);
     }
 
+    public ParticleDisappearingStatic(World world, double xPos, double yPos, double zPos, int maxAge, int textureIndex)
+    {
+        super(world, xPos, yPos, zPos, maxAge, textureIndex);
+    }
+
     @Override
     public void onUpdate()
     {

@@ -6,6 +6,7 @@ public class Names
     {
         public static final String LIFE_STICK = "itemLifeStick";
         public static final String BLOOD_PRISMARINE = "itemBloodPrismarine";
+        public static final String MIRAGE_ORB = "itemMirageOrb";
 
         public static final String DEBUG = "itemDebug";
     }
