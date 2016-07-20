@@ -1,11 +1,14 @@
 package com.brightspark.bitsandbobs.message;
 
+import com.brightspark.bitsandbobs.BitsAndBobs;
 import com.brightspark.bitsandbobs.entity.EntityPlayerGhost;
 import com.brightspark.bitsandbobs.util.LogHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.IThreadListener;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -23,28 +26,33 @@ import java.util.List;
  */
 public class MessageSpawnGhostOnServer implements IMessage
 {
-    private String playerName;
-    private ResourceLocation resourceLocation;
-    private float limbSwing;
-    private float limbSwingAmount;
+    public String playerName;
+    public ResourceLocation resourceLocation;
+    public float rotationYaw, rotationPitch, rotationYawHead, renderYawOffset, swingProgress, limbSwing, limbSwingAmount;
+    public boolean isSneaking, isSwingInProgress;
+    public int swingProgressInt;
+    public EnumHand swingingHand;
+    public EnumHandSide handSide;
 
     public MessageSpawnGhostOnServer() {}
-
-    public MessageSpawnGhostOnServer(String playerDisplayName, ResourceLocation resLoc, float limbSwing, float limbSwingAmount)
-    {
-        playerName = playerDisplayName;
-        resourceLocation = resLoc;
-        this.limbSwing = limbSwing;
-        this.limbSwingAmount = limbSwingAmount;
-    }
 
     @Override
     public void fromBytes(ByteBuf buf)
     {
         playerName = ByteBufUtils.readUTF8String(buf);
         resourceLocation = new ResourceLocation(ByteBufUtils.readUTF8String(buf));
+        rotationYaw = buf.readFloat();
+        rotationPitch = buf.readFloat();
+        rotationYawHead = buf.readFloat();
+        renderYawOffset = buf.readFloat();
+        swingProgress = buf.readFloat();
         limbSwing = buf.readFloat();
         limbSwingAmount = buf.readFloat();
+        isSneaking = buf.readBoolean();
+        isSwingInProgress = buf.readBoolean();
+        swingProgressInt = buf.readInt();
+        swingingHand = buf.readBoolean() ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
+        handSide = buf.readBoolean() ? EnumHandSide.RIGHT : EnumHandSide.LEFT;
     }
 
     @Override
@@ -52,8 +60,18 @@ public class MessageSpawnGhostOnServer implements IMessage
     {
         ByteBufUtils.writeUTF8String(buf, playerName);
         ByteBufUtils.writeUTF8String(buf, resourceLocation.toString());
+        buf.writeFloat(rotationYaw);
+        buf.writeFloat(rotationPitch);
+        buf.writeFloat(rotationYawHead);
+        buf.writeFloat(renderYawOffset);
+        buf.writeFloat(swingProgress);
         buf.writeFloat(limbSwing);
         buf.writeFloat(limbSwingAmount);
+        buf.writeBoolean(isSneaking);
+        buf.writeBoolean(isSwingInProgress);
+        buf.writeInt(swingProgressInt);
+        buf.writeBoolean(swingingHand == EnumHand.MAIN_HAND);
+        buf.writeBoolean(handSide == EnumHandSide.RIGHT);
     }
 
     public static class Handler implements IMessageHandler<MessageSpawnGhostOnServer, IMessage>
@@ -67,21 +85,21 @@ public class MessageSpawnGhostOnServer implements IMessage
                 @Override
                 public void run()
                 {
-                    LogHelper.info("Spawning player ghost for " + message.playerName);
-
                     WorldServer server = (WorldServer) ctx.getServerHandler().playerEntity.worldObj;
                     EntityPlayer player = server.getPlayerEntityByName(message.playerName);
                     if(player == null)
                     {
-                        LogHelper.warn("Player not found when trying to spawn ghost!");
+                        LogHelper.warn("Player " + message.playerName + " not found when trying to spawn ghost!");
                         return;
                     }
 
                     //Create ghost
                     EntityPlayerGhost ghost = new EntityPlayerGhost(server, player);
                     ghost.playerSkin = message.resourceLocation;
-                    ghost.setLimbSwing(message.limbSwing, message.limbSwingAmount);
                     server.spawnEntityInWorld(ghost);
+
+                    //Update the client entities with the correct data
+                    BitsAndBobs.NETWORK.sendToAll(new MessageSetClientGhostData(ghost.getEntityId(), message));
 
                     //Get nearby mobs
                     BlockPos playerPos = player.getPosition();

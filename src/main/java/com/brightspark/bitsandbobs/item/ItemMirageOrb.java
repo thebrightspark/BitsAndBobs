@@ -61,7 +61,24 @@ public class ItemMirageOrb extends ItemBasic
 
         //Spawn ghost of player on server
         if(world.isRemote && player instanceof AbstractClientPlayer)
-            BitsAndBobs.NETWORK.sendToServer(new MessageSpawnGhostOnServer(player.getName(), ((AbstractClientPlayer)player).getLocationSkin(), ((AbstractClientPlayer) player).limbSwing, ((AbstractClientPlayer) player).limbSwingAmount));
+        {
+            MessageSpawnGhostOnServer message = new MessageSpawnGhostOnServer();
+            message.playerName = player.getName();
+            message.resourceLocation = ((AbstractClientPlayer) player).getLocationSkin();
+            message.rotationYaw = player.rotationYaw;
+            message.rotationPitch = player.rotationPitch;
+            message.rotationYawHead = player.rotationYawHead;
+            message.renderYawOffset = player.renderYawOffset;
+            message.swingProgress = player.swingProgress;
+            message.limbSwing = player.limbSwing;
+            message.limbSwingAmount = player.limbSwingAmount;
+            message.isSneaking = player.isSneaking();
+            message.isSwingInProgress = player.isSwingInProgress;
+            message.swingProgressInt = player.swingProgressInt;
+            message.swingingHand = player.swingingHand;
+            message.handSide = player.getPrimaryHand();
+            BitsAndBobs.NETWORK.sendToServer(message);
+        }
 
         return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
     }
@@ -71,10 +88,7 @@ public class ItemMirageOrb extends ItemBasic
     {
         int cooldown = NBTHelper.getInt(stack, KEY_COOLDOWN);
         if(cooldown > 0)
-        {
             NBTHelper.setInteger(stack, KEY_COOLDOWN, --cooldown);
-            LogHelper.info("Cooldown: " + cooldown);
-        }
     }
 
     @SuppressWarnings("unchecked")

@@ -33,7 +33,7 @@ public class RenderPlayerGhost extends RenderLivingBase<EntityPlayerGhost>
     @Override
     protected ResourceLocation getEntityTexture(EntityPlayerGhost entity)
     {
-        return entity.playerSkin != null ? entity.playerSkin : DEFAULT_RES_LOC;
+        return entity.playerSkin == null || entity.playerSkin.getResourcePath().equals("") ? DEFAULT_RES_LOC : entity.playerSkin;
     }
 
     @Override
@@ -144,7 +144,7 @@ public class RenderPlayerGhost extends RenderLivingBase<EntityPlayerGhost>
         }
         catch (Exception exception)
         {
-            LogHelper.error("Couldn\'t render entity");
+            LogHelper.error("Couldn\'t render entity\n" + exception.getMessage());
         }
 
         GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);

@@ -1,7 +1,5 @@
 package com.brightspark.bitsandbobs.entity;
 
-import com.brightspark.bitsandbobs.BitsAndBobs;
-import com.brightspark.bitsandbobs.message.MessageSetClientGhostData;
 import com.brightspark.bitsandbobs.util.LogHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
@@ -31,6 +29,7 @@ public class EntityPlayerGhost extends EntityLivingBase implements IEntityAdditi
     private static final int MAX_GHOST_AGE = 200; //10 secs
     private int ghostAge;
     public ResourceLocation playerSkin;
+    public EnumHandSide handSide;
 
     public EntityPlayerGhost(World world)
     {
@@ -41,30 +40,8 @@ public class EntityPlayerGhost extends EntityLivingBase implements IEntityAdditi
     public EntityPlayerGhost(World world, EntityPlayer player)
     {
         this(world);
-        LogHelper.info("Creating Ghost");
-        //Copy variables from player for the model
-        //TODO: Get the entity to be set to the correct pose
+        //Copy position from player
         copyLocationAndAnglesFrom(player);
-        prevRotationYaw = rotationYaw;
-        prevRotationPitch = rotationPitch;
-        prevRotationYawHead = player.rotationYawHead;
-        renderYawOffset = player.renderYawOffset;
-        prevRenderYawOffset = player.prevRenderYawOffset;
-        setSneaking(player.isSneaking());
-        isSwingInProgress = player.isSwingInProgress;
-        swingingHand = player.swingingHand;
-        swingProgress = player.swingProgress;
-        swingProgressInt = player.swingProgressInt;
-        limbSwing = player.limbSwing;
-        limbSwingAmount = player.limbSwingAmount;
-        //prevLimbSwingAmount = player.prevLimbSwingAmount;
-        //ticksElytraFlying = player.getTicksElytraFlying();
-    }
-
-    public void setLimbSwing(float limbSwing, float limbSwingAmount)
-    {
-        this.limbSwing = limbSwing;
-        this.limbSwingAmount = limbSwingAmount;
     }
 
     @Override
@@ -86,10 +63,6 @@ public class EntityPlayerGhost extends EntityLivingBase implements IEntityAdditi
     public void onUpdate()
     {
         if(net.minecraftforge.common.ForgeHooks.onLivingUpdate(this)) return;
-
-        //Update the client entities with the correct data
-        if(firstUpdate && !worldObj.isRemote)
-            BitsAndBobs.NETWORK.sendToAll(new MessageSetClientGhostData(getEntityId(), limbSwing, limbSwingAmount));
 
         onLivingUpdate();
 
@@ -181,7 +154,7 @@ public class EntityPlayerGhost extends EntityLivingBase implements IEntityAdditi
     @Override
     public EnumHandSide getPrimaryHand()
     {
-        return null;
+        return handSide;
     }
 
     @Override
