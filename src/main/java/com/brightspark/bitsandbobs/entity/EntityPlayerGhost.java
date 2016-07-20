@@ -91,10 +91,7 @@ public class EntityPlayerGhost extends EntityLivingBase implements IEntityAdditi
     {
         ghostAge++;
         if(!worldObj.isRemote && ghostAge > MAX_GHOST_AGE)
-        {
-            LogHelper.info("Killing ghost");
             setDead();
-        }
     }
 
     @Override
@@ -160,14 +157,12 @@ public class EntityPlayerGhost extends EntityLivingBase implements IEntityAdditi
     @Override
     public void writeSpawnData(ByteBuf buffer)
     {
-        LogHelper.info("Ghost writing player skin to packet");
         ByteBufUtils.writeUTF8String(buffer, playerSkin != null ? playerSkin.toString() : "");
     }
 
     @Override
     public void readSpawnData(ByteBuf additionalData)
     {
-        LogHelper.info("Ghost reading player skin from packet");
         playerSkin = new ResourceLocation(ByteBufUtils.readUTF8String(additionalData));
     }
 
