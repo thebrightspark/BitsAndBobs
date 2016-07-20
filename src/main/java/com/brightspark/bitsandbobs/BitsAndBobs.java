@@ -4,7 +4,8 @@ import com.brightspark.bitsandbobs.gui.GuiHandler;
 import com.brightspark.bitsandbobs.handler.ConfigHandler;
 import com.brightspark.bitsandbobs.handler.EntityEventHandler;
 import com.brightspark.bitsandbobs.init.*;
-import com.brightspark.bitsandbobs.message.MessageSpawnPlayerGhost;
+import com.brightspark.bitsandbobs.message.MessageSpawnGhostOnServer;
+import com.brightspark.bitsandbobs.message.MessageSetClientGhostData;
 import com.brightspark.bitsandbobs.reference.Config;
 import com.brightspark.bitsandbobs.reference.Reference;
 import net.minecraft.creativetab.CreativeTabs;
@@ -40,7 +41,7 @@ public class BitsAndBobs
         }
     };
 
-    public static SimpleNetworkWrapper NETWORK_STRING;
+    public static SimpleNetworkWrapper NETWORK;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
@@ -88,8 +89,9 @@ public class BitsAndBobs
 
         MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 
-        NETWORK_STRING = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
-        NETWORK_STRING.registerMessage(MessageSpawnPlayerGhost.Handler.class, MessageSpawnPlayerGhost.class, 0, Side.SERVER);
+        NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
+        NETWORK.registerMessage(MessageSpawnGhostOnServer.Handler.class, MessageSpawnGhostOnServer.class, 0, Side.SERVER);
+        NETWORK.registerMessage(MessageSetClientGhostData.Handler.class, MessageSetClientGhostData.class, 1, Side.CLIENT);
 
         BABItems.init();
         BABBlocks.init();

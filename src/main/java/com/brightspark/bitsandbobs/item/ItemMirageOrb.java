@@ -1,7 +1,7 @@
 package com.brightspark.bitsandbobs.item;
 
 import com.brightspark.bitsandbobs.BitsAndBobs;
-import com.brightspark.bitsandbobs.message.MessageSpawnPlayerGhost;
+import com.brightspark.bitsandbobs.message.MessageSpawnGhostOnServer;
 import com.brightspark.bitsandbobs.reference.Names;
 import com.brightspark.bitsandbobs.util.LogHelper;
 import com.brightspark.bitsandbobs.util.NBTHelper;
@@ -56,11 +56,12 @@ public class ItemMirageOrb extends ItemBasic
             return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
 
         //Set cooldown
-        NBTHelper.setInteger(stack, KEY_COOLDOWN, MAX_COOLDOWN);
+        if(!player.isCreative())
+            NBTHelper.setInteger(stack, KEY_COOLDOWN, MAX_COOLDOWN);
 
         //Spawn ghost of player on server
         if(world.isRemote && player instanceof AbstractClientPlayer)
-            BitsAndBobs.NETWORK_STRING.sendToServer(new MessageSpawnPlayerGhost(player.getName(), ((AbstractClientPlayer)player).getLocationSkin()));
+            BitsAndBobs.NETWORK.sendToServer(new MessageSpawnGhostOnServer(player.getName(), ((AbstractClientPlayer)player).getLocationSkin(), ((AbstractClientPlayer) player).limbSwing, ((AbstractClientPlayer) player).limbSwingAmount));
 
         return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
     }

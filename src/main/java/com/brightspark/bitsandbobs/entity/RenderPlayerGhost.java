@@ -1,11 +1,14 @@
 package com.brightspark.bitsandbobs.entity;
 
-import net.minecraft.client.model.ModelPlayer;
+import com.brightspark.bitsandbobs.util.LogHelper;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 /**
@@ -18,13 +21,13 @@ public class RenderPlayerGhost extends RenderLivingBase<EntityPlayerGhost>
 
     public RenderPlayerGhost(RenderManager renderManagerIn)
     {
-        super(renderManagerIn, new ModelPlayer(0.0f, false), 0.5f);
+        super(renderManagerIn, new ModelPlayerGhost(), 0.5f);
     }
 
     @Override
-    public ModelPlayer getMainModel()
+    public ModelPlayerGhost getMainModel()
     {
-        return (ModelPlayer)super.getMainModel();
+        return (ModelPlayerGhost)super.getMainModel();
     }
 
     @Override
@@ -37,6 +40,119 @@ public class RenderPlayerGhost extends RenderLivingBase<EntityPlayerGhost>
     protected boolean canRenderName(EntityPlayerGhost entity)
     {
         return super.canRenderName(entity) && (entity.getAlwaysRenderNameTagForRender() || entity.hasCustomName() && entity == this.renderManager.pointedEntity);
+    }
+
+    @Override
+    public void doRender(EntityPlayerGhost entity, double x, double y, double z, float entityYaw, float partialTicks)
+    {
+        if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Pre<EntityPlayerGhost>(entity, this, x, y, z))) return;
+        GlStateManager.pushMatrix();
+        GlStateManager.disableCull();
+
+        mainModel.swingProgress = getSwingProgress(entity, partialTicks);
+        boolean shouldSit = entity.isRiding() && (entity.getRidingEntity() != null && entity.getRidingEntity().shouldRiderSit());
+        mainModel.isRiding = shouldSit;
+        mainModel.isChild = entity.isChild();
+
+        try
+        {
+            float renderYawOffset = entity.renderYawOffset;
+            float rotationYawHead = entity.rotationYawHead;
+            float headYaw = rotationYawHead - renderYawOffset;
+
+            if (shouldSit && entity.getRidingEntity() instanceof EntityLivingBase)
+            {
+                float f3 = MathHelper.wrapDegrees(headYaw);
+
+                if (f3 < -85.0F)
+                {
+                    f3 = -85.0F;
+                }
+
+                if (f3 >= 85.0F)
+                {
+                    f3 = 85.0F;
+                }
+
+                renderYawOffset = rotationYawHead - f3;
+
+                if (f3 * f3 > 2500.0F)
+                {
+                    renderYawOffset += f3 * 0.2F;
+                }
+            }
+
+            renderLivingAt(entity, x, y, z);
+            rotateCorpse(entity, 0, renderYawOffset, partialTicks);
+            float scale = prepareScale(entity, partialTicks);
+            float swingAmount = 0.0F;
+            float swing = 0.0F;
+
+            if (!entity.isRiding())
+            {
+                swingAmount = entity.limbSwingAmount;
+                swing = entity.limbSwing;
+
+                if (entity.isChild())
+                {
+                    swing *= 3.0F;
+                }
+
+                if (swingAmount > 1.0F)
+                {
+                    swingAmount = 1.0F;
+                }
+            }
+
+            GlStateManager.enableAlpha();
+            mainModel.setLivingAnimations(entity, swing, swingAmount, partialTicks);
+            mainModel.setRotationAngles(swing, swingAmount, 0, headYaw, entity.rotationPitch, scale, entity);
+
+            if (renderOutlines)
+            {
+                boolean flag1 = setScoreTeamColor(entity);
+                GlStateManager.enableColorMaterial();
+                GlStateManager.enableOutlineMode(getTeamColor(entity));
+
+                if (!renderMarker)
+                {
+                    renderModel(entity, swing, swingAmount, 0, headYaw, entity.rotationPitch, scale);
+                }
+
+                GlStateManager.disableOutlineMode();
+                GlStateManager.disableColorMaterial();
+
+                if (flag1)
+                {
+                    unsetScoreTeamColor();
+                }
+            }
+            else
+            {
+                boolean flag = setDoRenderBrightness(entity, partialTicks);
+                renderModel(entity, swing, swingAmount, 0, headYaw, entity.rotationPitch, scale);
+
+                if (flag)
+                {
+                    unsetBrightness();
+                }
+
+                GlStateManager.depthMask(true);
+            }
+
+            GlStateManager.disableRescaleNormal();
+        }
+        catch (Exception exception)
+        {
+            LogHelper.error("Couldn\'t render entity");
+        }
+
+        GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+        GlStateManager.enableTexture2D();
+        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+        GlStateManager.enableCull();
+        GlStateManager.popMatrix();
+        net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Post<EntityPlayerGhost>(entity, this, x, y, z));
     }
 
     @Override

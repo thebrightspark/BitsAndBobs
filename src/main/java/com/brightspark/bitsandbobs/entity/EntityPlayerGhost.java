@@ -1,5 +1,7 @@
 package com.brightspark.bitsandbobs.entity;
 
+import com.brightspark.bitsandbobs.BitsAndBobs;
+import com.brightspark.bitsandbobs.message.MessageSetClientGhostData;
 import com.brightspark.bitsandbobs.util.LogHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
@@ -14,6 +16,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
@@ -40,7 +44,7 @@ public class EntityPlayerGhost extends EntityLivingBase implements IEntityAdditi
         LogHelper.info("Creating Ghost");
         //Copy variables from player for the model
         //TODO: Get the entity to be set to the correct pose
-        setLocationAndAngles(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+        copyLocationAndAnglesFrom(player);
         prevRotationYaw = rotationYaw;
         prevRotationPitch = rotationPitch;
         prevRotationYawHead = player.rotationYawHead;
@@ -53,8 +57,14 @@ public class EntityPlayerGhost extends EntityLivingBase implements IEntityAdditi
         swingProgressInt = player.swingProgressInt;
         limbSwing = player.limbSwing;
         limbSwingAmount = player.limbSwingAmount;
-        prevLimbSwingAmount = player.prevLimbSwingAmount;
+        //prevLimbSwingAmount = player.prevLimbSwingAmount;
         //ticksElytraFlying = player.getTicksElytraFlying();
+    }
+
+    public void setLimbSwing(float limbSwing, float limbSwingAmount)
+    {
+        this.limbSwing = limbSwing;
+        this.limbSwingAmount = limbSwingAmount;
     }
 
     @Override
@@ -76,6 +86,11 @@ public class EntityPlayerGhost extends EntityLivingBase implements IEntityAdditi
     public void onUpdate()
     {
         if(net.minecraftforge.common.ForgeHooks.onLivingUpdate(this)) return;
+
+        //Update the client entities with the correct data
+        if(firstUpdate && !worldObj.isRemote)
+            BitsAndBobs.NETWORK.sendToAll(new MessageSetClientGhostData(getEntityId(), limbSwing, limbSwingAmount));
+
         onLivingUpdate();
 
         /*
@@ -95,6 +110,7 @@ public class EntityPlayerGhost extends EntityLivingBase implements IEntityAdditi
             }
         }
         */
+        firstUpdate = false;
     }
 
     @Override
@@ -109,16 +125,39 @@ public class EntityPlayerGhost extends EntityLivingBase implements IEntityAdditi
     }
 
     @Override
+    public void onKillCommand()
+    {
+        this.setDead();
+    }
+
+    @Override
+    protected void kill()
+    {
+        this.setDead();
+    }
+
+    @Override
     public void knockBack(Entity entityIn, float strenght, double xRatio, double zRatio) {}
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount)
     {
+        if(source.equals(DamageSource.outOfWorld))
+        {
+            damageEntity(source, amount);
+            return true;
+        }
         return false;
     }
 
     @Override
     public boolean canBePushed()
+    {
+        return false;
+    }
+
+    @Override
+    public boolean isPushedByWater()
     {
         return false;
     }
@@ -157,5 +196,11 @@ public class EntityPlayerGhost extends EntityLivingBase implements IEntityAdditi
     {
         LogHelper.info("Ghost reading player skin from packet");
         playerSkin = new ResourceLocation(ByteBufUtils.readUTF8String(additionalData));
+    }
+
+    @SideOnly(Side.CLIENT)
+    public float getSwingProgress(float partialTickTime)
+    {
+        return swingProgress;
     }
 }

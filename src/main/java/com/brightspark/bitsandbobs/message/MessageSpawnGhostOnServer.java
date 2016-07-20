@@ -17,22 +17,25 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by Mark on 19/07/2016.
  */
-public class MessageSpawnPlayerGhost implements IMessage
+public class MessageSpawnGhostOnServer implements IMessage
 {
     private String playerName;
     private ResourceLocation resourceLocation;
+    private float limbSwing;
+    private float limbSwingAmount;
 
-    public MessageSpawnPlayerGhost() {}
+    public MessageSpawnGhostOnServer() {}
 
-    public MessageSpawnPlayerGhost(String playerDisplayName, ResourceLocation resLoc)
+    public MessageSpawnGhostOnServer(String playerDisplayName, ResourceLocation resLoc, float limbSwing, float limbSwingAmount)
     {
         playerName = playerDisplayName;
         resourceLocation = resLoc;
+        this.limbSwing = limbSwing;
+        this.limbSwingAmount = limbSwingAmount;
     }
 
     @Override
@@ -40,6 +43,8 @@ public class MessageSpawnPlayerGhost implements IMessage
     {
         playerName = ByteBufUtils.readUTF8String(buf);
         resourceLocation = new ResourceLocation(ByteBufUtils.readUTF8String(buf));
+        limbSwing = buf.readFloat();
+        limbSwingAmount = buf.readFloat();
     }
 
     @Override
@@ -47,12 +52,14 @@ public class MessageSpawnPlayerGhost implements IMessage
     {
         ByteBufUtils.writeUTF8String(buf, playerName);
         ByteBufUtils.writeUTF8String(buf, resourceLocation.toString());
+        buf.writeFloat(limbSwing);
+        buf.writeFloat(limbSwingAmount);
     }
 
-    public static class Handler implements IMessageHandler<MessageSpawnPlayerGhost, IMessage>
+    public static class Handler implements IMessageHandler<MessageSpawnGhostOnServer, IMessage>
     {
         @Override
-        public IMessage onMessage(final MessageSpawnPlayerGhost message, final MessageContext ctx)
+        public IMessage onMessage(final MessageSpawnGhostOnServer message, final MessageContext ctx)
         {
             IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.worldObj;
             mainThread.addScheduledTask(new Runnable()
@@ -73,6 +80,7 @@ public class MessageSpawnPlayerGhost implements IMessage
                     //Create ghost
                     EntityPlayerGhost ghost = new EntityPlayerGhost(server, player);
                     ghost.playerSkin = message.resourceLocation;
+                    ghost.setLimbSwing(message.limbSwing, message.limbSwingAmount);
                     server.spawnEntityInWorld(ghost);
 
                     //Get nearby mobs

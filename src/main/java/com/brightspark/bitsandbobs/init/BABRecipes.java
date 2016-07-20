@@ -10,11 +10,11 @@ public class BABRecipes
 {
     public static void init()
     {
-        //Life Stick
         GameRegistry.addRecipe(new ItemStack(BABItems.itemLifeStick), " zx", "zyz", "xz ", 'x', Items.BLAZE_ROD, 'y', Items.NETHER_STAR, 'z', Items.GLOWSTONE_DUST);
         GameRegistry.addRecipe(new ItemStack(BABBlocks.blockHealing), "qsq", "sds", "qsq", 'q', Blocks.QUARTZ_BLOCK, 's', BABItems.itemLifeStick, 'd', Blocks.DRAGON_EGG);
         GameRegistry.addRecipe(new ItemStack(BABBlocks.blockStellarEgg), "sss", "sds", "sss", 's', Items.NETHER_STAR, 'd', Blocks.DRAGON_EGG);
         GameRegistry.addRecipe(new ItemStack(BABBlocks.blockHealing2), "php", "hdh", "php", 'h', BABBlocks.blockHealing2, 'p', BABItems.itemBloodPrismarine, 'd', BABBlocks.blockStellarEgg);
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BABBlocks.blockTrash), "shs", "s s", "sls", 's', "stone", 'h', Blocks.HOPPER, 'l', Items.LAVA_BUCKET));
+        GameRegistry.addRecipe(new ItemStack(BABItems.itemMirageOrb), " p ", "pep", " p ", 'e', Items.ENDER_EYE, 'p', Items.PRISMARINE_CRYSTALS);
     }
 }
