@@ -19,19 +19,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-/**
- * Created by Mark on 18/07/2016.
- */
-public class ItemMirageOrb extends ItemBasic
+public class ItemMirageOrb extends ItemCooldownBasic
 {
-    private final String TOOLTIP;
-    private static final int MAX_COOLDOWN = 1200; //60 sec cooldown
-    private static final String KEY_COOLDOWN = "cooldown";
-
     public ItemMirageOrb()
     {
-        super(Names.Items.MIRAGE_ORB);
-        TOOLTIP = getUnlocalizedName() + ".tooltip.";
+        super(Names.Items.MIRAGE_ORB, 1200);
         setMaxStackSize(1);
     }
 
@@ -42,23 +34,9 @@ public class ItemMirageOrb extends ItemBasic
         return NBTHelper.getInt(stack, KEY_COOLDOWN) > 0;
     }
 
-    public static boolean isActive(ItemStack stack)
-    {
-        return NBTHelper.getInt(stack, KEY_COOLDOWN) > 0;
-    }
-
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand)
+    public void doRightClickAction(ItemStack stack, World world, EntityPlayer player, EnumHand hand)
     {
-        int cooldown = NBTHelper.getInt(stack, KEY_COOLDOWN);
-        if(cooldown > 0)
-            //Item currently active
-            return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
-
-        //Set cooldown
-        if(!player.isCreative())
-            NBTHelper.setInteger(stack, KEY_COOLDOWN, MAX_COOLDOWN);
-
         //Spawn ghost of player on server
         if(world.isRemote && player instanceof AbstractClientPlayer)
         {
@@ -79,16 +57,6 @@ public class ItemMirageOrb extends ItemBasic
             message.handSide = player.getPrimaryHand();
             BitsAndBobs.NETWORK.sendToServer(message);
         }
-
-        return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
-    }
-
-    @Override
-    public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected)
-    {
-        int cooldown = NBTHelper.getInt(stack, KEY_COOLDOWN);
-        if(cooldown > 0)
-            NBTHelper.setInteger(stack, KEY_COOLDOWN, --cooldown);
     }
 
     @SuppressWarnings("unchecked")
@@ -101,19 +69,5 @@ public class ItemMirageOrb extends ItemBasic
         int cooldown = NBTHelper.getInt(stack, KEY_COOLDOWN);
         if(cooldown > 0)
             list.add(Math.round((float) cooldown / 20f) + I18n.format(TOOLTIP + "3"));
-    }
-
-    /**
-     * Determine if the player switching between these two item stacks
-     * @param oldStack The old stack that was equipped
-     * @param newStack The new stack
-     * @param slotChanged If the current equipped slot was changed,
-     *                    Vanilla does not play the animation if you switch between two
-     *                    slots that hold the exact same item.
-     * @return True to play the item change animation
-     */
-    public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged)
-    {
-        return !oldStack.isItemEqual(newStack) || (ItemMirageOrb.isActive(oldStack) != ItemMirageOrb.isActive(newStack));
     }
 }

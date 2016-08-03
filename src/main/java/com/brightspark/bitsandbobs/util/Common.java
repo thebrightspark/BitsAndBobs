@@ -1,8 +1,7 @@
 package com.brightspark.bitsandbobs.util;
 
-import com.brightspark.bitsandbobs.BitsAndBobs;
+import com.brightspark.bitsandbobs.entity.ParticleFlare;
 import com.brightspark.bitsandbobs.entity.ParticleTrailing;
-import com.brightspark.bitsandbobs.reference.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -10,9 +9,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
-import net.minecraftforge.client.ItemModelMesherForge;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class Common
 {
@@ -31,18 +28,32 @@ public class Common
     //Register a model with meta
     public static void regModel(Item item, int meta)
     {
-        LogHelper.info("Registering texture for " + item.getRegistryName());
+        //LogHelper.info("Registering texture for " + item.getRegistryName());
         //m.register(item, meta, new BABModelResLoc(Reference.ITEM_TEXTURE_DIR + itemName));
         ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName(), "inventory"));
     }
 
+    /**
+     * Spawns a particle in the world
+     */
     public static void spawnEffect(Particle particle)
     {
         mc.effectRenderer.addEffect(particle);
     }
 
+    /**
+     * Spawns a trailing particle which twirls upwards around the entity
+     */
     public static void spawnTwirlEffect(World world, Entity entity)
     {
         spawnEffect(new ParticleTrailing(world, entity, 6, 82, 160).setChildRGBColour(0.6f, 1f, 0.6f));
+    }
+
+    /**
+     * Spawns a trailing particle which shoots out from the entity in the direction it's facing
+     */
+    public static void spawnFlareEffect(World world, Entity entity)
+    {
+        spawnEffect(new ParticleFlare(world, entity.posX, entity.posY + 1d, entity.posZ, entity.getLookVec()));
     }
 }

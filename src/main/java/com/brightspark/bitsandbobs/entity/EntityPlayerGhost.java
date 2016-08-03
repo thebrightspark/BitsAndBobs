@@ -1,6 +1,5 @@
 package com.brightspark.bitsandbobs.entity;
 
-import com.brightspark.bitsandbobs.util.LogHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;

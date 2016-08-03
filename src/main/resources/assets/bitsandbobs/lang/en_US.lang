@@ -15,6 +15,9 @@ item.itemMirageOrb.tooltip.1=Right Click to create a ghost of yourself
 item.itemMirageOrb.tooltip.2=Attacking mobs will think this is you...
 item.itemMirageOrb.tooltip.3=s until ready to use again
 
+item.itemFlareGun.name=Flare Gun
+item.itemFlareAmmo.name=Flare Ammo
+
 item.itemDebug.name=Debug Item
 item.itemBloodPrismarine.name=Blood-Infused Prismarine Shard
 
