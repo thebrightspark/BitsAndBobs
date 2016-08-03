@@ -35,7 +35,7 @@ public class ItemMirageOrb extends ItemCooldownBasic
     }
 
     @Override
-    public void doRightClickAction(ItemStack stack, World world, EntityPlayer player, EnumHand hand)
+    public boolean doRightClickAction(ItemStack stack, World world, EntityPlayer player, EnumHand hand)
     {
         //Spawn ghost of player on server
         if(world.isRemote && player instanceof AbstractClientPlayer)
@@ -57,6 +57,7 @@ public class ItemMirageOrb extends ItemCooldownBasic
             message.handSide = player.getPrimaryHand();
             BitsAndBobs.NETWORK.sendToServer(message);
         }
+        return true;
     }
 
     @SuppressWarnings("unchecked")
