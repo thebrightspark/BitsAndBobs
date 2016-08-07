@@ -102,10 +102,9 @@ public class ItemLifeStick extends ItemBasic
         return true;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par4)
+    public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> list, boolean par4)
     {
         float hearts = NBTHelper.getFloat(itemStack, STORAGE);
         hearts = hearts / 2;

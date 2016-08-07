@@ -54,6 +54,6 @@ public class Common
      */
     public static void spawnFlareEffect(World world, Entity entity)
     {
-        spawnEffect(new ParticleFlare(world, entity.posX, entity.posY + 1d, entity.posZ, entity.getLookVec()));
+        spawnEffect(new ParticleFlare(world, entity.posX - 0.5d, entity.posY + 1d, entity.posZ - 0.5d, entity.getLookVec()));
     }
 }

@@ -16,6 +16,9 @@ item.itemMirageOrb.tooltip.2=Attacking mobs will think this is you...
 item.itemMirageOrb.tooltip.3=s until ready to use again
 
 item.itemFlareGun.name=Flare Gun
+item.itemFlareGun.tooltip.1=Right Click to shoot a flare
+item.itemFlareGun.tooltip.2=Shift Right Click to reload when empty (uses 1 Flare Ammo from inventory)
+
 item.itemFlareAmmo.name=Flare Ammo
 
 item.itemDebug.name=Debug Item

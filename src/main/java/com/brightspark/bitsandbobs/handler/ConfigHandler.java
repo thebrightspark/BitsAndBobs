@@ -8,9 +8,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.File;
 
-/**
- * Created by Mark on 22/06/2016.
- */
 public class ConfigHandler
 {
     public static class Categories

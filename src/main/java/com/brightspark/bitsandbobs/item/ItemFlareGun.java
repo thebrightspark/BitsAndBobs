@@ -4,10 +4,15 @@ import com.brightspark.bitsandbobs.init.BABItems;
 import com.brightspark.bitsandbobs.reference.Names;
 import com.brightspark.bitsandbobs.util.Common;
 import com.brightspark.bitsandbobs.util.NBTHelper;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class ItemFlareGun extends ItemCooldownBasic
 {
@@ -32,7 +37,8 @@ public class ItemFlareGun extends ItemCooldownBasic
         {
             //Spawn effect
             Common.spawnFlareEffect(world, player);
-            NBTHelper.setBoolean(stack, KEY_LOADED, false);
+            if(!player.isCreative())
+                NBTHelper.setBoolean(stack, KEY_LOADED, false);
             return false;
         }
         if(player.isSneaking() && !isLoaded && player.inventory.hasItemStack(new ItemStack(BABItems.itemFlareAmmo)))
@@ -47,11 +53,19 @@ public class ItemFlareGun extends ItemCooldownBasic
 
     public boolean showDurabilityBar(ItemStack stack)
     {
-        return super.showDurabilityBar(stack) || !NBTHelper.getBoolean(stack, KEY_LOADED);
+        return !NBTHelper.getBoolean(stack, KEY_LOADED) || super.showDurabilityBar(stack);
     }
 
     public double getDurabilityForDisplay(ItemStack stack)
     {
         return !NBTHelper.getBoolean(stack, KEY_LOADED) && NBTHelper.getInt(stack, KEY_COOLDOWN) == 0 ? 1 : super.getDurabilityForDisplay(stack);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean par4)
+    {
+        list.add(I18n.format(TOOLTIP + "1"));
+        list.add(I18n.format(TOOLTIP + "2"));
     }
 }
