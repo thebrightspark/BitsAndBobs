@@ -6,9 +6,6 @@ import com.brightspark.bitsandbobs.entity.RenderPlayerGhost;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
-/**
- * Created by Mark on 19/07/2016.
- */
 public class BABEntities
 {
     private static int modEntityId = 0;

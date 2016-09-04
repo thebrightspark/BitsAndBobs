@@ -32,6 +32,12 @@ tile.blockHealing2.name=Fast Healing Block
 tile.blockTrash.name=Trash Block
 tile.fakeBeacon.name=Aesthetic Beacon
 
+tile.fluid.xpjuice.name=XP Juice
+
+//Fluids
+
+fluid.xpjuice=XP Juice
+
 //Entiies
 
 entity.BitsAndBobs.PlayerGhost.name=Player Ghost

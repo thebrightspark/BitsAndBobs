@@ -3,40 +3,42 @@ package com.brightspark.bitsandbobs.init;
 import com.brightspark.bitsandbobs.block.BlockHealing;
 import com.brightspark.bitsandbobs.block.BlockStellarEgg;
 import com.brightspark.bitsandbobs.block.BlockTrash;
-import com.brightspark.bitsandbobs.item.ItemBlockBasic;
 import com.brightspark.bitsandbobs.util.Common;
 import com.brightspark.bitsandbobs.reference.Names;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BABBlocks
 {
-    public static BlockHealing blockHealing = new BlockHealing(Names.Blocks.HEALING, 1000, 20);
-    public static BlockHealing blockHealing2 = new BlockHealing(Names.Blocks.HEALING_2, 2000, 5);
-    public static BlockStellarEgg blockStellarEgg = new BlockStellarEgg();
-    public static BlockTrash blockTrash = new BlockTrash();
+    //Contains all of the registered blocks
+    public static List<Block> BLOCKS = new ArrayList<Block>();
 
-    private static void regBlock(Block block)
+    public static BlockHealing blockHealing, blockHealing2;
+    public static BlockStellarEgg blockStellarEgg;
+    public static BlockTrash blockTrash;
+
+    public static void regBlock(Block block)
     {
         GameRegistry.register(block);
-        GameRegistry.register(new ItemBlockBasic(block));
+        GameRegistry.register((new ItemBlock(block)).setRegistryName(block.getRegistryName()));
+        BLOCKS.add(block);
     }
 
     public static void init()
     {
-        regBlock(blockHealing);
-        regBlock(blockHealing2);
-        regBlock(blockStellarEgg);
-        regBlock(blockTrash);
+        regBlock(blockHealing = new BlockHealing(Names.Blocks.HEALING, 1000, 20));
+        regBlock(blockHealing2 = new BlockHealing(Names.Blocks.HEALING_2, 2000, 5));
+        regBlock(blockStellarEgg = new BlockStellarEgg());
+        regBlock(blockTrash = new BlockTrash());
     }
 
     public static void regModels()
     {
-        Common.regModel(blockHealing);
-        Common.regModel(blockHealing2);
-        Common.regModel(blockStellarEgg);
-        Common.regModel(blockTrash);
+        for(Block block : BLOCKS)
+            Common.regModel(block);
     }
 }

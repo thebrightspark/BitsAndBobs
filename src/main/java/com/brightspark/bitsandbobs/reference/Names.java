@@ -20,4 +20,15 @@ public class Names
         public static final String STELLAR_EGG = "blockStellarEgg";
         public static final String TRASH = "blockTrash";
     }
+
+    public static class Fluids
+    {
+        public static final String XP_JUICE = "xpjuice";
+    }
+
+    public static class ModIds
+    {
+        public static final String OPEN_BLOCKS = "OpenBlocks";
+        public static final String ENDERIO = "EnderIO";
+    }
 }

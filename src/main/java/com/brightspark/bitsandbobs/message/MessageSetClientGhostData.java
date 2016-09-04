@@ -12,9 +12,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-/**
- * Created by Mark on 20/07/2016.
- */
 public class MessageSetClientGhostData implements IMessage
 {
     private int ghostId;

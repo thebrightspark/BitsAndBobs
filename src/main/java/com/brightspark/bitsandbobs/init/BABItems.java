@@ -3,6 +3,12 @@ package com.brightspark.bitsandbobs.init;
 import com.brightspark.bitsandbobs.item.*;
 import com.brightspark.bitsandbobs.util.Common;
 import com.brightspark.bitsandbobs.reference.Names;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.ForgeModContainer;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class BABItems
@@ -15,6 +21,8 @@ public class BABItems
 
     public static final ItemDebug itemDebug = new ItemDebug(Names.Items.DEBUG);
 
+    public static ItemStack itemBucketXpJuice;
+
     public static void init()
     {
         GameRegistry.register(itemLifeStick);
@@ -24,6 +32,15 @@ public class BABItems
         GameRegistry.register(itemFlareAmmo);
 
         GameRegistry.register(itemDebug);
+
+        if(FluidRegistry.isUniversalBucketEnabled())
+        {
+            if(BABFluids.fluidXpJuice != null)
+            {
+                FluidRegistry.addBucketForFluid(BABFluids.fluidXpJuice);
+                itemBucketXpJuice = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, BABFluids.fluidXpJuice);
+            }
+        }
     }
 
     public static void regModels()

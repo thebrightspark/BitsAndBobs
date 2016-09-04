@@ -12,6 +12,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -20,7 +21,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid=Reference.MOD_ID, name=Reference.MOD_NAME, version=Reference.VERSION)
+@Mod(modid=Reference.MOD_ID, name=Reference.MOD_NAME, version=Reference.VERSION, dependencies=Reference.DEPEND)
 public class BitsAndBobs
 {
     @Mod.Instance(Reference.MOD_ID)
@@ -42,6 +43,12 @@ public class BitsAndBobs
     };
 
     public static SimpleNetworkWrapper NETWORK;
+
+    static
+    {
+        //Enable the universal buckets for the fluid xp
+        FluidRegistry.enableUniversalBucket();
+    }
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event)
@@ -110,6 +117,8 @@ public class BitsAndBobs
 
         BABRecipes.init();
         BABTileEntities.init();
+        //TODO: Uncomment this when I want to try xp juice again...
+        //BABFluids.init();
 
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
     }
@@ -119,5 +128,9 @@ public class BitsAndBobs
     {
         //Run stuff after mods have initialized here
 
+        //TODO: Uncomment this when I want to try xp juice again...
+        //BABFluids.postInit();
+        //if(event.getSide() == Side.CLIENT)
+        //    BABFluids.regModels();
     }
 }

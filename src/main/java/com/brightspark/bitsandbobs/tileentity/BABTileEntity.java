@@ -12,9 +12,6 @@ import net.minecraft.util.text.TextComponentTranslation;
 
 import javax.annotation.Nullable;
 
-/**
- * Created by Mark on 28/06/2016.
- */
 public abstract class BABTileEntity extends TileEntity implements ISidedInventory
 {
     protected final String KEY_DEFAULT_NAME = "defaultName";
