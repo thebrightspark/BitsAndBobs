@@ -13,9 +13,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * Created by Mark on 28/06/2016.
- */
 public class BlockTrash extends BABBlockContainer
 {
     public BlockTrash()
