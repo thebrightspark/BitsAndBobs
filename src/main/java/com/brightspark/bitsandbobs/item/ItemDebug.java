@@ -1,6 +1,6 @@
 package com.brightspark.bitsandbobs.item;
 
-import com.brightspark.bitsandbobs.util.Common;
+import com.brightspark.bitsandbobs.util.ClientUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
@@ -26,7 +26,7 @@ public class ItemDebug extends ItemBasic
     public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand)
     {
         if(world.isRemote)
-            Common.spawnTwirlEffect(world, player);
+            ClientUtils.spawnTwirlEffect(world, player);
         return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
     }
 
@@ -44,7 +44,7 @@ public class ItemDebug extends ItemBasic
     public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity)
     {
         if(entity.worldObj.isRemote)
-            Common.spawnTwirlEffect(entity.worldObj, entity);
+            ClientUtils.spawnTwirlEffect(entity.worldObj, entity);
         return true;
     }
 

@@ -1,8 +1,7 @@
-package com.brightspark.bitsandbobs.entity;
+package com.brightspark.bitsandbobs.particle;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 public class ParticleStatic extends Particle

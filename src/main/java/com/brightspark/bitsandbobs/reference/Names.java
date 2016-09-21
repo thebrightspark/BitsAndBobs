@@ -10,6 +10,9 @@ public class Names
         public static final String FLARE_GUN = "itemFlareGun";
         public static final String FLARE_AMMO = "itemFlareAmmo";
 
+        public static final String BULLET = "itemBullet";
+        public static final String GUN = "itemGun";
+
         public static final String DEBUG = "itemDebug";
     }
 

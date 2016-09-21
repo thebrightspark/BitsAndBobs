@@ -3,11 +3,10 @@ package com.brightspark.bitsandbobs.init;
 import com.brightspark.bitsandbobs.BitsAndBobs;
 import com.brightspark.bitsandbobs.reference.Names;
 import com.brightspark.bitsandbobs.reference.Reference;
-import com.brightspark.bitsandbobs.util.Common;
+import com.brightspark.bitsandbobs.util.ClientUtils;
 import com.brightspark.bitsandbobs.util.LogHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialLiquid;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
@@ -61,6 +60,6 @@ public class BABFluids
     public static void regModels()
     {
         if(blockXpJuice != null)
-            Common.regFluidModel((IFluidBlock) blockXpJuice);
+            ClientUtils.regFluidModel((IFluidBlock) blockXpJuice);
     }
 }

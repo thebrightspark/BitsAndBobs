@@ -1,6 +1,6 @@
-package com.brightspark.bitsandbobs.entity;
+package com.brightspark.bitsandbobs.particle;
 
-import com.brightspark.bitsandbobs.util.Common;
+import com.brightspark.bitsandbobs.util.ClientUtils;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
@@ -41,7 +41,7 @@ public class ParticleFlare extends Particle
 
         //Spawn child particles
         for(int i = rand.nextInt(4) + 1; i > 0; i--)
-            Common.spawnEffect(new Child(worldObj, posX, posY, posZ, motionX, motionY, motionZ));
+            ClientUtils.spawnEffect(new Child(worldObj, posX, posY, posZ, motionX, motionY, motionZ));
 
         motionY -= 0.01d;
         moveEntity(motionX, motionY, motionZ);

@@ -1,5 +1,6 @@
 package com.brightspark.bitsandbobs.entity;
 
+import com.brightspark.bitsandbobs.reference.Config;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -18,14 +19,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 
-/**
- * Created by Mark on 18/07/2016.
- */
 public class EntityPlayerGhost extends EntityLivingBase implements IEntityAdditionalSpawnData
 {
     private static final String KEY_AGE = "ghostAge";
     private static final String KEY_SKIN = "ghostSkin";
-    private static final int MAX_GHOST_AGE = 200; //10 secs
+    private static final int MAX_GHOST_AGE = Config.mirageOrbGhostLife * 20;
     private int ghostAge;
     public ResourceLocation playerSkin;
     public EnumHandSide handSide;
@@ -62,26 +60,7 @@ public class EntityPlayerGhost extends EntityLivingBase implements IEntityAdditi
     public void onUpdate()
     {
         if(net.minecraftforge.common.ForgeHooks.onLivingUpdate(this)) return;
-
         onLivingUpdate();
-
-        /*
-        //Spawn particles
-        if(worldObj.isRemote && rand.nextBoolean())
-        {
-            AxisAlignedBB bounds = getEntityBoundingBox();
-            double diffX = bounds.maxX - bounds.minX;
-            double diffY = bounds.maxY - bounds.minY;
-            double diffZ = bounds.maxZ - bounds.minZ;
-            for(int i = 0; i < rand.nextInt(5) + 5; i++)
-            {
-                double x = (rand.nextDouble() * diffX) + bounds.minX;
-                double y = (rand.nextDouble() * diffY) + bounds.minY;
-                double z = (rand.nextDouble() * diffZ) + bounds.minZ;
-                Common.spawnEffect(new ParticleDisappearingStatic(worldObj, x, y, z, 20, 82));
-            }
-        }
-        */
         firstUpdate = false;
     }
 

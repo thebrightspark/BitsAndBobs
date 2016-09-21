@@ -23,6 +23,7 @@ public class ItemCooldownBasic extends ItemBasic
     public ItemCooldownBasic(String itemName, int maxCooldown, boolean useDurabilityBar)
     {
         super(itemName);
+        setMaxStackSize(1);
         MAX_COOLDOWN = maxCooldown;
         durabilityBar = useDurabilityBar;
     }
@@ -84,7 +85,7 @@ public class ItemCooldownBasic extends ItemBasic
 
     public boolean showDurabilityBar(ItemStack stack)
     {
-        return NBTHelper.getInt(stack, KEY_COOLDOWN) > 0;
+        return durabilityBar && NBTHelper.getInt(stack, KEY_COOLDOWN) > 0;
     }
 
     public double getDurabilityForDisplay(ItemStack stack)

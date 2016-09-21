@@ -1,22 +1,43 @@
 package com.brightspark.bitsandbobs.init;
 
 import com.brightspark.bitsandbobs.BitsAndBobs;
+import com.brightspark.bitsandbobs.entity.EntityBullet;
 import com.brightspark.bitsandbobs.entity.EntityPlayerGhost;
+import com.brightspark.bitsandbobs.entity.RenderBullet;
 import com.brightspark.bitsandbobs.entity.RenderPlayerGhost;
+import com.brightspark.bitsandbobs.util.LogHelper;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.Entity;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.List;
+
 public class BABEntities
 {
+    private static List<Class<? extends Entity>> ENTITY_CLASSES = new ArrayList<Class<? extends Entity>>();
     private static int modEntityId = 0;
 
-    public static void init(boolean isClientSide)
+    private static void regEntity(Class<? extends Entity> entityClass, String name)
     {
-        EntityRegistry.registerModEntity(EntityPlayerGhost.class, "PlayerGhost", ++modEntityId, BitsAndBobs.instance, 64, 1, false);
+        EntityRegistry.registerModEntity(entityClass, name, ++modEntityId, BitsAndBobs.instance, 64, 1, false);
+        ENTITY_CLASSES.add(entityClass);
+    }
 
-        if(isClientSide)
-        {
-            RenderingRegistry.registerEntityRenderingHandler(EntityPlayerGhost.class, RenderPlayerGhost.FACTORY);
-        }
+    public static void regEntities()
+    {
+        regEntity(EntityPlayerGhost.class, "PlayerGhost");
+        //TODO: Uncomment these!
+        //regEntity(EntityBullet.class, "EntityBullet");
+    }
+
+    public static void regRenders()
+    {
+        RenderingRegistry.registerEntityRenderingHandler(EntityPlayerGhost.class, RenderPlayerGhost.FACTORY);
+        //RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, RenderBullet.FACTORY);
     }
 }

@@ -3,7 +3,7 @@ package com.brightspark.bitsandbobs.tileentity;
 import com.brightspark.bitsandbobs.container.ContainerBlockHealing;
 import com.brightspark.bitsandbobs.reference.Config;
 import com.brightspark.bitsandbobs.reference.Reference;
-import com.brightspark.bitsandbobs.util.Common;
+import com.brightspark.bitsandbobs.util.ClientUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -122,7 +122,7 @@ public class TileHealing extends BABTileEntity implements ITickable, IInteractio
                 if(fuel > 0 && p.shouldHeal() && !p.capabilities.isCreativeMode)
                 {
                     if(worldObj.isRemote)
-                        Common.spawnTwirlEffect(worldObj, p);
+                        ClientUtils.spawnTwirlEffect(worldObj, p);
                     else
                     {
                         p.heal(2); //Heal 1 heart

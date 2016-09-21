@@ -1,38 +1,56 @@
 package com.brightspark.bitsandbobs.init;
 
 import com.brightspark.bitsandbobs.item.*;
-import com.brightspark.bitsandbobs.util.Common;
+import com.brightspark.bitsandbobs.util.ClientUtils;
 import com.brightspark.bitsandbobs.reference.Names;
-import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeModContainer;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BABItems
 {
-    public static final ItemLifeStick itemLifeStick = new ItemLifeStick();
-    public static final ItemBasic itemBloodPrismarine = new ItemBasic(Names.Items.BLOOD_PRISMARINE);
-    public static final ItemMirageOrb itemMirageOrb = new ItemMirageOrb();
-    public static final ItemFlareGun itemFlareGun = new ItemFlareGun();
-    public static final ItemBasic itemFlareAmmo = new ItemBasic(Names.Items.FLARE_AMMO);
+    public static List<Item> ITEMS = new ArrayList<Item>();
 
-    public static final ItemDebug itemDebug = new ItemDebug(Names.Items.DEBUG);
+    public static ItemLifeStick itemLifeStick;
+    public static ItemBasic itemBloodPrismarine;
+    public static ItemMirageOrb itemMirageOrb;
+    public static ItemFlareGun itemFlareGun;
+    public static ItemBasic itemFlareAmmo;
+
+    public static ItemBasic itemBullet;
+    public static ItemGun itemGun;
+
+    public static ItemDebug itemDebug;
 
     public static ItemStack itemBucketXpJuice;
 
-    public static void init()
+    public static void regItem(Item item)
     {
-        GameRegistry.register(itemLifeStick);
-        GameRegistry.register(itemBloodPrismarine);
-        GameRegistry.register(itemMirageOrb);
-        GameRegistry.register(itemFlareGun);
-        GameRegistry.register(itemFlareAmmo);
+        GameRegistry.register(item);
+        ITEMS.add(item);
+    }
 
-        GameRegistry.register(itemDebug);
+    public static void regItems()
+    {
+        regItem(itemLifeStick = new ItemLifeStick());
+        regItem(itemBloodPrismarine = new ItemBasic(Names.Items.BLOOD_PRISMARINE));
+        regItem(itemMirageOrb = new ItemMirageOrb());
+        regItem(itemFlareGun = new ItemFlareGun());
+        regItem(itemFlareAmmo = new ItemBasic(Names.Items.FLARE_AMMO));
 
+        //TODO: Uncomment these!
+        //regItem(itemBullet = new ItemBasic(Names.Items.BULLET));
+        //regItem(itemGun = new ItemGun(Names.Items.GUN, 30));
+
+        regItem(itemDebug = new ItemDebug(Names.Items.DEBUG));
+
+        /*
         if(FluidRegistry.isUniversalBucketEnabled())
         {
             if(BABFluids.fluidXpJuice != null)
@@ -41,16 +59,12 @@ public class BABItems
                 itemBucketXpJuice = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, BABFluids.fluidXpJuice);
             }
         }
+        */
     }
 
     public static void regModels()
     {
-        Common.regModel(itemLifeStick);
-        Common.regModel(itemBloodPrismarine);
-        Common.regModel(itemMirageOrb);
-        Common.regModel(itemFlareGun);
-        Common.regModel(itemFlareAmmo);
-
-        Common.regModel(itemDebug);
+        for(Item item : ITEMS)
+            ClientUtils.regModel(item);
     }
 }

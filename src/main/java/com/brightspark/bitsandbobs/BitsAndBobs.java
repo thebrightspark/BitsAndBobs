@@ -57,57 +57,22 @@ public class BitsAndBobs
 
         ConfigHandler.init(event.getSuggestedConfigurationFile());
         MinecraftForge.EVENT_BUS.register(new ConfigHandler());
-        //Create mapping for valid healing block items with fuel values
-        for(int i = 0; i < Config.healingBlockValidFuel.length; i++)
-        {
-            String[] entry = Config.healingBlockValidFuel[i].split(",");
-            //2 values -> Item ID and fuel value
-            if(entry.length == 2)
-            {
-                Item item = Item.getByNameOrId(entry[0]);
-                if(item == null) continue;
-                int value = -1;
-                try
-                {
-                    value = Integer.parseInt(entry[1]);
-                }
-                catch(NumberFormatException e) {}
-                if(value < 1) continue;
-                Config.healingBlockValidFuelStacks.put(new ItemStack(item), value);
-            }
-            //3 values -> Item ID, Item metadata and fuel value
-            else if(entry.length == 3)
-            {
-                Item item = Item.getByNameOrId(entry[0]);
-                if(item == null) continue;
-                int meta = -1;
-                int value = -1;
-                try
-                {
-                    meta = Integer.parseInt(entry[1]);
-                    value = Integer.parseInt(entry[2]);
-                }
-                catch(NumberFormatException e) {}
-                if(meta < 0 || value < 1) continue;
-                Config.healingBlockValidFuelStacks.put(new ItemStack(item, 1, meta), value);
-            }
-        }
-        //LogHelper.info("Generated ItemStack map: (" + Config.healingBlockValidFuelStacks.size() + " values)\n" + Config.healingBlockValidFuelStacks.toString());
-
+        ConfigHandler.getHealingBlockInputs();
         MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 
         NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
         NETWORK.registerMessage(MessageSpawnGhostOnServer.Handler.class, MessageSpawnGhostOnServer.class, 0, Side.SERVER);
         NETWORK.registerMessage(MessageSetClientGhostData.Handler.class, MessageSetClientGhostData.class, 1, Side.CLIENT);
 
-        BABItems.init();
-        BABBlocks.init();
+        BABItems.regItems();
+        BABBlocks.regBlocks();
+        BABEntities.regEntities();
         if(event.getSide() == Side.CLIENT)
         {
             BABItems.regModels();
             BABBlocks.regModels();
+            BABEntities.regRenders();
         }
-        BABEntities.init(event.getSide() == Side.CLIENT);
     }
 
     @Mod.EventHandler

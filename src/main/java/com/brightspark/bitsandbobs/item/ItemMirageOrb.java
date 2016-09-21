@@ -2,6 +2,7 @@ package com.brightspark.bitsandbobs.item;
 
 import com.brightspark.bitsandbobs.BitsAndBobs;
 import com.brightspark.bitsandbobs.message.MessageSpawnGhostOnServer;
+import com.brightspark.bitsandbobs.reference.Config;
 import com.brightspark.bitsandbobs.reference.Names;
 import com.brightspark.bitsandbobs.util.LogHelper;
 import com.brightspark.bitsandbobs.util.NBTHelper;
@@ -23,8 +24,7 @@ public class ItemMirageOrb extends ItemCooldownBasic
 {
     public ItemMirageOrb()
     {
-        super(Names.Items.MIRAGE_ORB, 1200);
-        setMaxStackSize(1);
+        super(Names.Items.MIRAGE_ORB, Config.mirageOrbCooldown * 20);
     }
 
     @Override

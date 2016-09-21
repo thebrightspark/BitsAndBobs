@@ -1,7 +1,7 @@
 package com.brightspark.bitsandbobs.util;
 
-import com.brightspark.bitsandbobs.entity.ParticleFlare;
-import com.brightspark.bitsandbobs.entity.ParticleTrailing;
+import com.brightspark.bitsandbobs.particle.ParticleFlare;
+import com.brightspark.bitsandbobs.particle.ParticleTrailing;
 import com.brightspark.bitsandbobs.reference.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.IFluidBlock;
 
-public class Common
+public class ClientUtils
 {
     private static Minecraft mc = Minecraft.getMinecraft();
 

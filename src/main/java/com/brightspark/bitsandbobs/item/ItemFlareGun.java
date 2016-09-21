@@ -2,7 +2,7 @@ package com.brightspark.bitsandbobs.item;
 
 import com.brightspark.bitsandbobs.init.BABItems;
 import com.brightspark.bitsandbobs.reference.Names;
-import com.brightspark.bitsandbobs.util.Common;
+import com.brightspark.bitsandbobs.util.ClientUtils;
 import com.brightspark.bitsandbobs.util.NBTHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,7 +21,6 @@ public class ItemFlareGun extends ItemCooldownBasic
     public ItemFlareGun()
     {
         super(Names.Items.FLARE_GUN, 40);
-        setMaxStackSize(1);
     }
 
     @Override
@@ -29,14 +28,11 @@ public class ItemFlareGun extends ItemCooldownBasic
     {
         boolean isLoaded = NBTHelper.getBoolean(stack, KEY_LOADED);
 
-        //Only run the code on the server
-        if(world.isRemote)
-            return false;
-
         if(!player.isSneaking() && isLoaded && !isActive(stack))
         {
             //Spawn effect
-            Common.spawnFlareEffect(world, player);
+            if(world.isRemote)
+                ClientUtils.spawnFlareEffect(world, player);
             if(!player.isCreative())
                 NBTHelper.setBoolean(stack, KEY_LOADED, false);
             return false;

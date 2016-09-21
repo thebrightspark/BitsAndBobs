@@ -28,7 +28,7 @@ public class EntityEventHandler
         {
             EntityPlayer player = (EntityPlayer) event.getSource().getSourceOfDamage();
             ItemStack heldStack = player.getHeldItemMainhand();
-            if(heldStack.getItem().equals(Items.PRISMARINE_SHARD) && heldStack.stackSize == 1 && isValidMob(EntityList.getEntityString(event.getEntityLiving())))
+            if(heldStack != null && heldStack.getItem().equals(Items.PRISMARINE_SHARD) && heldStack.stackSize == 1 && isValidMob(EntityList.getEntityString(event.getEntityLiving())))
                 player.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(BABItems.itemBloodPrismarine));
         }
     }
