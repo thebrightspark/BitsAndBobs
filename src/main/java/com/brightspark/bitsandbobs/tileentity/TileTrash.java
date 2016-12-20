@@ -16,9 +16,6 @@ import net.minecraft.world.IInteractionObject;
 
 import javax.annotation.Nullable;
 
-/**
- * Created by Mark on 28/06/2016.
- */
 public class TileTrash extends BABTileEntity implements ISidedInventory, IInteractionObject
 {
     private final String KEY_INVENTORY = "inventory";
