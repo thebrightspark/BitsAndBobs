@@ -48,3 +48,6 @@ tooltip.shift=Hold SHIFT for extra info
 
 //Misc
 
+bitsandbobs.config.title=Bits And Bobs Config
+bitsandbobs.config.titleGeneral=General Config
+bitsandbobs.config.titleGeneral.tooltip=Contains all the general config options

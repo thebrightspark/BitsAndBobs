@@ -24,6 +24,7 @@ public class BABItems
     public static ItemBasic itemFlareAmmo;
 
     public static ItemBasic itemBullet;
+    public static ItemBulletClip itemBulletClip;
     public static ItemGun itemGun;
 
     public static ItemDebug itemDebug;
@@ -44,9 +45,9 @@ public class BABItems
         regItem(itemFlareGun = new ItemFlareGun());
         regItem(itemFlareAmmo = new ItemBasic(Names.Items.FLARE_AMMO));
 
-        //TODO: Uncomment these!
-        //regItem(itemBullet = new ItemBasic(Names.Items.BULLET));
-        //regItem(itemGun = new ItemGun(Names.Items.GUN, 30));
+        regItem(itemBullet = new ItemBasic(Names.Items.BULLET));
+        regItem(itemBulletClip = new ItemBulletClip(Names.Items.BULLET_CLIP));
+        regItem(itemGun = new ItemGun(Names.Items.GUN));
 
         regItem(itemDebug = new ItemDebug(Names.Items.DEBUG));
 

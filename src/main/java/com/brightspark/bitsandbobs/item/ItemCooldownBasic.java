@@ -80,7 +80,7 @@ public class ItemCooldownBasic extends ItemBasic
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged)
     {
         //This change will stop the animation playing due to the cooldown changing
-        return !oldStack.isItemEqual(newStack) || (ItemMirageOrb.isActive(oldStack) != ItemMirageOrb.isActive(newStack));
+        return !oldStack.isItemEqual(newStack) || (isActive(oldStack) != isActive(newStack));
     }
 
     public boolean showDurabilityBar(ItemStack stack)

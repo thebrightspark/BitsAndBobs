@@ -5,10 +5,13 @@ import com.brightspark.bitsandbobs.reference.Reference;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConfigHandler
 {
@@ -17,25 +20,60 @@ public class ConfigHandler
         public static final String GENERAL = Configuration.CATEGORY_GENERAL;
     }
 
-    public static Configuration configuration;
+    public static Configuration config;
+    private static List<String> propOrder = new ArrayList<String>();
 
     public static void init(File configFile)
     {
-        if(configuration == null)
+        if(config == null)
         {
-            configuration = new Configuration(configFile);
+            config = new Configuration(configFile);
             loadConfiguration();
         }
     }
 
+    private static String[] getStringList(String key, String[] defaultValue, String comment)
+    {
+        Property prop = config.get(Categories.GENERAL, key, defaultValue, comment);
+        setPropDefaults(prop, key);
+        return prop.getStringList();
+    }
+
+    private static String getString(String key, String defaultValue, String comment)
+    {
+        Property prop = config.get(Categories.GENERAL, key, defaultValue, comment);
+        setPropDefaults(prop, key);
+        return prop.getString();
+    }
+
+    private static int getInt(String key, int defaultValue, int min, int max, String comment)
+    {
+        Property prop = config.get(Categories.GENERAL, key, defaultValue, comment).setMinValue(min).setMaxValue(max);
+        setPropDefaults(prop, key);
+        return prop.getInt();
+    }
+
+    private static void setPropDefaults(Property prop, String key)
+    {
+        prop.setLanguageKey(Reference.MOD_ID + ".config." + key);
+        propOrder.add(prop.getName());
+    }
+
     private static void loadConfiguration()
     {
-        Config.healingBlockValidFuel = configuration.getStringList("healingBlockValidFuel", Categories.GENERAL, Config.healingBlockValidFuel, "A list of all item IDs which are valid to be used as fuel in the healing block. Put all metadata for an id in the next entry in the array with individual metadata separated by commas (See default for example).");
-        Config.mirageOrbCooldown = configuration.getInt("mirageOrbCooldown", Categories.GENERAL, Config.mirageOrbCooldown, 0, Integer.MAX_VALUE, "The Mirage Orb's cooldown in seconds");
-        Config.mirageOrbGhostLife = configuration.getInt("mirageOrbGhostLife", Categories.GENERAL, Config.mirageOrbGhostLife, 1, Integer.MAX_VALUE, "The Mirage Orb ghost's life in seconds");
+        propOrder.clear();
 
-        if(configuration.hasChanged())
-            configuration.save();
+        Config.healingBlockValidFuel = getStringList("healingBlockValidFuel", Config.healingBlockValidFuel, "A list of all item IDs which are valid to be used as fuel in the healing block. Put all metadata for an id in the next entry in the array with individual metadata separated by commas (See default for example).");
+        Config.mirageOrbCooldown = getInt("mirageOrbCooldown", Config.mirageOrbCooldown, 0, Integer.MAX_VALUE, "The Mirage Orb's cooldown in seconds");
+        Config.mirageOrbGhostLife = getInt("mirageOrbGhostLife", Config.mirageOrbGhostLife, 1, Integer.MAX_VALUE, "The Mirage Orb ghost's life in seconds");
+
+        Config.commandKillName = getString("commandKillName", Config.commandKillName, "Name for the kill command - configurable in-case of conflicting command names");
+        Config.commandKillMessages = getStringList("commandKillMessages", Config.commandKillMessages, "Kill command result messages. Use one '%s' somewhere in the message to insert the kill count there.");
+
+        config.setCategoryPropertyOrder(Categories.GENERAL, propOrder);
+
+        if(config.hasChanged())
+            config.save();
     }
 
     @SubscribeEvent

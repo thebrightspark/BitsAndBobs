@@ -11,7 +11,9 @@ public class Names
         public static final String FLARE_AMMO = "itemFlareAmmo";
 
         public static final String BULLET = "itemBullet";
+        public static final String BULLET_CLIP = "itemBulletClip";
         public static final String GUN = "itemGun";
+        public static final String AMMO_BELT = "itemAmmoBelt";
 
         public static final String DEBUG = "itemDebug";
     }
