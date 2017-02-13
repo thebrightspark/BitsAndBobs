@@ -10,9 +10,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-/**
- * Created by Mark on 12/02/2017.
- */
 public class ItemBulletClip extends ItemBasic
 {
     //TODO: Make texture change depending on how full it is?

@@ -1,13 +1,11 @@
 package com.brightspark.bitsandbobs.tileentity;
 
-import com.brightspark.bitsandbobs.container.ContainerBlockTrash;
+import com.brightspark.bitsandbobs.gui.ContainerBlockTrash;
 import com.brightspark.bitsandbobs.reference.Reference;
-import com.brightspark.bitsandbobs.util.LogHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;

@@ -1,10 +1,7 @@
 package com.brightspark.bitsandbobs.gui;
 
-import com.brightspark.bitsandbobs.container.ContainerBlockHealing;
-import com.brightspark.bitsandbobs.container.ContainerBlockTrash;
 import com.brightspark.bitsandbobs.init.BABBlocks;
 import com.brightspark.bitsandbobs.reference.Reference;
-import com.brightspark.bitsandbobs.tileentity.TileHealing;
 import com.brightspark.bitsandbobs.tileentity.TileTrash;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;

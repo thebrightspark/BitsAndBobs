@@ -1,6 +1,5 @@
 package com.brightspark.bitsandbobs.gui;
 
-import com.brightspark.bitsandbobs.container.ContainerBlockHealing;
 import com.brightspark.bitsandbobs.init.BABBlocks;
 import com.brightspark.bitsandbobs.reference.Reference;
 import com.brightspark.bitsandbobs.tileentity.TileHealing;

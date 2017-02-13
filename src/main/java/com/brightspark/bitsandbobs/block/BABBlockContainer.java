@@ -1,6 +1,7 @@
 package com.brightspark.bitsandbobs.block;
 
 import com.brightspark.bitsandbobs.BitsAndBobs;
+import com.brightspark.bitsandbobs.util.CommonUtils;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -36,7 +37,7 @@ public abstract class BABBlockContainer extends BlockContainer
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
     {
         if(!world.isRemote && !player.isSneaking())
-            player.openGui(BitsAndBobs.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
+            CommonUtils.openGui(player, world, pos);
         return true;
     }
 }

@@ -1,7 +1,7 @@
 package com.brightspark.bitsandbobs;
 
 import com.brightspark.bitsandbobs.command.CommandKill;
-import com.brightspark.bitsandbobs.gui.GuiHandler;
+import com.brightspark.bitsandbobs.handler.GuiHandler;
 import com.brightspark.bitsandbobs.handler.ConfigHandler;
 import com.brightspark.bitsandbobs.handler.EntityEventHandler;
 import com.brightspark.bitsandbobs.init.*;

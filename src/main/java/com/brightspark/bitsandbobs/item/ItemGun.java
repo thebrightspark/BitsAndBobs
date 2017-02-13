@@ -71,6 +71,8 @@ public class ItemGun extends ItemCooldownBasic
                 return;
         }
 
+        //TODO: Check any ammo belts before any loose ones in inventory
+
         //Check main inventory
         for(int i = 0; i < player.inventory.mainInventory.length; i++)
         {

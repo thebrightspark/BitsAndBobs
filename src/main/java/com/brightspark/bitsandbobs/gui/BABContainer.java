@@ -1,25 +1,24 @@
-package com.brightspark.bitsandbobs.container;
+package com.brightspark.bitsandbobs.gui;
 
-import com.brightspark.bitsandbobs.tileentity.BABTileEntity;
-import com.brightspark.bitsandbobs.util.LogHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class BABContainer extends Container
 {
-    protected BABTileEntity inventory;
+    protected IInventory inventory;
 
     protected int slotInvStart = 1;
     protected int invStartX = 8;
     protected int invStartY = 84;
 
-    public BABContainer(InventoryPlayer invPlayer, BABTileEntity tileEntity)
+    public BABContainer(InventoryPlayer invPlayer, IInventory inventory)
     {
-        inventory = tileEntity;
+        this.inventory = inventory;
         init();
         addSlots();
         bindPlayerInventory(invPlayer);
@@ -34,6 +33,14 @@ public class BABContainer extends Container
      * Called after init() to add slots to the container.
      */
     protected void addSlots() {}
+
+    /**
+     * Called by transferStackInSlot for an easy way to set valid items without overriding the whole method
+     */
+    public boolean isValidStack(ItemStack stack)
+    {
+        return true;
+    }
 
     @Override
     public boolean canInteractWith(EntityPlayer playerIn)
@@ -93,7 +100,7 @@ public class BABContainer extends Container
                 slotObject.onSlotChange(stackInSlot, stack);
             }
             //If slot Inventory
-            else if (slot >= slotInvStart && slot <= slotInvStart+36 && inventory.isValidItem(stackInSlot))
+            else if (slot >= slotInvStart && slot <= slotInvStart+36 && isValidStack(stackInSlot))
             {
                 if (!this.mergeItemStack(stackInSlot, 0, 1, false))
                     return null;

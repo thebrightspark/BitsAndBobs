@@ -1,4 +1,4 @@
-package com.brightspark.bitsandbobs.container;
+package com.brightspark.bitsandbobs.gui;
 
 import com.brightspark.bitsandbobs.tileentity.BABTileEntity;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -23,9 +23,18 @@ public class ContainerBlockHealing extends BABContainer
         {
             public boolean isItemValid(ItemStack stack)
             {
-                return ((BABTileEntity)inventory).isValidItem(stack);
+                return inventory.isItemValidForSlot(slotNumber, stack);
             }
         });
+    }
+
+    /**
+     * Called by transferStackInSlot for an easy way to set valid items without overriding the whole method
+     */
+    @Override
+    public boolean isValidStack(ItemStack stack)
+    {
+        return inventory.isItemValidForSlot(0, stack);
     }
 
     /**

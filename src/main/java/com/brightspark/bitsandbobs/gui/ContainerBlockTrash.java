@@ -1,8 +1,7 @@
-package com.brightspark.bitsandbobs.container;
+package com.brightspark.bitsandbobs.gui;
 
 import com.brightspark.bitsandbobs.tileentity.BABTileEntity;
 import com.brightspark.bitsandbobs.tileentity.TileTrash;
-import com.brightspark.bitsandbobs.util.LogHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
@@ -90,7 +89,7 @@ public class ContainerBlockTrash extends BABContainer
                 slotObject.onSlotChange(stackInSlot, stack);
             }
             //If slot Inventory
-            else if (slot >= slotInvStart && slot <= slotInvStart+36 && inventory.isValidItem(stackInSlot))
+            else if (slot >= slotInvStart && slot <= slotInvStart+36 && inventory.isItemValidForSlot(0, stackInSlot))
             {
                 if (!this.mergeItemStack(stackInSlot, 0, 1, false))
                     return null;

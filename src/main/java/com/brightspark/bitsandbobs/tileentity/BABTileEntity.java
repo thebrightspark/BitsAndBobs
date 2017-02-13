@@ -63,11 +63,6 @@ public abstract class BABTileEntity extends TileEntity implements ISidedInventor
         readFromNBT(pkt.getNbtCompound());
     }
 
-    public boolean isValidItem(ItemStack stack)
-    {
-        return true;
-    }
-
     public void setDefaultName(String name)
     {
         defaultName = name;

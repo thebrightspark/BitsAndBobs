@@ -22,9 +22,6 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Created by Mark on 12/02/2017.
- */
 public class CommandKill extends CommandBase
 {
     @Override

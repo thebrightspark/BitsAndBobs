@@ -1,6 +1,6 @@
 package com.brightspark.bitsandbobs.tileentity;
 
-import com.brightspark.bitsandbobs.container.ContainerBlockHealing;
+import com.brightspark.bitsandbobs.gui.ContainerBlockHealing;
 import com.brightspark.bitsandbobs.reference.Config;
 import com.brightspark.bitsandbobs.reference.Reference;
 import com.brightspark.bitsandbobs.util.ClientUtils;
@@ -39,15 +39,6 @@ public class TileHealing extends BABTileEntity implements ITickable, IInteractio
     public void setTicksBetweenChecks(int ticks)
     {
         this.ticks = ticks;
-    }
-
-    /**
-     * Returns whether the given stack is a valid input for this block
-     */
-    @Override
-    public boolean isValidItem(ItemStack stack)
-    {
-        return getFuelForItem(stack) > 0;
     }
 
     public static int getFuelForItem(ItemStack stack)
@@ -223,7 +214,7 @@ public class TileHealing extends BABTileEntity implements ITickable, IInteractio
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack)
     {
-        return index == 0 && isValidItem(stack);
+        return index == 0 && getFuelForItem(stack) > 0;
     }
 
     @Override
