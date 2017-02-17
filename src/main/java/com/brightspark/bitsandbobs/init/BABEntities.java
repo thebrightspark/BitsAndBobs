@@ -5,15 +5,10 @@ import com.brightspark.bitsandbobs.entity.EntityBullet;
 import com.brightspark.bitsandbobs.entity.EntityPlayerGhost;
 import com.brightspark.bitsandbobs.entity.RenderBullet;
 import com.brightspark.bitsandbobs.entity.RenderPlayerGhost;
-import com.brightspark.bitsandbobs.util.LogHelper;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,13 +26,12 @@ public class BABEntities
     public static void regEntities()
     {
         regEntity(EntityPlayerGhost.class, "PlayerGhost");
-        //TODO: Uncomment these!
-        //regEntity(EntityBullet.class, "EntityBullet");
+        regEntity(EntityBullet.class, "EntityBullet");
     }
 
     public static void regRenders()
     {
         RenderingRegistry.registerEntityRenderingHandler(EntityPlayerGhost.class, RenderPlayerGhost.FACTORY);
-        //RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, RenderBullet.FACTORY);
+        RenderingRegistry.registerEntityRenderingHandler(EntityBullet.class, RenderBullet.FACTORY);
     }
 }

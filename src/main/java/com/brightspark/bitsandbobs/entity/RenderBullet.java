@@ -5,6 +5,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.RenderTippedArrow;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
@@ -12,7 +13,7 @@ import net.minecraftforge.fml.client.registry.IRenderFactory;
 public class RenderBullet extends Render<EntityBullet>
 {
     private static final ResourceLocation RES_LOC = new ResourceLocation("bitsandbobs:textures/entities");
-    public static final Factory FACTORY = new RenderBullet.Factory();
+    public static final Factory FACTORY = new Factory();
 
     protected RenderBullet(RenderManager renderManager)
     {
@@ -87,7 +88,7 @@ public class RenderBullet extends Render<EntityBullet>
     @Override
     protected ResourceLocation getEntityTexture(EntityBullet entity)
     {
-        return RES_LOC;
+        return RenderTippedArrow.RES_ARROW; //RES_LOC;
     }
 
     public static class Factory implements IRenderFactory<EntityBullet>

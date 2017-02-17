@@ -2,7 +2,6 @@ package com.brightspark.bitsandbobs.item;
 
 import com.brightspark.bitsandbobs.entity.EntityBullet;
 import com.brightspark.bitsandbobs.init.BABItems;
-import com.brightspark.bitsandbobs.util.LogHelper;
 import com.brightspark.bitsandbobs.util.NBTHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

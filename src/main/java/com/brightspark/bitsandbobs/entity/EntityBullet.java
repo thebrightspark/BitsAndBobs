@@ -26,8 +26,6 @@ import java.util.List;
 
 public class EntityBullet extends Entity implements IProjectile
 {
-    //TODO: Make bullet entity - don't forget a renderer!
-
     //Copied from EntityArrow
     private static final Predicate<Entity> BULLET_TARGETS = Predicates.and(new Predicate[] {EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE, new Predicate<Entity>()
     {
@@ -37,7 +35,7 @@ public class EntityBullet extends Entity implements IProjectile
         }
     }});
 
-    private float damage = 3f;
+    private float damage = 4f;
     private int knockbackStrength = 1;
     private Entity shooter;
     private int ticksInAir = 0;
@@ -48,15 +46,15 @@ public class EntityBullet extends Entity implements IProjectile
         setSize(0.2f, 0.2f);
     }
 
-    public EntityBullet(World world, BlockPos pos)
+    public EntityBullet(World world, double x, double y, double z)
     {
         this(world);
-        setPosition(pos.getX(), pos.getY(), pos.getZ());
+        setPosition(x, y, z);
     }
 
     public EntityBullet(World world, EntityLivingBase shooter)
     {
-        this(world, new BlockPos(shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1f, shooter.posZ));
+        this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1d, shooter.posZ);
         this.shooter = shooter;
         setHeadingFromShooter(shooter, 5f);
     }
@@ -84,7 +82,7 @@ public class EntityBullet extends Entity implements IProjectile
         float rotPitch = shooter.rotationPitch;
         float x = -MathHelper.sin(rotYaw * 0.017453292f) * MathHelper.cos(rotPitch * 0.017453292f);
         float y = -MathHelper.sin(rotPitch * 0.017453292f);
-        float z = -MathHelper.cos(rotYaw * 0.017453292f) * MathHelper.cos(rotPitch * 0.017453292f);
+        float z = MathHelper.cos(rotYaw * 0.017453292f) * MathHelper.cos(rotPitch * 0.017453292f);
         setThrowableHeading(x, y, z, velocity, 0);
         motionX += shooter.motionX;
         motionZ += shooter.motionZ;
@@ -119,7 +117,6 @@ public class EntityBullet extends Entity implements IProjectile
         {
             //Hit an entity
             float magnitude = MathHelper.sqrt_double(motionX * motionX + motionY * motionY + motionZ * motionZ);
-            int actualDamage = MathHelper.ceiling_double_int(magnitude * damage);
 
             //Create damage source
             DamageSource damageSource;
@@ -129,7 +126,7 @@ public class EntityBullet extends Entity implements IProjectile
                 damageSource = CommonUtils.causeBulletDamage(this, shooter);
 
             //Hit entity
-            if(entityHit.attackEntityFrom(damageSource, actualDamage))
+            if(entityHit.attackEntityFrom(damageSource, damage))
             {
                 if(entityHit instanceof EntityLivingBase)
                 {
@@ -137,7 +134,7 @@ public class EntityBullet extends Entity implements IProjectile
 
                     //Knockback
                     if(magnitude > 0)
-                        entityLiving.addVelocity(motionX * knockbackStrength * 0.6d / magnitude, 0.1d, motionZ * knockbackStrength * 0.6d / magnitude);
+                        entityLiving.addVelocity(knockbackStrength * 0.6d / magnitude, 0.1d, knockbackStrength * 0.6d / magnitude);
 
                     //Apply enchantments
                     if(shooter instanceof EntityLivingBase)
