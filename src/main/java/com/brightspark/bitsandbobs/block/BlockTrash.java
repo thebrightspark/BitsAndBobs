@@ -1,6 +1,5 @@
 package com.brightspark.bitsandbobs.block;
 
-import com.brightspark.bitsandbobs.reference.Names;
 import com.brightspark.bitsandbobs.tileentity.TileTrash;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -17,7 +16,7 @@ public class BlockTrash extends BABBlockContainer
 {
     public BlockTrash()
     {
-        super(Material.ROCK, Names.Blocks.TRASH);
+        super(Material.ROCK, "blockTrash");
     }
 
     @Override

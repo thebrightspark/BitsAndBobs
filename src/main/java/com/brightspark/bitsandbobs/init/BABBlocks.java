@@ -5,7 +5,6 @@ import com.brightspark.bitsandbobs.block.BlockLightning;
 import com.brightspark.bitsandbobs.block.BlockStellarEgg;
 import com.brightspark.bitsandbobs.block.BlockTrash;
 import com.brightspark.bitsandbobs.util.ClientUtils;
-import com.brightspark.bitsandbobs.reference.Names;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -32,8 +31,8 @@ public class BABBlocks
 
     public static void regBlocks()
     {
-        regBlock(blockHealing = new BlockHealing(Names.Blocks.HEALING, 1000, 20));
-        regBlock(blockHealing2 = new BlockHealing(Names.Blocks.HEALING_2, 2000, 5));
+        regBlock(blockHealing = new BlockHealing("blockHealing", 1000, 20));
+        regBlock(blockHealing2 = new BlockHealing("blockHealing2", 2000, 5));
         regBlock(blockStellarEgg = new BlockStellarEgg());
         regBlock(blockTrash = new BlockTrash());
         regBlock(blockLightning = new BlockLightning());

@@ -3,6 +3,7 @@ package com.brightspark.bitsandbobs.gui;
 import com.brightspark.bitsandbobs.InventorySimple;
 import com.brightspark.bitsandbobs.init.BABItems;
 import com.brightspark.bitsandbobs.item.ItemAmmoBelt;
+import com.brightspark.bitsandbobs.item.ItemBulletClip;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
@@ -40,7 +41,7 @@ public class ContainerAmmoBelt extends Container
                 @Override
                 public boolean isItemValid(@Nullable ItemStack stack)
                 {
-                    return stack == null || stack.getItem() == BABItems.itemBulletClip;
+                    return stack == null || stack.getItem() instanceof ItemBulletClip;
                 }
             });
 

@@ -13,12 +13,13 @@ import java.util.List;
 public class ItemBulletClip extends ItemBasic
 {
     //TODO: Make texture change depending on how full it is?
-    public static int CLIP_SIZE = 10;
+    public int clipSize;
 
-    public ItemBulletClip(String itemName)
+    public ItemBulletClip(String itemName, int clipSize)
     {
         super(itemName);
         setMaxStackSize(1);
+        this.clipSize = clipSize;
     }
 
     @Override
@@ -29,13 +30,18 @@ public class ItemBulletClip extends ItemBasic
         ItemStack clip = new ItemStack(itemIn);
         setBulletsAmount(clip, 0);
         subItems.add(clip.copy());
-        setBulletsAmount(clip, CLIP_SIZE);
+        setBulletsAmount(clip, clipSize);
         subItems.add(clip);
+    }
+
+    public static boolean isClipWithAmmo(ItemStack stack)
+    {
+        return stack != null && stack.getItem() instanceof ItemBulletClip && getBulletsAmount(stack) > 0;
     }
 
     public static void setBulletsAmount(ItemStack stack, int amount)
     {
-        NBTHelper.setInteger(stack, "ammo", Math.max(Math.min(amount, CLIP_SIZE), 0));
+        NBTHelper.setInteger(stack, "ammo", Math.max(Math.min(amount, ((ItemBulletClip) stack.getItem()).clipSize), 0));
     }
 
     public static int getBulletsAmount(ItemStack stack)
@@ -47,6 +53,6 @@ public class ItemBulletClip extends ItemBasic
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
     {
-        tooltip.add("Bullets: " + getBulletsAmount(stack) + "/" + CLIP_SIZE);
+        tooltip.add("Bullets: " + getBulletsAmount(stack) + "/" + clipSize);
     }
 }

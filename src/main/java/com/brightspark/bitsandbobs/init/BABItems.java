@@ -2,12 +2,8 @@ package com.brightspark.bitsandbobs.init;
 
 import com.brightspark.bitsandbobs.item.*;
 import com.brightspark.bitsandbobs.util.ClientUtils;
-import com.brightspark.bitsandbobs.reference.Names;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.ForgeModContainer;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.ArrayList;
@@ -26,7 +22,8 @@ public class BABItems
     public static ItemBasic itemBullet;
     public static ItemBulletClip itemBulletClip;
     public static ItemAmmoBelt itemAmmoBelt;
-    public static ItemGun itemGun;
+    public static ItemPistol itemPistol;
+    public static ItemBulletClip itemMinigunClip;
     public static ItemMinigun itemMinigun;
 
     public static ItemDebug itemDebug;
@@ -42,18 +39,19 @@ public class BABItems
     public static void regItems()
     {
         regItem(itemLifeStick = new ItemLifeStick());
-        regItem(itemBloodPrismarine = new ItemBasic(Names.Items.BLOOD_PRISMARINE));
+        regItem(itemBloodPrismarine = new ItemBasic("itemBloodPrismarine"));
         regItem(itemMirageOrb = new ItemMirageOrb());
         regItem(itemFlareGun = new ItemFlareGun());
-        regItem(itemFlareAmmo = new ItemBasic(Names.Items.FLARE_AMMO));
+        regItem(itemFlareAmmo = new ItemBasic("itemFlareAmmo"));
 
-        regItem(itemBullet = new ItemBasic(Names.Items.BULLET));
-        regItem(itemBulletClip = new ItemBulletClip(Names.Items.BULLET_CLIP));
+        regItem(itemBullet = new ItemBasic("itemBullet"));
+        regItem(itemBulletClip = new ItemBulletClip("itemBulletClip", 10));
         regItem(itemAmmoBelt = new ItemAmmoBelt());
-        regItem(itemGun = new ItemGun(Names.Items.GUN));
-        regItem(itemMinigun = new ItemMinigun(Names.Items.MINIGUN));
+        regItem(itemPistol = new ItemPistol());
+        regItem(itemMinigunClip = new ItemBulletClip("itemMinigunClip", 100));
+        regItem(itemMinigun = new ItemMinigun("itemMinigun"));
 
-        regItem(itemDebug = new ItemDebug(Names.Items.DEBUG));
+        regItem(itemDebug = new ItemDebug("itemDebug"));
 
         /*
         if(FluidRegistry.isUniversalBucketEnabled())

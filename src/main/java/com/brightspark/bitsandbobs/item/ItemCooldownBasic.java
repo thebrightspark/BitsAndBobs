@@ -56,7 +56,7 @@ public class ItemCooldownBasic extends ItemBasic
         if(!player.isCreative() && startCooldown)
             NBTHelper.setInteger(stack, KEY_COOLDOWN, MAX_COOLDOWN);
 
-        return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
+        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
     }
 
     @Override

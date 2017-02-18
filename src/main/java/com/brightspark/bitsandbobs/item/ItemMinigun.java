@@ -1,7 +1,7 @@
 package com.brightspark.bitsandbobs.item;
 
 import com.brightspark.bitsandbobs.entity.EntityBullet;
-import com.brightspark.bitsandbobs.util.LogHelper;
+import com.brightspark.bitsandbobs.util.NBTHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,14 +12,25 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemMinigun extends ItemBasic
+import java.util.List;
+
+public class ItemMinigun extends ItemBasic implements IUseAmmo
 {
-    protected final int minSpeed = 20;
-    protected final int maxSpeed = 2;
-    protected final float acceleration = -0.2f;
-    protected float curSpeed = minSpeed;
+    private final int minSpeed = 30;
+    private final int maxSpeed = 2;
+    private final float acceleration = -0.2f;
+    private final float deceleration = acceleration * -2;
+    private float curSpeed = minSpeed;
     private int lastShotTick = 0;
+
+    public static final int MAX_AMMO = 100;
+    //I need to cache the ammo amount here because shooting messes up if I update the stack's NBT
+    //So I update the NBT once the player has stopped shooting
+    private int ammoCache;
+    private boolean isInUse = false;
 
     public ItemMinigun(String itemName)
     {
@@ -30,15 +41,40 @@ public class ItemMinigun extends ItemBasic
     /**
      * How long it takes to use or consume an item
      */
+    @Override
     public int getMaxItemUseDuration(ItemStack stack)
     {
         return 72000;
     }
 
+    @Override
     public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
     {
-        lastShotTick = 0;
-        playerIn.setActiveHand(hand);
+        int ammo = getAmmoAmount(itemStackIn);
+
+        if(playerIn.isSneaking())
+        {
+            if(!worldIn.isRemote && ammo < MAX_AMMO)
+                ItemPistol.reloadAll(playerIn, itemStackIn);
+        }
+        else
+        {
+            if(ammo == 0)
+            {
+                //TODO: Play gun out of ammo sound
+                return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
+            }
+            else
+            {
+                //Start shooting
+                lastShotTick = 0;
+                ammoCache = ammo;
+                isInUse = true;
+                if(playerIn.isCreative())
+                    curSpeed = maxSpeed;
+                playerIn.setActiveHand(hand);
+            }
+        }
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
     }
 
@@ -48,10 +84,15 @@ public class ItemMinigun extends ItemBasic
      * @param player The Player using the item
      * @param count The amount of time in tick the item has been used for continuously
      */
+    @Override
     public void onUsingTick(ItemStack stack, EntityLivingBase player, int count)
     {
         if(player.worldObj.isRemote)
             return;
+
+        //Stop shooting if out of ammo
+        if(ammoCache <= 0)
+            player.stopActiveHand();
 
         int ticksUsed = getMaxItemUseDuration(stack) - count;
 
@@ -62,16 +103,27 @@ public class ItemMinigun extends ItemBasic
         else if(curSpeed < maxSpeed)
             curSpeed = maxSpeed;
 
-        //LogHelper.info("Minigun Speed: " + curSpeed + "   Count: " + ticksUsed + "   Next: " + lastShotTick + curSpeed);
+        //LogHelper.info("Minigun Speed: " + curSpeed + "   Count: " + ticksUsed + "   Next: " + (lastShotTick + curSpeed));
 
-        if(ticksUsed > lastShotTick + curSpeed)
+        if(ticksUsed >= lastShotTick + curSpeed)
         {
             //Shoot bullet
             //LogHelper.info("Pew");
-            player.worldObj.spawnEntityInWorld(new EntityBullet(player.worldObj, player));
+            player.worldObj.spawnEntityInWorld(new EntityBullet(player.worldObj, player).setShouldResetHurtTimer());
             player.worldObj.playSound(null, player.getPosition(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1f, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.5F);
             lastShotTick = ticksUsed;
+            if(!((EntityPlayer) player).isCreative())
+                ammoCache--;
         }
+    }
+
+    /**
+     * Called when the player stops using an Item (stops holding the right mouse button).
+     */
+    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft)
+    {
+        isInUse = false;
+        setAmmoAmount(stack, ammoCache);
     }
 
     @Override
@@ -83,11 +135,48 @@ public class ItemMinigun extends ItemBasic
         if(!player.isHandActive() && curSpeed < minSpeed)
         {
             //Slow down speed when not holding right click
-            if(curSpeed < minSpeed)
-                curSpeed -= acceleration;
-            else
+            curSpeed += deceleration;
+            if(curSpeed > minSpeed)
                 curSpeed = minSpeed;
             //LogHelper.info("Minigun Slowing Down: " + curSpeed);
         }
+    }
+
+    @Override
+    public void setAmmoAmount(ItemStack stack, int amount)
+    {
+        NBTHelper.setInteger(stack, "ammo", Math.max(amount, 0));
+    }
+
+    @Override
+    public int getAmmoAmount(ItemStack stack)
+    {
+        return NBTHelper.getInt(stack, "ammo");
+    }
+
+    @Override
+    public int getAmmoSpace(ItemStack stack)
+    {
+        return MAX_AMMO - getAmmoAmount(stack);
+    }
+
+    @Override
+    public boolean showDurabilityBar(ItemStack stack)
+    {
+        return true;
+    }
+
+    @Override
+    public double getDurabilityForDisplay(ItemStack stack)
+    {
+        int ammoAmount = isInUse ? ammoCache : getAmmoAmount(stack);
+        return 1 - ((float) ammoAmount / (float) MAX_AMMO);
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
+    {
+        tooltip.add("Ammo: " + getAmmoAmount(stack) + "/" + MAX_AMMO);
     }
 }

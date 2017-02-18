@@ -1,6 +1,5 @@
 package com.brightspark.bitsandbobs.block;
 
-import com.brightspark.bitsandbobs.reference.Names;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,7 +15,7 @@ public class BlockLightning extends BABBlock
 {
     public BlockLightning()
     {
-        super(Names.Blocks.LIGHTNING);
+        super("blockLightning");
     }
 
     @Override

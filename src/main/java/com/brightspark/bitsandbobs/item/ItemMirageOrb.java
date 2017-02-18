@@ -3,16 +3,11 @@ package com.brightspark.bitsandbobs.item;
 import com.brightspark.bitsandbobs.BitsAndBobs;
 import com.brightspark.bitsandbobs.message.MessageSpawnGhostOnServer;
 import com.brightspark.bitsandbobs.reference.Config;
-import com.brightspark.bitsandbobs.reference.Names;
-import com.brightspark.bitsandbobs.util.LogHelper;
 import com.brightspark.bitsandbobs.util.NBTHelper;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -24,7 +19,7 @@ public class ItemMirageOrb extends ItemCooldownBasic
 {
     public ItemMirageOrb()
     {
-        super(Names.Items.MIRAGE_ORB, Config.mirageOrbCooldown * 20);
+        super("itemMirageOrb", Config.mirageOrbCooldown * 20);
     }
 
     @Override

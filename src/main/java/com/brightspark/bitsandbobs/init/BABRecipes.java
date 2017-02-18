@@ -38,7 +38,7 @@ public class BABRecipes
         ItemBulletClip.setBulletsAmount(emptyClip, 0);
         GameRegistry.addRecipe(emptyClip, "i i", "i i", " i ", 'i', Items.IRON_INGOT);
         //Bullet Clips
-        int max = ItemBulletClip.CLIP_SIZE;
+        int max = BABItems.itemBulletClip.clipSize;
         for(int clipSize = 0; clipSize < max; clipSize++)
         {
             for(int numBullets = 1; numBullets <= Math.min(Math.min(max, 8), max - clipSize); numBullets++)

@@ -1,7 +1,6 @@
 package com.brightspark.bitsandbobs.item;
 
 import com.brightspark.bitsandbobs.util.NBTHelper;
-import com.brightspark.bitsandbobs.reference.Names;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,7 +22,7 @@ public class ItemLifeStick extends ItemBasic
 
     public ItemLifeStick()
     {
-        super(Names.Items.LIFE_STICK);
+        super("itemLifeStick");
         TOOLTIP = getUnlocalizedName() + ".tooltip.";
         setMaxStackSize(1);
     }

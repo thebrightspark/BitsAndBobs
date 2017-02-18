@@ -39,6 +39,7 @@ public class EntityBullet extends Entity implements IProjectile
     private int knockbackStrength = 1;
     private Entity shooter;
     private int ticksInAir = 0;
+    private boolean shouldResetHurtTimer = false;
 
     public EntityBullet(World world)
     {
@@ -57,6 +58,12 @@ public class EntityBullet extends Entity implements IProjectile
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1d, shooter.posZ);
         this.shooter = shooter;
         setHeadingFromShooter(shooter, 5f);
+    }
+
+    public EntityBullet setShouldResetHurtTimer()
+    {
+        shouldResetHurtTimer = true;
+        return this;
     }
 
     @Override
@@ -141,6 +148,12 @@ public class EntityBullet extends Entity implements IProjectile
                     {
                         EnchantmentHelper.applyThornEnchantments(entityLiving, shooter);
                         EnchantmentHelper.applyArthropodEnchantments((EntityLivingBase) shooter, entityLiving);
+                    }
+
+                    if(shouldResetHurtTimer)
+                    {
+                        entityLiving.hurtTime = 0;
+                        entityLiving.hurtResistantTime = 0;
                     }
 
                     bulletHit(entityLiving);

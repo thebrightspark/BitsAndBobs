@@ -2,6 +2,7 @@ package com.brightspark.bitsandbobs.item;
 
 import com.brightspark.bitsandbobs.entity.EntityBullet;
 import com.brightspark.bitsandbobs.init.BABItems;
+import com.brightspark.bitsandbobs.util.LogHelper;
 import com.brightspark.bitsandbobs.util.NBTHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -9,16 +10,19 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.List;
 
-public class ItemGun extends ItemCooldownBasic
+public class ItemPistol extends ItemCooldownBasic implements IUseAmmo
 {
     //TODO: Make model/texture for this and the bullets
 
-    public ItemGun(String itemName)
+    public static final int MAX_AMMO = 10;
+
+    public ItemPistol()
     {
-        super(itemName, 10, false);
+        super("itemGun", 10, false);
     }
 
     /**
@@ -36,7 +40,7 @@ public class ItemGun extends ItemCooldownBasic
         if(player.isSneaking())
         {
             //Reload
-            if(ammo < ItemBulletClip.CLIP_SIZE)
+            if(ammo < MAX_AMMO)
             {
                 reloadAll(player, stack);
                 return true;
@@ -60,33 +64,64 @@ public class ItemGun extends ItemCooldownBasic
     /**
      * Reloads the gun as much as possible using any ammo clips in the player's inventory
      */
-    private void reloadAll(EntityPlayer player, ItemStack gunStack)
+    public static void reloadAll(EntityPlayer player, ItemStack gunStack)
     {
+        if(gunStack == null || !(gunStack.getItem() instanceof IUseAmmo))
+        {
+            LogHelper.error("Trying to reload an ItemStack that is null of it's Item isn't an instance of IUseAmmo!");
+            return;
+        }
+
         //Check held items first
         for(EnumHand hand : EnumHand.values())
         {
             ItemStack heldStack = player.getHeldItem(hand);
-            if(isClipWithAmmo(heldStack) && reloadWithClip(gunStack, heldStack) == 0)
+            if(ItemBulletClip.isClipWithAmmo(heldStack) && reloadWithClip(gunStack, heldStack) == 0)
                 return;
         }
 
-        //TODO: Check any ammo belts before any loose ones in inventory
+        //Check any ammo belts before any loose ones in inventory
+        for(int i = 0; i < player.inventory.mainInventory.length; i++)
+        {
+            //Find ammo belts
+            ItemStack stack = player.inventory.mainInventory[i];
+            if(stack != null && stack.getItem() == BABItems.itemAmmoBelt)
+            {
+                //Find ammo clips within the ammo belt
+                ItemStackHandler ammoHandler = ItemAmmoBelt.getInventoryHandler(stack);
+                for(int j = 0; j < ammoHandler.getSlots(); j++)
+                {
+                    ItemStack ammoClip = ammoHandler.getStackInSlot(j);
+                    if(ItemBulletClip.isClipWithAmmo(ammoClip) && reloadWithClip(gunStack, ammoClip) == 0)
+                        return;
+                }
+            }
+        }
 
         //Check main inventory
         for(int i = 0; i < player.inventory.mainInventory.length; i++)
         {
             ItemStack stack = player.inventory.mainInventory[i];
-            if(isClipWithAmmo(stack) && reloadWithClip(gunStack, stack) == 0)
+            if(ItemBulletClip.isClipWithAmmo(stack) && reloadWithClip(gunStack, stack) == 0)
                 return;
         }
     }
 
+    /**
+     * Reloads the gun with the given clip stack
+     * Returns how many bullets weren't used of the amount given
+     */
     public static int reloadWithClip(ItemStack gunStack, ItemStack clipStack)
     {
         int bulletsInClip = ItemBulletClip.getBulletsAmount(clipStack);
-        int remaining = reload(gunStack, bulletsInClip);
-        ItemBulletClip.setBulletsAmount(clipStack, remaining);
-        return getAmmoSpace(gunStack);
+        if((clipStack.getItem() == BABItems.itemBulletClip && gunStack.getItem() instanceof ItemPistol) ||
+                (clipStack.getItem() == BABItems.itemMinigunClip && gunStack.getItem() instanceof ItemMinigun))
+        {
+            int remaining = reload(gunStack, bulletsInClip);
+            ItemBulletClip.setBulletsAmount(clipStack, remaining);
+            return ((IUseAmmo) gunStack.getItem()).getAmmoSpace(gunStack);
+        }
+        return bulletsInClip;
     }
 
     /**
@@ -95,32 +130,30 @@ public class ItemGun extends ItemCooldownBasic
      */
     public static int reload(ItemStack gunStack, int bullets)
     {
-        int spaceInGun = getAmmoSpace(gunStack);
+        int spaceInGun = ((IUseAmmo) gunStack.getItem()).getAmmoSpace(gunStack);
         if(spaceInGun == 0 || bullets == 0)
             return bullets;
         int toRefill = Math.min(spaceInGun, bullets);
-        setAmmoAmount(gunStack, getAmmoAmount(gunStack) + toRefill);
+        ((IUseAmmo) gunStack.getItem()).setAmmoAmount(gunStack, ((IUseAmmo) gunStack.getItem()).getAmmoAmount(gunStack) + toRefill);
         return bullets - toRefill;
     }
 
-    protected boolean isClipWithAmmo(ItemStack stack)
-    {
-        return stack != null && stack.getItem() == BABItems.itemBulletClip && ItemBulletClip.getBulletsAmount(stack) > 0;
-    }
-
-    protected static void setAmmoAmount(ItemStack stack, int amount)
+    @Override
+    public void setAmmoAmount(ItemStack stack, int amount)
     {
         NBTHelper.setInteger(stack, "ammo", Math.max(amount, 0));
     }
 
-    public static int getAmmoAmount(ItemStack stack)
+    @Override
+    public int getAmmoAmount(ItemStack stack)
     {
         return NBTHelper.getInt(stack, "ammo");
     }
 
-    public static int getAmmoSpace(ItemStack stack)
+    @Override
+    public int getAmmoSpace(ItemStack stack)
     {
-        return ItemBulletClip.CLIP_SIZE - getAmmoAmount(stack);
+        return MAX_AMMO - getAmmoAmount(stack);
     }
 
     @Override
@@ -132,13 +165,13 @@ public class ItemGun extends ItemCooldownBasic
     @Override
     public double getDurabilityForDisplay(ItemStack stack)
     {
-        return 1 - ((float) getAmmoAmount(stack) / (float) ItemBulletClip.CLIP_SIZE);
+        return 1 - ((float) getAmmoAmount(stack) / (float) MAX_AMMO);
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
     {
-        tooltip.add("Ammo: " + getAmmoAmount(stack) + "/" + ItemBulletClip.CLIP_SIZE);
+        tooltip.add("Ammo: " + getAmmoAmount(stack) + "/" + MAX_AMMO);
     }
 }

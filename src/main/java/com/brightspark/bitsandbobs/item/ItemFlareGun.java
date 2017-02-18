@@ -1,7 +1,6 @@
 package com.brightspark.bitsandbobs.item;
 
 import com.brightspark.bitsandbobs.init.BABItems;
-import com.brightspark.bitsandbobs.reference.Names;
 import com.brightspark.bitsandbobs.util.ClientUtils;
 import com.brightspark.bitsandbobs.util.NBTHelper;
 import net.minecraft.client.resources.I18n;
@@ -20,7 +19,7 @@ public class ItemFlareGun extends ItemCooldownBasic
 
     public ItemFlareGun()
     {
-        super(Names.Items.FLARE_GUN, 40);
+        super("itemFlareGun", 40);
     }
 
     @Override
