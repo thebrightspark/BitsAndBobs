@@ -53,4 +53,29 @@ public class CommonUtils
         BlockPos pos = player.getPosition();
         player.openGui(BitsAndBobs.instance, guiID, world, pos.getX(), pos.getY(), pos.getZ());
     }
+
+    /**
+     * Capitalises the first letter of every word in the string
+     */
+    public static String capitaliseAllFirstLetters(String text)
+    {
+        String[] textArray = text.split("\\s");
+        String output = "";
+        for(String t : textArray)
+        {
+            String space = output.equals("") ? "" : " ";
+            output += space + capitaliseFirstLetter(t);
+        }
+        return output;
+    }
+
+    /**
+     * Capitalises the first letter of the string
+     */
+    public static String capitaliseFirstLetter(String text)
+    {
+        if(text == null || text.length() <= 0)
+            return text;
+        return text.substring(0, 1).toUpperCase() + text.substring(1);
+    }
 }

@@ -4,7 +4,11 @@ public enum EItemBasic
 {
     BLOOD_PRISMARINE("bloodPrismarine"),
     FLARE_AMMO("flareAmmo"),
-    BULLET("bullet");
+    BULLET("bullet"),
+    GUN_BARREL("gunBarrel"),
+    PISTOL_ASSEMBLY("pistolAssembly"),
+    MINIGUN_BARREL("minigunBarrel"),
+    MINIGUN_ASSEMBLY("minigunAssembly");
 
     public String name;
     public static final String[] allNames;

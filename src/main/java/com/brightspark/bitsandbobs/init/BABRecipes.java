@@ -67,7 +67,14 @@ public class BABRecipes
             }
         }
 
-        //TODO: Pistol and Minigun recipes
+        //Pistol
+        GameRegistry.addRecipe(BABItems.getBasicItem(EItemBasic.GUN_BARREL), "iii", "iii", 'i', Items.IRON_INGOT);
+        GameRegistry.addRecipe(BABItems.getBasicItem(EItemBasic.PISTOL_ASSEMBLY), "id", "ii", " i", 'i', Items.IRON_INGOT, 'd', Items.DIAMOND);
+        GameRegistry.addRecipe(new ItemStack(BABItems.itemPistol), "ba", 'b', BABItems.getBasicItem(EItemBasic.GUN_BARREL), 'a', BABItems.getBasicItem(EItemBasic.PISTOL_ASSEMBLY));
+        //Minigun
+        GameRegistry.addRecipe(BABItems.getBasicItem(EItemBasic.MINIGUN_BARREL), "iii", "iii", 'i', BABItems.getBasicItem(EItemBasic.GUN_BARREL));
+        GameRegistry.addRecipe(BABItems.getBasicItem(EItemBasic.MINIGUN_ASSEMBLY), "iii", "ind", " ii", 'i', Items.IRON_INGOT, 'd', Items.DIAMOND, 'n', Items.NETHER_STAR);
+        GameRegistry.addRecipe(new ItemStack(BABItems.itemMinigun), "ba", 'b', BABItems.getBasicItem(EItemBasic.MINIGUN_BARREL), 'a', BABItems.getBasicItem(EItemBasic.MINIGUN_ASSEMBLY));
     }
 
     /**
