@@ -1,6 +1,7 @@
 package com.brightspark.bitsandbobs.item;
 
 import com.brightspark.bitsandbobs.init.BABItems;
+import com.brightspark.bitsandbobs.init.EItemBasic;
 import com.brightspark.bitsandbobs.util.ClientUtils;
 import com.brightspark.bitsandbobs.util.NBTHelper;
 import net.minecraft.client.resources.I18n;
@@ -36,10 +37,10 @@ public class ItemFlareGun extends ItemCooldownBasic
                 NBTHelper.setBoolean(stack, KEY_LOADED, false);
             return false;
         }
-        if(player.isSneaking() && !isLoaded && player.inventory.hasItemStack(new ItemStack(BABItems.itemFlareAmmo)))
+        if(player.isSneaking() && !isLoaded && player.inventory.hasItemStack(BABItems.getBasicItem(EItemBasic.FLARE_AMMO)))
         {
             //Reload
-            player.inventory.clearMatchingItems(BABItems.itemFlareAmmo, -1, 1, null);
+            player.inventory.clearMatchingItems(BABItems.itemBasic, EItemBasic.FLARE_AMMO.ordinal(), 1, null);
             NBTHelper.setBoolean(stack, KEY_LOADED, true);
             return true;
         }

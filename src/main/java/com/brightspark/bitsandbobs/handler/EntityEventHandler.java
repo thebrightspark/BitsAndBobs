@@ -1,6 +1,7 @@
 package com.brightspark.bitsandbobs.handler;
 
 import com.brightspark.bitsandbobs.init.BABItems;
+import com.brightspark.bitsandbobs.init.EItemBasic;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -29,7 +30,7 @@ public class EntityEventHandler
             EntityPlayer player = (EntityPlayer) event.getSource().getSourceOfDamage();
             ItemStack heldStack = player.getHeldItemMainhand();
             if(heldStack != null && heldStack.getItem().equals(Items.PRISMARINE_SHARD) && heldStack.stackSize == 1 && isValidMob(EntityList.getEntityString(event.getEntityLiving())))
-                player.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(BABItems.itemBloodPrismarine));
+                player.setHeldItem(EnumHand.MAIN_HAND, BABItems.getBasicItem(EItemBasic.BLOOD_PRISMARINE));
         }
     }
 }

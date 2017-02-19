@@ -1,5 +1,6 @@
 package com.brightspark.bitsandbobs.util;
 
+import com.brightspark.bitsandbobs.item.ItemBasicMeta;
 import com.brightspark.bitsandbobs.particle.ParticleFlare;
 import com.brightspark.bitsandbobs.particle.ParticleTrailing;
 import com.brightspark.bitsandbobs.reference.Reference;
@@ -25,8 +26,14 @@ public class ClientUtils
     //Register a model
     public static void regModel(Item item)
     {
-        regModel(item, 0);
+        if(item instanceof ItemBasicMeta && item.getHasSubtypes())
+            for(int meta = 0; meta < ((ItemBasicMeta) item).getSubNames().length; meta++)
+                ModelLoader.setCustomModelResourceLocation(item, meta,
+                        new ModelResourceLocation(item.getRegistryName().toString() + "/" + ((ItemBasicMeta) item).getSubNames()[meta], "inventory"));
+        else
+            regModel(item, 0);
     }
+
     public static void regModel(Block block)
     {
         regModel(Item.getItemFromBlock(block), 0);
