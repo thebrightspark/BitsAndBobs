@@ -1,4 +1,4 @@
-package com.brightspark.bitsandbobs;
+package com.brightspark.bitsandbobs.util;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;

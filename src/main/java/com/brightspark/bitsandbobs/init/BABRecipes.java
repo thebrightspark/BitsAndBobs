@@ -1,6 +1,6 @@
 package com.brightspark.bitsandbobs.init;
 
-import com.brightspark.bitsandbobs.ShapelessNBTRecipe;
+import com.brightspark.bitsandbobs.util.ShapelessNBTRecipe;
 import com.brightspark.bitsandbobs.item.ItemBulletClip;
 import com.brightspark.bitsandbobs.util.ShapedNBTRecipe;
 import com.google.common.collect.Maps;
@@ -69,12 +69,12 @@ public class BABRecipes
 
         //Pistol
         GameRegistry.addRecipe(BABItems.getBasicItem(EItemBasic.GUN_BARREL), "iii", "iii", 'i', Items.IRON_INGOT);
-        GameRegistry.addRecipe(BABItems.getBasicItem(EItemBasic.PISTOL_ASSEMBLY), "id", "ii", " i", 'i', Items.IRON_INGOT, 'd', Items.DIAMOND);
-        GameRegistry.addRecipe(new ItemStack(BABItems.itemPistol), "ba", 'b', BABItems.getBasicItem(EItemBasic.GUN_BARREL), 'a', BABItems.getBasicItem(EItemBasic.PISTOL_ASSEMBLY));
+        GameRegistry.addRecipe(BABItems.getBasicItem(EItemBasic.PISTOL_ASSEMBLY), "di", "ii", "i ", 'i', Items.IRON_INGOT, 'd', Items.DIAMOND);
+        GameRegistry.addRecipe(new ItemStack(BABItems.itemPistol), "ab", 'b', BABItems.getBasicItem(EItemBasic.GUN_BARREL), 'a', BABItems.getBasicItem(EItemBasic.PISTOL_ASSEMBLY));
         //Minigun
-        GameRegistry.addRecipe(BABItems.getBasicItem(EItemBasic.MINIGUN_BARREL), "iii", "iii", 'i', BABItems.getBasicItem(EItemBasic.GUN_BARREL));
-        GameRegistry.addRecipe(BABItems.getBasicItem(EItemBasic.MINIGUN_ASSEMBLY), "iii", "ind", " ii", 'i', Items.IRON_INGOT, 'd', Items.DIAMOND, 'n', Items.NETHER_STAR);
-        GameRegistry.addRecipe(new ItemStack(BABItems.itemMinigun), "ba", 'b', BABItems.getBasicItem(EItemBasic.MINIGUN_BARREL), 'a', BABItems.getBasicItem(EItemBasic.MINIGUN_ASSEMBLY));
+        GameRegistry.addRecipe(BABItems.getBasicItem(EItemBasic.MINIGUN_BARREL), "ii", "ii", 'i', BABItems.getBasicItem(EItemBasic.GUN_BARREL));
+        GameRegistry.addRecipe(BABItems.getBasicItem(EItemBasic.MINIGUN_ASSEMBLY), "iii", "dni", "ii ", 'i', Items.IRON_INGOT, 'd', Items.DIAMOND, 'n', Items.NETHER_STAR);
+        GameRegistry.addRecipe(new ItemStack(BABItems.itemMinigun), "ab", 'b', BABItems.getBasicItem(EItemBasic.MINIGUN_BARREL), 'a', BABItems.getBasicItem(EItemBasic.MINIGUN_ASSEMBLY));
     }
 
     /**

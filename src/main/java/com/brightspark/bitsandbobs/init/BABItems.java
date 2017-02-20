@@ -43,12 +43,9 @@ public class BABItems
         regItem(itemBasic = new ItemBasicMeta("basic", EItemBasic.allNames));
 
         regItem(itemLifeStick = new ItemLifeStick());
-        //regItem(itemBloodPrismarine = new ItemBasic("itemBloodPrismarine"));
         regItem(itemMirageOrb = new ItemMirageOrb());
         regItem(itemFlareGun = new ItemFlareGun());
-        //regItem(itemFlareAmmo = new ItemBasic("itemFlareAmmo"));
 
-        //regItem(itemBullet = new ItemBasic("itemBullet"));
         regItem(itemBulletClip = new ItemBulletClip("itemBulletClip", 10));
         regItem(itemAmmoBelt = new ItemAmmoBelt());
         regItem(itemPistol = new ItemPistol());

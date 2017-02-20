@@ -1,6 +1,6 @@
 package com.brightspark.bitsandbobs.gui;
 
-import com.brightspark.bitsandbobs.InventorySimple;
+import com.brightspark.bitsandbobs.util.InventorySimple;
 import com.brightspark.bitsandbobs.init.BABItems;
 import com.brightspark.bitsandbobs.item.ItemAmmoBelt;
 import com.brightspark.bitsandbobs.item.ItemBulletClip;

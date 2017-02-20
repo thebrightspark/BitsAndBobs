@@ -1,4 +1,4 @@
-package com.brightspark.bitsandbobs;
+package com.brightspark.bitsandbobs.util;
 
 import com.google.common.collect.Lists;
 import net.minecraft.block.Block;

@@ -16,13 +16,11 @@ import java.util.List;
 
 public class ItemPistol extends ItemCooldownBasic implements IUseAmmo
 {
-    //TODO: Make model/texture for this and the bullets
-
     public static final int MAX_AMMO = 10;
 
     public ItemPistol()
     {
-        super("itemGun", 10, false);
+        super("itemPistol", 10, false);
     }
 
     /**
