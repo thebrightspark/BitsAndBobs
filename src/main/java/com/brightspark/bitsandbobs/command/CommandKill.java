@@ -86,7 +86,7 @@ public class CommandKill extends CommandBase
                 //With no filter, only kill living mobs
                 if(!(entity instanceof EntityLivingBase))
                     continue;
-                entity.onKillCommand();
+                entity.setDead();
                 numKilled++;
             }
             //Kill mobs according to the filter
@@ -105,7 +105,7 @@ public class CommandKill extends CommandBase
                             ((filterName.equals("item") || filterName.equals("i")) && entity instanceof EntityItem) ||
                             filterName.equals(entityName))
                     {
-                        entity.onKillCommand();
+                        entity.setDead();
                         numKilled++;
                         break;
                     }
