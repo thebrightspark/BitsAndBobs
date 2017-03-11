@@ -16,12 +16,10 @@ public class BABItems
     public static ItemBasicMeta itemBasic;
 
     public static ItemLifeStick itemLifeStick;
-    //public static ItemBasic itemBloodPrismarine;
     public static ItemMirageOrb itemMirageOrb;
     public static ItemFlareGun itemFlareGun;
-    //public static ItemBasic itemFlareAmmo;
+    public static ItemEntityNoDespawn itemEntityNoDespawn;
 
-    //public static ItemBasic itemBullet;
     public static ItemBulletClip itemBulletClip;
     public static ItemAmmoBelt itemAmmoBelt;
     public static ItemPistol itemPistol;
@@ -45,6 +43,7 @@ public class BABItems
         regItem(itemLifeStick = new ItemLifeStick());
         regItem(itemMirageOrb = new ItemMirageOrb());
         regItem(itemFlareGun = new ItemFlareGun());
+        regItem(itemEntityNoDespawn = new ItemEntityNoDespawn());
 
         regItem(itemBulletClip = new ItemBulletClip("itemBulletClip", 10));
         regItem(itemAmmoBelt = new ItemAmmoBelt());
