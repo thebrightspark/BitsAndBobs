@@ -68,7 +68,7 @@ public class EntityPlayerGhost extends EntityLivingBase implements IEntityAdditi
     public void onLivingUpdate()
     {
         ghostAge++;
-        if(!worldObj.isRemote && ghostAge > MAX_GHOST_AGE)
+        if(!world.isRemote && ghostAge > MAX_GHOST_AGE)
             setDead();
     }
 

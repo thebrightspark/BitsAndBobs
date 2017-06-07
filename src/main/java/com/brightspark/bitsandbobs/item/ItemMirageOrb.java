@@ -19,7 +19,7 @@ public class ItemMirageOrb extends ItemCooldownBasic
 {
     public ItemMirageOrb()
     {
-        super("itemMirageOrb", Config.mirageOrbCooldown * 20);
+        super("mirageOrb", Config.mirageOrbCooldown * 20);
     }
 
     @Override

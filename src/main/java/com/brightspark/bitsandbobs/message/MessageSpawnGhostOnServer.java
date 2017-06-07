@@ -79,13 +79,13 @@ public class MessageSpawnGhostOnServer implements IMessage
         @Override
         public IMessage onMessage(final MessageSpawnGhostOnServer message, final MessageContext ctx)
         {
-            IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.worldObj;
+            IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.world;
             mainThread.addScheduledTask(new Runnable()
             {
                 @Override
                 public void run()
                 {
-                    WorldServer server = (WorldServer) ctx.getServerHandler().playerEntity.worldObj;
+                    WorldServer server = (WorldServer) ctx.getServerHandler().playerEntity.world;
                     EntityPlayer player = server.getPlayerEntityByName(message.playerName);
                     if(player == null)
                     {
@@ -96,7 +96,7 @@ public class MessageSpawnGhostOnServer implements IMessage
                     //Create ghost
                     EntityPlayerGhost ghost = new EntityPlayerGhost(server, player);
                     ghost.playerSkin = message.resourceLocation;
-                    server.spawnEntityInWorld(ghost);
+                    server.spawnEntity(ghost);
 
                     //Update the client entities with the correct data
                     BitsAndBobs.NETWORK.sendToAll(new MessageSetClientGhostData(ghost.getEntityId(), message));

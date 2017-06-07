@@ -116,7 +116,7 @@ public class ModelPlayerGhost extends ModelBiped
             ModelRenderer modelrenderer = this.getArmForSide(enumhandside);
             this.getArmForSide(enumhandside.opposite());
             float f1 = this.swingProgress;
-            this.bipedBody.rotateAngleY = MathHelper.sin(MathHelper.sqrt_float(f1) * ((float)Math.PI * 2F)) * 0.2F;
+            this.bipedBody.rotateAngleY = MathHelper.sin(MathHelper.sqrt(f1) * ((float)Math.PI * 2F)) * 0.2F;
 
             if (enumhandside == EnumHandSide.LEFT)
             {

@@ -97,7 +97,7 @@ public class ParticleTrailing extends Particle
             this.setExpired();
 
         //Spawn child particle before moving
-        er.addEffect(new ParticleDisappearingStatic(worldObj, attachedEntity, posX - attachedEntity.posX, posY - attachedEntity.posY, posZ - attachedEntity.posZ, childMaxAge, childTextureIndex).setRBG(childRed, childGreen, childBlue));
+        er.addEffect(new ParticleDisappearingStatic(world, attachedEntity, posX - attachedEntity.posX, posY - attachedEntity.posY, posZ - attachedEntity.posZ, childMaxAge, childTextureIndex).setRBG(childRed, childGreen, childBlue));
 
         //Increase height and angle
         angle += angleSpeed;

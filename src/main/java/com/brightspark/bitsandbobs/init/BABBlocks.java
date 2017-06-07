@@ -17,10 +17,7 @@ public class BABBlocks
     //Contains all of the registered blocks
     public static List<Block> BLOCKS = new ArrayList<Block>();
 
-    public static BlockHealing blockHealing, blockHealing2;
-    public static BlockStellarEgg blockStellarEgg;
-    public static BlockTrash blockTrash;
-    public static BlockLightning blockLightning;
+    public static Block blockHealing, blockHealing2, blockStellarEgg, blockTrash, blockLightning;
 
     public static void regBlock(Block block)
     {
@@ -31,8 +28,8 @@ public class BABBlocks
 
     public static void regBlocks()
     {
-        regBlock(blockHealing = new BlockHealing("blockHealing", 1000, 20));
-        regBlock(blockHealing2 = new BlockHealing("blockHealing2", 2000, 5));
+        regBlock(blockHealing = new BlockHealing("healing", 1000, 20));
+        regBlock(blockHealing2 = new BlockHealing("healing2", 2000, 5));
         regBlock(blockStellarEgg = new BlockStellarEgg());
         regBlock(blockTrash = new BlockTrash());
         regBlock(blockLightning = new BlockLightning());

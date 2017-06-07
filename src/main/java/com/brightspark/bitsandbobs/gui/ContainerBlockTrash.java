@@ -4,7 +4,6 @@ import com.brightspark.bitsandbobs.tileentity.BABTileEntity;
 import com.brightspark.bitsandbobs.tileentity.TileTrash;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
@@ -37,8 +36,9 @@ public class ContainerBlockTrash extends BABContainer
             }
             public void onSlotChanged()
             {
-                this.inventory.markDirty();
-                ContainerBlockTrash.this.onCraftMatrixChanged(this.inventory);
+                super.onSlotChanged();
+                ((TileTrash) this.inventory).addItem();
+                ContainerBlockTrash.this.detectAndSendChanges();
             }
         });
         //Adds the 9 slots which you can't put items into, but can remove.
@@ -52,22 +52,11 @@ public class ContainerBlockTrash extends BABContainer
                 }
                 public void onPickupFromSlot(EntityPlayer playerIn, ItemStack stack)
                 {
-                    this.onSlotChanged();
-                    ContainerBlockTrash.this.onCraftMatrixChanged(this.inventory);
+                    super.onPickupFromSlot(playerIn, stack);
+                    ContainerBlockTrash.this.detectAndSendChanges();
                 }
             });
         }
-    }
-
-    /**
-     * Callback for when the crafting matrix is changed.
-     * Using this to update the stacks when a player has put a new stack in or taken one out.
-     */
-    @Override
-    public void onCraftMatrixChanged(IInventory inventoryIn)
-    {
-        ((TileTrash)inventory).updateInventory();
-        detectAndSendChanges();
     }
 
     @Override

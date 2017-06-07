@@ -22,7 +22,7 @@ public class ItemLifeStick extends ItemBasic
 
     public ItemLifeStick()
     {
-        super("itemLifeStick");
+        super("lifeStick");
         TOOLTIP = getUnlocalizedName() + ".tooltip.";
         setMaxStackSize(1);
     }

@@ -2,8 +2,8 @@ package com.brightspark.bitsandbobs.gui;
 
 import com.brightspark.bitsandbobs.util.InventorySimple;
 import com.brightspark.bitsandbobs.init.BABItems;
-import com.brightspark.bitsandbobs.item.ItemAmmoBelt;
-import com.brightspark.bitsandbobs.item.ItemBulletClip;
+import com.brightspark.bitsandbobs.item.gun.ItemAmmoBelt;
+import com.brightspark.bitsandbobs.item.gun.ItemBulletClip;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
@@ -65,7 +65,7 @@ public class ContainerAmmoBelt extends Container
     {
         ItemStack returnStack = super.slotClick(slotId, dragType, clickTypeIn, player);
 
-        if(!player.worldObj.isRemote && slotId >= 0 && slotId < slotInvStart)
+        if(!player.world.isRemote && slotId >= 0 && slotId < slotInvStart)
             itemStackHandler.setStackInSlot(slotId, inventory.getStackInSlot(slotId));
 
         return returnStack;
@@ -73,13 +73,13 @@ public class ContainerAmmoBelt extends Container
 
     public boolean isValidStack(ItemStack stack)
     {
-        return stack == null || stack.getItem() == BABItems.itemBulletClip;
+        return stack == null || stack.getItem() == BABItems.itemPistolClip;
     }
 
     @Override
     public boolean canInteractWith(EntityPlayer playerIn)
     {
-        return inventory.isUseableByPlayer(playerIn);
+        return inventory.isUsableByPlayer(playerIn);
     }
 
     @Override

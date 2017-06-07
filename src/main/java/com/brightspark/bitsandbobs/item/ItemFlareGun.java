@@ -1,60 +1,30 @@
 package com.brightspark.bitsandbobs.item;
 
+import com.brightspark.bitsandbobs.entity.EntityFlare;
 import com.brightspark.bitsandbobs.init.BABItems;
-import com.brightspark.bitsandbobs.init.EItemBasic;
-import com.brightspark.bitsandbobs.util.ClientUtils;
-import com.brightspark.bitsandbobs.util.NBTHelper;
+import com.brightspark.bitsandbobs.item.gun.IShootable;
+import com.brightspark.bitsandbobs.item.gun.ItemSimpleGun;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
-public class ItemFlareGun extends ItemCooldownBasic
+public class ItemFlareGun extends ItemSimpleGun
 {
-    protected final String KEY_LOADED = "loaded";
-
     public ItemFlareGun()
     {
-        super("itemFlareGun", 40);
+        super("flareGun", 40);
     }
 
     @Override
-    public boolean doRightClickAction(ItemStack stack, World world, EntityPlayer player, EnumHand hand)
+    protected void spawnBullet(World world, EntityPlayer player)
     {
-        boolean isLoaded = NBTHelper.getBoolean(stack, KEY_LOADED);
-
-        if(!player.isSneaking() && isLoaded && !isActive(stack))
-        {
-            //Spawn effect
-            if(world.isRemote)
-                ClientUtils.spawnFlareEffect(world, player);
-            if(!player.isCreative())
-                NBTHelper.setBoolean(stack, KEY_LOADED, false);
-            return false;
-        }
-        if(player.isSneaking() && !isLoaded && player.inventory.hasItemStack(BABItems.getBasicItem(EItemBasic.FLARE_AMMO)))
-        {
-            //Reload
-            player.inventory.clearMatchingItems(BABItems.itemBasic, EItemBasic.FLARE_AMMO.ordinal(), 1, null);
-            NBTHelper.setBoolean(stack, KEY_LOADED, true);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean showDurabilityBar(ItemStack stack)
-    {
-        return !NBTHelper.getBoolean(stack, KEY_LOADED) || super.showDurabilityBar(stack);
-    }
-
-    public double getDurabilityForDisplay(ItemStack stack)
-    {
-        return !NBTHelper.getBoolean(stack, KEY_LOADED) && NBTHelper.getInt(stack, KEY_COOLDOWN) == 0 ? 1 : super.getDurabilityForDisplay(stack);
+        world.spawnEntity(new EntityFlare(world, player));
     }
 
     @Override
@@ -63,5 +33,12 @@ public class ItemFlareGun extends ItemCooldownBasic
     {
         list.add(I18n.format(TOOLTIP + "1"));
         list.add(I18n.format(TOOLTIP + "2"));
+    }
+
+    @Nonnull
+    @Override
+    public IShootable getAmmoItem()
+    {
+        return BABItems.itemFlareAmmo;
     }
 }

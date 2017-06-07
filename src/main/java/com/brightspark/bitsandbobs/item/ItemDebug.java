@@ -12,14 +12,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-/**
- * Created by Mark on 24/06/2016.
- */
 public class ItemDebug extends ItemBasic
 {
-    public ItemDebug(String itemName)
+    public ItemDebug()
     {
-        super(itemName);
+        super("debug");
     }
 
     @Override
@@ -43,8 +40,8 @@ public class ItemDebug extends ItemBasic
     @Override
     public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity)
     {
-        if(entity.worldObj.isRemote)
-            ClientUtils.spawnTwirlEffect(entity.worldObj, entity);
+        if(entity.world.isRemote)
+            ClientUtils.spawnTwirlEffect(entity.world, entity);
         return true;
     }
 

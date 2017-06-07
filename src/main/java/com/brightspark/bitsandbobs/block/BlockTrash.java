@@ -16,7 +16,7 @@ public class BlockTrash extends BABBlockContainer
 {
     public BlockTrash()
     {
-        super(Material.ROCK, "blockTrash");
+        super(Material.ROCK, "trash");
     }
 
     @Override

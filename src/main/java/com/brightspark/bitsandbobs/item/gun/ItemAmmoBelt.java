@@ -1,6 +1,7 @@
-package com.brightspark.bitsandbobs.item;
+package com.brightspark.bitsandbobs.item.gun;
 
 import com.brightspark.bitsandbobs.handler.EnumGuiID;
+import com.brightspark.bitsandbobs.item.ItemBasic;
 import com.brightspark.bitsandbobs.util.CommonUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -24,7 +25,7 @@ public class ItemAmmoBelt extends ItemBasic
 
     public ItemAmmoBelt()
     {
-        super("itemAmmoBelt");
+        super("ammoBelt");
         setMaxStackSize(1);
     }
 

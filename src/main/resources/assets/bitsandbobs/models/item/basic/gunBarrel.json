@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "BitsAndBobs:items/itemGunBarrel"
+		"layer0": "BitsAndBobs:items/gunBarrel"
 	}
 }

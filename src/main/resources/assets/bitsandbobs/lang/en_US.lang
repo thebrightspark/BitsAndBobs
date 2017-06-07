@@ -1,35 +1,44 @@
 //Items
 
-item.itemLifeStick.name=Life Stick
-item.itemLiftStick.disco=Disco Stick
-item.itemLifeStick.tooltip.1=Held hearts:
-item.itemLifeStick.tooltip.2.1=Right Click
-item.itemLifeStick.tooltip.2.2= to heal health
-item.itemLifeStick.tooltip.3.1=Shift Right Click
-item.itemLifeStick.tooltip.3.2= to store health
-item.itemLifeStick.tooltip.disco=Let me take a ride on your disco stick
-item.itemLifeStick.tooltip.watching=I'm watching you Jason...
+item.lifeStick.name=Life Stick
+item.liftStick.disco=Disco Stick
+item.lifeStick.tooltip.1=Held hearts:
+item.lifeStick.tooltip.2.1=Right Click
+item.lifeStick.tooltip.2.2= to heal health
+item.lifeStick.tooltip.3.1=Shift Right Click
+item.lifeStick.tooltip.3.2= to store health
+item.lifeStick.tooltip.disco=Let me take a ride on your disco stick
+item.lifeStick.tooltip.watching=I'm watching you Jason...
 
-item.itemMirageOrb.name=Mirage Orb
-item.itemMirageOrb.tooltip.1=Right Click to create a ghost of yourself
-item.itemMirageOrb.tooltip.2=Attacking mobs will think this is you...
-item.itemMirageOrb.tooltip.3=s until ready to use again
+item.mirageOrb.name=Mirage Orb
+item.mirageOrb.tooltip.1=Right Click to create a ghost of yourself
+item.mirageOrb.tooltip.2=Attacking mobs will think this is you...
+item.mirageOrb.tooltip.3=s until ready to use again
 
-item.itemFlareGun.name=Flare Gun
-item.itemFlareGun.tooltip.1=Right Click to shoot a flare
-item.itemFlareGun.tooltip.2=Shift Right Click to reload when empty (uses 1 Flare Ammo from inventory)
+item.flareGun.name=Flare Gun
+item.flareGun.tooltip.1=Right Click to shoot a flare
+item.flareGun.tooltip.2=Shift Right Click to reload when empty (uses 1 Flare Ammo from inventory)
+item.flareAmmo.name=Flare Ammo
 
-item.itemFlareAmmo.name=Flare Ammo
+item.pistol.name=Pistol
+item.pistolClip.name=Pistol Clip
+item.minigun.name=Minigun
+item.minigunClip.name=Minigun Clip
+item.shotgun.name=Shotgun
+item.shotgunClip.name=Shotgun Clip
 
-item.itemDebug.name=Debug Item
-item.itemBloodPrismarine.name=Blood-Infused Prismarine Shard
+item.grenade.name=Grenade
+
+item.debug.name=Debug Item
+item.bloodPrismarine.name=Blood-Infused Prismarine Shard
 
 //Blocks
 
-tile.blockStellarEgg.name=Stellar Egg
-tile.blockHealing.name=Healing Block
-tile.blockHealing2.name=Fast Healing Block
-tile.blockTrash.name=Trash Block
+tile.stellarEgg.name=Stellar Egg
+tile.healing.name=Healing Block
+tile.healing2.name=Fast Healing Block
+tile.trash.name=Trash Block
+tile.lightning.name=Lightning Block
 tile.fakeBeacon.name=Aesthetic Beacon
 
 tile.fluid.xpjuice.name=XP Juice

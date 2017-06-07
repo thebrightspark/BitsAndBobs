@@ -1,6 +1,7 @@
 package com.brightspark.bitsandbobs.init;
 
 import com.brightspark.bitsandbobs.item.*;
+import com.brightspark.bitsandbobs.item.gun.*;
 import com.brightspark.bitsandbobs.util.ClientUtils;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,22 +14,12 @@ public class BABItems
 {
     public static List<Item> ITEMS = new ArrayList<Item>();
 
-    public static ItemBasicMeta itemBasic;
+    public static Item itemBasic, itemLifeStick, itemMirageOrb, itemFlareGun, itemEntityNoDespawn,
+            itemAmmoBelt, itemPistol, itemMinigun, itemShotgun, itemGrenade,
+            itemDebug, itemBucketXpJuice;
 
-    public static ItemLifeStick itemLifeStick;
-    public static ItemMirageOrb itemMirageOrb;
-    public static ItemFlareGun itemFlareGun;
-    public static ItemEntityNoDespawn itemEntityNoDespawn;
-
-    public static ItemBulletClip itemBulletClip;
-    public static ItemAmmoBelt itemAmmoBelt;
-    public static ItemPistol itemPistol;
-    public static ItemBulletClip itemMinigunClip;
-    public static ItemMinigun itemMinigun;
-
-    public static ItemDebug itemDebug;
-
-    public static ItemStack itemBucketXpJuice;
+    public static ItemBulletClip itemPistolClip, itemMinigunClip;
+    public static ItemBullet itemFlareAmmo, itemShotgunShell;
 
     public static void regItem(Item item)
     {
@@ -42,16 +33,21 @@ public class BABItems
 
         regItem(itemLifeStick = new ItemLifeStick());
         regItem(itemMirageOrb = new ItemMirageOrb());
-        regItem(itemFlareGun = new ItemFlareGun());
         regItem(itemEntityNoDespawn = new ItemEntityNoDespawn());
 
-        regItem(itemBulletClip = new ItemBulletClip("itemBulletClip", 10));
         regItem(itemAmmoBelt = new ItemAmmoBelt());
-        regItem(itemPistol = new ItemPistol());
-        regItem(itemMinigunClip = new ItemBulletClip("itemMinigunClip", 100));
-        regItem(itemMinigun = new ItemMinigun("itemMinigun"));
 
-        regItem(itemDebug = new ItemDebug("itemDebug"));
+        regItem(itemFlareAmmo = new ItemBullet("flareAmmo", 1));
+        regItem(itemFlareGun = new ItemFlareGun());
+        regItem(itemPistolClip = new ItemBulletClip("pistolClip", 10));
+        regItem(itemPistol = new ItemPistol());
+        regItem(itemMinigunClip = new ItemBulletClip("minigunClip", 100));
+        regItem(itemMinigun = new ItemMinigun());
+        regItem(itemShotgunShell = new ItemBullet("shotgunShell", 16));
+        regItem(itemShotgun = new ItemShotgun());
+        regItem(itemGrenade = new ItemGrenade());
+
+        regItem(itemDebug = new ItemDebug());
 
         /*
         if(FluidRegistry.isUniversalBucketEnabled())

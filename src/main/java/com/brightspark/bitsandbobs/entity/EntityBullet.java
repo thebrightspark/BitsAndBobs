@@ -39,7 +39,6 @@ public class EntityBullet extends Entity implements IProjectile
     private int knockbackStrength = 1;
     private Entity shooter;
     private int ticksInAir = 0;
-    private boolean shouldResetHurtTimer = false;
 
     public EntityBullet(World world)
     {
@@ -55,14 +54,19 @@ public class EntityBullet extends Entity implements IProjectile
 
     public EntityBullet(World world, EntityLivingBase shooter)
     {
-        this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1d, shooter.posZ);
-        this.shooter = shooter;
-        setHeadingFromShooter(shooter, 5f);
+        this(world, shooter, 0.25f);
     }
 
-    public EntityBullet setShouldResetHurtTimer()
+    public EntityBullet(World world, EntityLivingBase shooter, float inaccuracy)
     {
-        shouldResetHurtTimer = true;
+        this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1d, shooter.posZ);
+        this.shooter = shooter;
+        setHeadingFromShooter(shooter, 5f, inaccuracy);
+    }
+
+    public EntityBullet setDamage(float amount)
+    {
+        damage = amount;
         return this;
     }
 
@@ -83,31 +87,36 @@ public class EntityBullet extends Entity implements IProjectile
         nbt.setInteger("knockback", knockbackStrength);
     }
 
-    public void setHeadingFromShooter(Entity shooter, float velocity)
+    public void setHeadingFromShooter(Entity shooter, float velocity, float inaccuracy)
     {
         float rotYaw = shooter.rotationYaw;
         float rotPitch = shooter.rotationPitch;
         float x = -MathHelper.sin(rotYaw * 0.017453292f) * MathHelper.cos(rotPitch * 0.017453292f);
         float y = -MathHelper.sin(rotPitch * 0.017453292f);
         float z = MathHelper.cos(rotYaw * 0.017453292f) * MathHelper.cos(rotPitch * 0.017453292f);
-        setThrowableHeading(x, y, z, velocity, 0);
+        setThrowableHeading(x, y, z, velocity, inaccuracy);
         motionX += shooter.motionX;
         motionZ += shooter.motionZ;
         if(!shooter.onGround)
             motionY += shooter.motionY;
     }
 
+    private double genRandInaccuracy(float inaccuracy)
+    {
+        return rand.nextGaussian() * 0.007499999832361937D * (double) inaccuracy;
+    }
+
     @Override
     public void setThrowableHeading(double x, double y, double z, float velocity, float inaccuracy)
     {
-        double magnitude = MathHelper.sqrt_double(x * x + y * y + z * z);
-        x = (x / magnitude) * velocity;
-        y = (y / magnitude) * velocity;
-        z = (z / magnitude) * velocity;
+        double magnitude = MathHelper.sqrt(x * x + y * y + z * z);
+        x = (x / magnitude + genRandInaccuracy(inaccuracy)) * velocity;
+        y = (y / magnitude + genRandInaccuracy(inaccuracy)) * velocity;
+        z = (z / magnitude + genRandInaccuracy(inaccuracy)) * velocity;
         motionX = x;
         motionY = y;
         motionZ = z;
-        double hMagnitude = MathHelper.sqrt_double(x * x + z * z);
+        double hMagnitude = MathHelper.sqrt(x * x + z * z);
         rotationYaw = (float) (MathHelper.atan2(x, z) * (180d / Math.PI));
         rotationPitch = (float)(MathHelper.atan2(y, hMagnitude) * (180D / Math.PI));
         prevRotationYaw = rotationYaw;
@@ -123,7 +132,7 @@ public class EntityBullet extends Entity implements IProjectile
         if(entityHit != null)
         {
             //Hit an entity
-            float magnitude = MathHelper.sqrt_double(motionX * motionX + motionY * motionY + motionZ * motionZ);
+            float magnitude = MathHelper.sqrt(motionX * motionX + motionY * motionY + motionZ * motionZ);
 
             //Create damage source
             DamageSource damageSource;
@@ -150,11 +159,9 @@ public class EntityBullet extends Entity implements IProjectile
                         EnchantmentHelper.applyArthropodEnchantments((EntityLivingBase) shooter, entityLiving);
                     }
 
-                    if(shouldResetHurtTimer)
-                    {
-                        entityLiving.hurtTime = 0;
-                        entityLiving.hurtResistantTime = 0;
-                    }
+                    //Reset hurt timers
+                    entityLiving.hurtTime = 0;
+                    entityLiving.hurtResistantTime = 0;
 
                     bulletHit(entityLiving);
 
@@ -180,9 +187,9 @@ public class EntityBullet extends Entity implements IProjectile
             //Hit a block
             playSound(SoundEvents.ENTITY_ARROW_HIT, 1.0F, 1.2F / (rand.nextFloat() * 0.2F + 0.9F));
             BlockPos pos = ray.getBlockPos();
-            IBlockState state = worldObj.getBlockState(pos);
+            IBlockState state = world.getBlockState(pos);
             if(state.getMaterial() != Material.AIR)
-                state.getBlock().onEntityCollidedWithBlock(worldObj, pos, state, this);
+                state.getBlock().onEntityCollidedWithBlock(world, pos, state, this);
             setDead();
         }
     }
@@ -206,7 +213,7 @@ public class EntityBullet extends Entity implements IProjectile
         //Ray trace in front of the bullet between its current and next position
         Vec3d posNow = new Vec3d(posX, posY, posZ);
         Vec3d posNext = posNow.addVector(motionX, motionY, motionZ);
-        RayTraceResult ray = worldObj.rayTraceBlocks(posNow, posNext, false, true, false);
+        RayTraceResult ray = world.rayTraceBlocks(posNow, posNext, false, true, false);
         posNow = new Vec3d(posX, posY, posZ);
         posNext = posNow.addVector(motionX, motionY, motionZ);
         if(ray != null)
@@ -237,7 +244,7 @@ public class EntityBullet extends Entity implements IProjectile
         if(isInWater())
         {
             for(int i = 0; i < 4; ++i)
-                worldObj.spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX - motionX * 0.25D, posY - motionY * 0.25D, posZ - motionZ * 0.25D, motionX, motionY, motionZ);
+                world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX - motionX * 0.25D, posY - motionY * 0.25D, posZ - motionZ * 0.25D, motionX, motionY, motionZ);
             motionMult = 0.6F;
         }
 
@@ -258,7 +265,7 @@ public class EntityBullet extends Entity implements IProjectile
     protected Entity findEntityOnPath(Vec3d start, Vec3d end)
     {
         Entity closestEntity = null;
-        List<Entity> list = worldObj.getEntitiesInAABBexcluding(this, getEntityBoundingBox().addCoord(motionX, motionY, motionZ).expandXyz(1.0D), BULLET_TARGETS);
+        List<Entity> list = world.getEntitiesInAABBexcluding(this, getEntityBoundingBox().addCoord(motionX, motionY, motionZ).expandXyz(1.0D), BULLET_TARGETS);
         double closestDistance = 0.0D;
 
         for (int i = 0; i < list.size(); ++i)

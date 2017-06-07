@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "BitsAndBobs:items/itemMirageOrb"
+		"layer0": "BitsAndBobs:items/flareAmmo"
 	}
 }

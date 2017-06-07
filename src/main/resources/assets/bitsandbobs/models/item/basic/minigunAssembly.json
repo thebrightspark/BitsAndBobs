@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "BitsAndBobs:items/itemMinigunAssembly"
+		"layer0": "BitsAndBobs:items/minigunAssembly"
 	}
 }

@@ -83,7 +83,7 @@ public class RenderPlayerGhost extends RenderLivingBase<EntityPlayerGhost>
             }
 
             renderLivingAt(entity, x, y, z);
-            rotateCorpse(entity, 0, renderYawOffset, partialTicks);
+            applyRotations(entity, 0, renderYawOffset, partialTicks);
             float scale = prepareScale(entity, partialTicks);
             float swingAmount = 0.0F;
             float swing = 0.0F;

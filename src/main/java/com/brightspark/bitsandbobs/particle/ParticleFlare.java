@@ -41,10 +41,10 @@ public class ParticleFlare extends Particle
 
         //Spawn child particles
         for(int i = rand.nextInt(4) + 1; i > 0; i--)
-            ClientUtils.spawnEffect(new Child(worldObj, posX, posY, posZ, motionX, motionY, motionZ));
+            ClientUtils.spawnEffect(new Child(world, posX, posY, posZ, motionX, motionY, motionZ));
 
         motionY -= 0.01d;
-        moveEntity(motionX, motionY, motionZ);
+        move(motionX, motionY, motionZ);
         motionX *= 0.98d;
         motionY *= 0.95d;
         motionZ *= 0.98d;
@@ -57,27 +57,27 @@ public class ParticleFlare extends Particle
     }
 
     @Override
-    public void moveEntity(double x, double y, double z)
+    public void move(double x, double y, double z)
     {
         double d0 = x;
         double d1 = y;
         double d2 = z;
-        List<AxisAlignedBB> list = worldObj.getCollisionBoxes(null, getEntityBoundingBox().addCoord(x, y, z));
+        List<AxisAlignedBB> list = world.getCollisionBoxes(null, getBoundingBox().addCoord(x, y, z));
 
         for(AxisAlignedBB axisalignedbb : list)
-            y = axisalignedbb.calculateYOffset(getEntityBoundingBox(), y);
+            y = axisalignedbb.calculateYOffset(getBoundingBox(), y);
 
-        setEntityBoundingBox(getEntityBoundingBox().offset(0.0D, y, 0.0D));
+        setBoundingBox(getBoundingBox().offset(0.0D, y, 0.0D));
 
         for(AxisAlignedBB axisalignedbb1 : list)
-            x = axisalignedbb1.calculateXOffset(getEntityBoundingBox(), x);
+            x = axisalignedbb1.calculateXOffset(getBoundingBox(), x);
 
-        setEntityBoundingBox(getEntityBoundingBox().offset(x, 0.0D, 0.0D));
+        setBoundingBox(getBoundingBox().offset(x, 0.0D, 0.0D));
 
         for(AxisAlignedBB axisalignedbb2 : list)
-            z = axisalignedbb2.calculateZOffset(getEntityBoundingBox(), z);
+            z = axisalignedbb2.calculateZOffset(getBoundingBox(), z);
 
-        setEntityBoundingBox(getEntityBoundingBox().offset(0.0D, 0.0D, z));
+        setBoundingBox(getBoundingBox().offset(0.0D, 0.0D, z));
         resetPositionToBB();
         isCollided = d1 != y && d1 < 0.0D;
 
@@ -129,7 +129,7 @@ public class ParticleFlare extends Particle
                 setParticleTextureIndex((particleMaxAge - particleAge) / 4);
 
             motionY -= 0.04d;
-            moveEntity(motionX, motionY, motionZ);
+            move(motionX, motionY, motionZ);
             motionX *= 0.8d;
             motionY *= 0.8d;
             motionZ *= 0.8d;

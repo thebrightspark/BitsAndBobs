@@ -1,6 +1,8 @@
-package com.brightspark.bitsandbobs.item;
+package com.brightspark.bitsandbobs.item.gun;
 
 import com.brightspark.bitsandbobs.entity.EntityBullet;
+import com.brightspark.bitsandbobs.init.BABItems;
+import com.brightspark.bitsandbobs.item.ItemBasic;
 import com.brightspark.bitsandbobs.util.NBTHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -17,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class ItemMinigun extends ItemBasic implements IUseAmmo
+public class ItemMinigun extends ItemBasic implements IGun
 {
     private final int minSpeed = 30;
     private final int maxSpeed = 2;
@@ -26,16 +28,20 @@ public class ItemMinigun extends ItemBasic implements IUseAmmo
     private float curSpeed = minSpeed;
     private int lastShotTick = 0;
 
-    public static final int MAX_AMMO = 100;
     //I need to cache the ammo amount here because shooting messes up if I update the stack's NBT
     //So I update the NBT once the player has stopped shooting
     private int ammoCache;
     private boolean isInUse = false;
 
-    public ItemMinigun(String itemName)
+    public ItemMinigun()
     {
-        super(itemName);
+        super("minigun");
         setMaxStackSize(1);
+    }
+    
+    private int getMaxAmmo()
+    {
+        return getAmmoItem().getMaxAmmo();
     }
 
     /**
@@ -54,26 +60,23 @@ public class ItemMinigun extends ItemBasic implements IUseAmmo
 
         if(playerIn.isSneaking())
         {
-            if(!worldIn.isRemote && ammo < MAX_AMMO)
-                ItemPistol.reloadAll(playerIn, itemStackIn);
+            if(!worldIn.isRemote && ammo < getMaxAmmo())
+                ItemSimpleGun.reloadAll(playerIn, itemStackIn);
         }
         else
         {
-            if(ammo == 0)
+            if(!playerIn.capabilities.isCreativeMode && ammo == 0)
             {
                 //TODO: Play gun out of ammo sound
                 return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
             }
-            else
-            {
-                //Start shooting
-                lastShotTick = 0;
-                ammoCache = ammo;
-                isInUse = true;
-                if(playerIn.isCreative())
-                    curSpeed = maxSpeed;
-                playerIn.setActiveHand(hand);
-            }
+            //Start shooting
+            lastShotTick = 0;
+            ammoCache = ammo;
+            isInUse = true;
+            if(playerIn.capabilities.isCreativeMode)
+                curSpeed = maxSpeed;
+            playerIn.setActiveHand(hand);
         }
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
     }
@@ -87,7 +90,7 @@ public class ItemMinigun extends ItemBasic implements IUseAmmo
     @Override
     public void onUsingTick(ItemStack stack, EntityLivingBase player, int count)
     {
-        if(player.worldObj.isRemote)
+        if(player.world.isRemote)
             return;
 
         //Stop shooting if out of ammo
@@ -109,10 +112,10 @@ public class ItemMinigun extends ItemBasic implements IUseAmmo
         {
             //Shoot bullet
             //LogHelper.info("Pew");
-            player.worldObj.spawnEntityInWorld(new EntityBullet(player.worldObj, player).setShouldResetHurtTimer());
-            player.worldObj.playSound(null, player.getPosition(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1f, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.5F);
+            player.world.spawnEntity(new EntityBullet(player.world, player, 5f));
+            player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1f, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + 0.5F);
             lastShotTick = ticksUsed;
-            if(!((EntityPlayer) player).isCreative())
+            if(!((EntityPlayer) player).capabilities.isCreativeMode)
                 ammoCache--;
         }
     }
@@ -129,7 +132,7 @@ public class ItemMinigun extends ItemBasic implements IUseAmmo
     @Override
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected)
     {
-        if(entityIn.worldObj.isRemote || !(entityIn instanceof EntityPlayer)) return;
+        if(entityIn.world.isRemote || !(entityIn instanceof EntityPlayer)) return;
         EntityPlayer player = (EntityPlayer) entityIn;
 
         if(!player.isHandActive() && curSpeed < minSpeed)
@@ -157,7 +160,13 @@ public class ItemMinigun extends ItemBasic implements IUseAmmo
     @Override
     public int getAmmoSpace(ItemStack stack)
     {
-        return MAX_AMMO - getAmmoAmount(stack);
+        return getMaxAmmo() - getAmmoAmount(stack);
+    }
+
+    @Override
+    public IShootable getAmmoItem()
+    {
+        return BABItems.itemMinigunClip;
     }
 
     @Override
@@ -170,13 +179,13 @@ public class ItemMinigun extends ItemBasic implements IUseAmmo
     public double getDurabilityForDisplay(ItemStack stack)
     {
         int ammoAmount = isInUse ? ammoCache : getAmmoAmount(stack);
-        return 1 - ((float) ammoAmount / (float) MAX_AMMO);
+        return 1 - ((float) ammoAmount / (float) getMaxAmmo());
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
     {
-        tooltip.add("Ammo: " + getAmmoAmount(stack) + "/" + MAX_AMMO);
+        tooltip.add("Ammo: " + getAmmoAmount(stack) + "/" + getMaxAmmo());
     }
 }

@@ -3,7 +3,6 @@ package com.brightspark.bitsandbobs.init;
 public enum EItemBasic
 {
     BLOOD_PRISMARINE("bloodPrismarine"),
-    FLARE_AMMO("flareAmmo"),
     BULLET("bullet"),
     GUN_BARREL("gunBarrel"),
     PISTOL_ASSEMBLY("pistolAssembly"),

@@ -87,7 +87,7 @@ public class MessageSetClientGhostData implements IMessage
                 @Override
                 public void run()
                 {
-                    World world = Minecraft.getMinecraft().theWorld;
+                    World world = Minecraft.getMinecraft().world;
                     Entity entity = world.getEntityByID(message.ghostId);
                     if(!(entity instanceof EntityPlayerGhost))
                         return;

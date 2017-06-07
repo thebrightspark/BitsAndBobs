@@ -13,106 +13,89 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IInteractionObject;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class TileTrash extends BABTileEntity implements ISidedInventory, IInteractionObject
 {
     private final String KEY_INVENTORY = "inventory";
     private final String KEY_SLOT = "slot";
     private int[] allSlots = new int[] {0,1,2,3,4,5,6,7,8,9};
-    protected ItemStack[] stacks = new ItemStack[10];
+    protected ItemStack inputStack;
+    protected List<ItemStack> stacks = new ArrayList<ItemStack>(9);
 
     public TileTrash() {}
 
-    /**
-     * Called from the gui when the inventory is changed.
-     */
-    public void updateInventory()
+    private void removeNulls()
     {
-        if(stacks[0] != null)
-            inputItem();
-        else
-            shuffleItemsUp();
+        //Remove any null values
+        Iterator<ItemStack> iterator = stacks.iterator();
+        while(iterator.hasNext())
+            if(iterator.next() == null)
+                iterator.remove();
+        //Remove any values at indices greater than 8 (keeping 9 values)
+        while(stacks.size() > 9)
+            stacks.remove(9);
     }
 
-    /**
-     * Adds the stack from the input slot to the main slots.
-     */
-    private void inputItem()
+    public void addItem()
     {
-        shuffleItemsDown();
-        stacks[1] = stacks[0].copy();
-        stacks[0] = null;
+        if(inputStack == null) return;
+        stacks.add(0, inputStack.copy());
+        inputStack = null;
+        removeNulls();
     }
 
-    /**
-     * Moves all stacks right one to allow for new stack.
-     */
-    private void shuffleItemsDown()
+    private boolean isInputSlot(int index)
     {
-        for(int i = 9; i > 0; i--)
-        {
-            if(stacks[i] == null)
-                continue;
-            if(i < 9)
-                stacks[i + 1] = stacks[i].copy();
-            stacks[i] = null;
-        }
+        return index == 0;
     }
 
-    /**
-     * Moves stacks to the left to fill any gaps created.
-     */
-    private void shuffleItemsUp()
+    private boolean isOutputSlot(int index)
     {
-        for(int i = 1; i <= 9; i++)
-        {
-            if(stacks[i] != null && stacks[i].stackSize == 0)
-                stacks[i] = null;
-            if(stacks[i] == null)
-                for(int nextI = i + 1; nextI <= 9; nextI++)
-                {
-                    if(stacks[nextI] != null)
-                    {
-                        if(stacks[nextI].stackSize == 0)
-                        {
-                            stacks[nextI] = null;
-                            continue;
-                        }
-                        stacks[i] = stacks[nextI].copy();
-                        stacks[nextI] = null;
-                        break;
-                    }
-                }
-        }
+        return index > 0 && index < 10;
+    }
+
+    private ItemStack getStack(int index)
+    {
+        return stacks.size() > index ? stacks.get(index) : null;
     }
 
     @Override
     public void readFromNBT(NBTTagCompound tag)
     {
         super.readFromNBT(tag);
-        stacks = new ItemStack[10];
+
+        inputStack = tag.hasKey("id") ? ItemStack.loadItemStackFromNBT(tag) : null;
+
+        stacks.clear();
         NBTTagList nbttaglist = tag.getTagList(KEY_INVENTORY, 10);
         for (int i = 0; i < nbttaglist.tagCount(); ++i)
         {
             NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
-            int j = nbttagcompound.getByte(KEY_SLOT) & 255;
-            if (j >= 0 && j < stacks.length)
-                stacks[j] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+            int slotNum = nbttagcompound.getByte(KEY_SLOT);
+            stacks.set(slotNum, ItemStack.loadItemStackFromNBT(nbttagcompound));
         }
+        removeNulls();
     }
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound tag)
     {
         super.writeToNBT(tag);
+
+        if(inputStack != null)
+            inputStack.writeToNBT(tag);
+
         NBTTagList nbttaglist = new NBTTagList();
-        for (int i = 0; i < this.stacks.length; ++i)
+        for (int i = 0; i < stacks.size(); ++i)
         {
-            if (this.stacks[i] != null)
+            if (stacks.get(i) != null)
             {
                 NBTTagCompound nbttagcompound = new NBTTagCompound();
                 nbttagcompound.setByte(KEY_SLOT, (byte)i);
-                stacks[i].writeToNBT(nbttagcompound);
+                stacks.get(i).writeToNBT(nbttagcompound);
                 nbttaglist.appendTag(nbttagcompound);
             }
         }
@@ -129,13 +112,13 @@ public class TileTrash extends BABTileEntity implements ISidedInventory, IIntera
     @Override
     public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction)
     {
-        return index == 0;
+        return isInputSlot(index);
     }
 
     @Override
     public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction)
     {
-        return index > 0 && index <= 10;
+        return isOutputSlot(index) && stacks.get(index).isItemEqual(stack);
     }
 
     @Override
@@ -148,33 +131,40 @@ public class TileTrash extends BABTileEntity implements ISidedInventory, IIntera
     @Override
     public ItemStack getStackInSlot(int index)
     {
-        return stacks[index];
+        return isOutputSlot(index) ? getStack(index) : null;
     }
 
     @Nullable
     @Override
     public ItemStack decrStackSize(int index, int count)
     {
-        ItemStack stack = (index > 0 && index <= 10) && stacks[index] != null && count >= stacks[index].stackSize ? stacks[index].copy() : null;
-        stacks[index] = null;
-        return stack;
+        if(!isOutputSlot(index) || stacks.get(index) == null) return null;
+        ItemStack stack = getStack(index);
+        ItemStack returnStack = stack.splitStack(count);
+        if(stack.stackSize <= 0)
+            stacks.remove(index);
+        else
+            stacks.set(index, stack);
+        return returnStack;
     }
 
     @Nullable
     @Override
     public ItemStack removeStackFromSlot(int index)
     {
-        if(index < 1 || index > 10 || stacks[index] == null) return null;
-        ItemStack stack = stacks[index].copy();
-        stacks[index] = null;
+        if(!isOutputSlot(index) || stacks.get(index) == null) return null;
+        ItemStack stack = getStack(index - 1);
+        if(stack != null) stack = stack.copy();
+        stacks.remove(index - 1);
         return stack;
     }
 
     @Override
     public void setInventorySlotContents(int index, @Nullable ItemStack stack)
     {
-        if(index == 0 && stack != null)
-            stacks[0] = stack;
+        if(!isInputSlot(index) || !isOutputSlot(index)) return;
+        stacks.set(index, stack);
+        removeNulls();
     }
 
     @Override
@@ -192,7 +182,7 @@ public class TileTrash extends BABTileEntity implements ISidedInventory, IIntera
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack)
     {
-        return index == 0 && stack != null;
+        return isInputSlot(index) && stack != null;
     }
 
     @Override
@@ -213,7 +203,7 @@ public class TileTrash extends BABTileEntity implements ISidedInventory, IIntera
     @Override
     public void clear()
     {
-        stacks = new ItemStack[10];
+        stacks.clear();
     }
 
     @Override

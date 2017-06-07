@@ -16,7 +16,7 @@ import org.lwjgl.opengl.GL11;
  */
 public class GuiBlockTrash extends GuiContainer
 {
-    public static final ResourceLocation guiImage = new ResourceLocation(Reference.GUI_TEXTURE_DIR + "guiBlockTrash.png");
+    public static final ResourceLocation guiImage = new ResourceLocation(Reference.MOD_ID, Reference.GUI_TEXTURE_DIR + "guiBlockTrash.png");
 
     public GuiBlockTrash(InventoryPlayer invPlayer, World world, int x, int y, int z)
     {

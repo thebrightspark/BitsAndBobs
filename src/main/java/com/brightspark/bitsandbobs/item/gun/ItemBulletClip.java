@@ -1,5 +1,6 @@
-package com.brightspark.bitsandbobs.item;
+package com.brightspark.bitsandbobs.item.gun;
 
+import com.brightspark.bitsandbobs.item.ItemBasic;
 import com.brightspark.bitsandbobs.util.NBTHelper;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,7 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class ItemBulletClip extends ItemBasic
+public class ItemBulletClip extends ItemBasic implements IShootable
 {
     //TODO: Make texture change depending on how full it is?
     public int clipSize;
@@ -34,11 +35,6 @@ public class ItemBulletClip extends ItemBasic
         subItems.add(clip);
     }
 
-    public static boolean isClipWithAmmo(ItemStack stack)
-    {
-        return stack != null && stack.getItem() instanceof ItemBulletClip && getBulletsAmount(stack) > 0;
-    }
-
     public static void setBulletsAmount(ItemStack stack, int amount)
     {
         NBTHelper.setInteger(stack, "ammo", Math.max(Math.min(amount, ((ItemBulletClip) stack.getItem()).clipSize), 0));
@@ -54,5 +50,17 @@ public class ItemBulletClip extends ItemBasic
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced)
     {
         tooltip.add("Bullets: " + getBulletsAmount(stack) + "/" + clipSize);
+    }
+
+    @Override
+    public boolean isClip()
+    {
+        return true;
+    }
+
+    @Override
+    public int getMaxAmmo()
+    {
+        return clipSize;
     }
 }

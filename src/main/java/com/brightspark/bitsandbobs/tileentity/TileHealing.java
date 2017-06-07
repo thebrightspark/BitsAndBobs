@@ -80,7 +80,7 @@ public class TileHealing extends BABTileEntity implements ITickable, IInteractio
     @Override
     public void update()
     {
-        if(addingFuel && !worldObj.isRemote)
+        if(addingFuel && !world.isRemote)
         {
             if(inputStack != null && inputStack.stackSize > 0)
             {
@@ -97,23 +97,23 @@ public class TileHealing extends BABTileEntity implements ITickable, IInteractio
                 inputStack = null;
         }
 
-        if(worldObj.getTotalWorldTime() % ticks == 0) //Check every so many ticks (20 ticks for first healing block)
+        if(world.getTotalWorldTime() % ticks == 0) //Check every so many ticks (20 ticks for first healing block)
         {
             //Check fuel slot
-            if(!worldObj.isRemote && inputStack != null && inputStack.stackSize > 0)
+            if(!world.isRemote && inputStack != null && inputStack.stackSize > 0)
                 addingFuel = true;
 
             //Heal players!
             BlockPos pos = this.getPos().up(); //Block above this healing block
             AxisAlignedBB area = new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1);
-            List<EntityPlayer> players = worldObj.getEntitiesWithinAABB(EntityPlayer.class, area);
+            List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, area);
             for(EntityPlayer p : players)
             {
                 //Check to see if player is standing in blockspace above block and if need healing
                 if(fuel > 0 && p.shouldHeal() && !p.capabilities.isCreativeMode)
                 {
-                    if(worldObj.isRemote)
-                        ClientUtils.spawnTwirlEffect(worldObj, p);
+                    if(world.isRemote)
+                        ClientUtils.spawnTwirlEffect(world, p);
                     else
                     {
                         p.heal(2); //Heal 1 heart
@@ -124,7 +124,7 @@ public class TileHealing extends BABTileEntity implements ITickable, IInteractio
         }
 
         this.markDirty();
-        worldObj.scheduleUpdate(this.getPos(), this.getBlockType(), 2);
+        world.scheduleUpdate(this.getPos(), this.getBlockType(), 2);
     }
 
     public int getFuelAmount()

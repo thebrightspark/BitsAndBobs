@@ -15,7 +15,7 @@ public class BlockLightning extends BABBlock
 {
     public BlockLightning()
     {
-        super("blockLightning");
+        super("lightning");
     }
 
     @Override

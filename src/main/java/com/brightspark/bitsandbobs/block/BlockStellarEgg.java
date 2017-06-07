@@ -9,8 +9,8 @@ public class BlockStellarEgg extends BlockDragonEgg
     {
         super();
         setCreativeTab(BitsAndBobs.BAB_TAB);
-        setUnlocalizedName("blockStellarEgg");
-        setRegistryName("blockStellarEgg");
+        setUnlocalizedName("stellarEgg");
+        setRegistryName("stellarEgg");
         setLightLevel(1f);
     }
 }

@@ -1,7 +1,7 @@
 package com.brightspark.bitsandbobs.init;
 
 import com.brightspark.bitsandbobs.util.ShapelessNBTRecipe;
-import com.brightspark.bitsandbobs.item.ItemBulletClip;
+import com.brightspark.bitsandbobs.item.gun.ItemBulletClip;
 import com.brightspark.bitsandbobs.util.ShapedNBTRecipe;
 import com.google.common.collect.Maps;
 import net.minecraft.block.Block;
@@ -36,18 +36,18 @@ public class BABRecipes
         //Mirage Orb
         GameRegistry.addRecipe(new ItemStack(BABItems.itemMirageOrb), " p ", "pep", " p ", 'e', Items.ENDER_EYE, 'p', Items.PRISMARINE_CRYSTALS);
         //Flare Ammo
-        GameRegistry.addShapelessRecipe(BABItems.getBasicItem(EItemBasic.FLARE_AMMO), Items.IRON_INGOT, Items.GUNPOWDER, new ItemStack(Items.DYE, 1, 1));
+        GameRegistry.addShapelessRecipe(new ItemStack(BABItems.itemFlareAmmo), Items.IRON_INGOT, Items.GUNPOWDER, new ItemStack(Items.DYE, 1, 1));
         //Flare Gun
         GameRegistry.addRecipe(new ItemStack(BABItems.itemFlareGun), "iib", " oi", 'i', Items.IRON_INGOT, 'o', new ItemStack(Items.DYE, 1, 14), 'b', Blocks.STONE_BUTTON);
 
         //Bullet
-        GameRegistry.addShapelessRecipe(BABItems.getBasicItem(EItemBasic.FLARE_AMMO, 4), Items.IRON_INGOT, Items.GUNPOWDER);
+        GameRegistry.addShapelessRecipe(new ItemStack(BABItems.itemFlareAmmo, 4), Items.IRON_INGOT, Items.GUNPOWDER);
         //Empty Bullet Clip
-        ItemStack emptyClip = new ItemStack(BABItems.itemBulletClip);
+        ItemStack emptyClip = new ItemStack(BABItems.itemPistolClip);
         ItemBulletClip.setBulletsAmount(emptyClip, 0);
         GameRegistry.addRecipe(emptyClip, "i i", "i i", " i ", 'i', Items.IRON_INGOT);
         //Bullet Clips
-        int max = BABItems.itemBulletClip.clipSize;
+        int max = BABItems.itemPistolClip.clipSize;
         for(int clipSize = 0; clipSize < max; clipSize++)
         {
             for(int numBullets = 1; numBullets <= Math.min(Math.min(max, 8), max - clipSize); numBullets++)
@@ -56,11 +56,11 @@ public class BABRecipes
                 ItemStack[] bullets = new ItemStack[numBullets + 1];
                 Arrays.fill(bullets, BABItems.getBasicItem(EItemBasic.BULLET));
 
-                ItemStack inputClip = new ItemStack(BABItems.itemBulletClip);
+                ItemStack inputClip = new ItemStack(BABItems.itemPistolClip);
                 ItemBulletClip.setBulletsAmount(inputClip, clipSize);
                 bullets[0] = inputClip;
 
-                ItemStack outputClip = new ItemStack(BABItems.itemBulletClip);
+                ItemStack outputClip = new ItemStack(BABItems.itemPistolClip);
                 ItemBulletClip.setBulletsAmount(outputClip, clipSize + numBullets);
 
                 GameRegistry.addRecipe(new ShapelessNBTRecipe(outputClip, (Object[]) bullets));

@@ -25,16 +25,16 @@ import java.util.List;
 public class CommandKill extends CommandBase
 {
     @Override
-    public String getCommandName()
+    public String getName()
     {
         return Config.commandKillName;
     }
 
     @Override
-    public String getCommandUsage(ICommandSender sender)
+    public String getUsage(ICommandSender sender)
     {
         return "Usage:\n" +
-                " " + getCommandName() + " [radius] [filter]\n" +
+                " " + getName() + " [radius] [filter]\n" +
                 " Filter can be 'aggressive' (or 'a'), 'passive' (or 'p'), 'item' (or 'i'), or an entity ID.";
     }
 
@@ -47,7 +47,7 @@ public class CommandKill extends CommandBase
         {
             if(args[0].equals("help"))
             {
-                sender.addChatMessage(new TextComponentString(getCommandUsage(sender)));
+                sender.sendMessage(new TextComponentString(getUsage(sender)));
                 return;
             }
 
@@ -118,7 +118,7 @@ public class CommandKill extends CommandBase
         {
             String[] resultText = Config.commandKillMessages;
             String message = resultText[world.rand.nextInt(resultText.length)];
-            sender.addChatMessage(new TextComponentString(String.format(message, numKilled)));
+            sender.sendMessage(new TextComponentString(String.format(message, numKilled)));
         }
     }
 
@@ -132,7 +132,7 @@ public class CommandKill extends CommandBase
     }
 
     @Override
-    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos)
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos)
     {
         List<String> list = Lists.newArrayList("help", "passive", "p", "aggressive", "a", "item", "i");
         List<String> entityNames = EntityList.getEntityNameList();
