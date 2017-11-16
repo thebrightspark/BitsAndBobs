@@ -24,7 +24,7 @@ public class BABEntities
 
     private static void regEntity(Class<? extends Entity> entityClass, String name)
     {
-        EntityRegistry.registerModEntity(entityClass, name, ++modEntityId, BitsAndBobs.instance, 64, 1, false);
+        EntityRegistry.registerModEntity(entityClass, name, ++modEntityId, BitsAndBobs.instance, 64, 20, false);
         ENTITY_CLASSES.add(entityClass);
     }
 

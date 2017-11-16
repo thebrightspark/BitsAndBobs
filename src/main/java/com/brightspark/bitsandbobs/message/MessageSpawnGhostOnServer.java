@@ -21,9 +21,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import java.util.List;
 
-/**
- * Created by Mark on 19/07/2016.
- */
 public class MessageSpawnGhostOnServer implements IMessage
 {
     public String playerName;

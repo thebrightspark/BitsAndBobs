@@ -1,6 +1,6 @@
 package com.brightspark.bitsandbobs.gui;
 
-import com.brightspark.bitsandbobs.tileentity.BABTileEntity;
+import com.brightspark.bitsandbobs.tileentity.BABTileInventory;
 import com.brightspark.bitsandbobs.tileentity.TileTrash;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -12,9 +12,9 @@ import javax.annotation.Nullable;
 /**
  * Created by Mark on 28/06/2016.
  */
-public class ContainerBlockTrash extends BABContainer
+public class ContainerBlockTrash extends BABContainerInventory
 {
-    public ContainerBlockTrash(InventoryPlayer invPlayer, BABTileEntity tileEntity)
+    public ContainerBlockTrash(InventoryPlayer invPlayer, BABTileInventory tileEntity)
     {
         super(invPlayer, tileEntity);
     }

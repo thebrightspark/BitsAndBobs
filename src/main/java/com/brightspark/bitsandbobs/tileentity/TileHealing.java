@@ -16,7 +16,7 @@ import net.minecraft.world.IInteractionObject;
 
 import java.util.List;
 
-public class TileHealing extends BABTileEntity implements ITickable, IInteractionObject
+public class TileHealing extends BABTileInventory implements ITickable, IInteractionObject
 {
     private static final String KEY_FUEL = "fuel";
     private static final String KEY_FUEL_MAX = "fuelMax";

@@ -1,17 +1,17 @@
 package com.brightspark.bitsandbobs.gui;
 
-import com.brightspark.bitsandbobs.tileentity.BABTileEntity;
+import com.brightspark.bitsandbobs.tileentity.BABTileInventory;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ContainerBlockHealing extends BABContainer
+public class ContainerBlockHealing extends BABContainerInventory
 {
     private int fuel;
 
-    public ContainerBlockHealing(InventoryPlayer invPlayer, BABTileEntity tileEntity)
+    public ContainerBlockHealing(InventoryPlayer invPlayer, BABTileInventory tileEntity)
     {
         super(invPlayer, tileEntity);
     }

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class TileTrash extends BABTileEntity implements ISidedInventory, IInteractionObject
+public class TileTrash extends BABTileInventory implements ISidedInventory, IInteractionObject
 {
     private final String KEY_INVENTORY = "inventory";
     private final String KEY_SLOT = "slot";

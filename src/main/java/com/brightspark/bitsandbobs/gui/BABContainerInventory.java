@@ -8,7 +8,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class BABContainer extends Container
+public class BABContainerInventory extends Container
 {
     protected IInventory inventory;
 
@@ -16,7 +16,7 @@ public class BABContainer extends Container
     protected int invStartX = 8;
     protected int invStartY = 84;
 
-    public BABContainer(InventoryPlayer invPlayer, IInventory inventory)
+    public BABContainerInventory(InventoryPlayer invPlayer, IInventory inventory)
     {
         this.inventory = inventory;
         init();

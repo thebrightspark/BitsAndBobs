@@ -1,13 +1,12 @@
 package com.brightspark.bitsandbobs.block;
 
-import com.brightspark.bitsandbobs.BitsAndBobs;
+import com.brightspark.bitsandbobs.tileentity.TileChatter;
 import com.brightspark.bitsandbobs.util.CommonUtils;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -15,33 +14,35 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 
-public abstract class BABBlockContainer extends BlockContainer
+public class BlockChatter extends BABBlockContainer
 {
-    public BABBlockContainer(String name)
+    public BlockChatter()
     {
-        this(Material.ROCK, name);
-    }
-
-    public BABBlockContainer(Material material, String name)
-    {
-        super(material);
-        setCreativeTab(BitsAndBobs.BAB_TAB);
-        setUnlocalizedName(name);
-        setRegistryName(name);
-        setHardness(2f);
-        setResistance(10f);
+        super("chatter");
     }
 
     @Override
-    public EnumBlockRenderType getRenderType(IBlockState state)
+    public TileEntity createNewTileEntity(World worldIn, int meta)
     {
-        return EnumBlockRenderType.MODEL;
+        return new TileChatter();
+    }
+
+    @Override
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn)
+    {
+        //TODO: Only send the message when a redstone pulse is received
+        if(!worldIn.isRemote)
+        {
+            TileEntity te = worldIn.getTileEntity(pos);
+            if(te instanceof TileChatter)
+                ((TileChatter) te).sendMessage();
+        }
     }
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
     {
-        if(!world.isRemote && !player.isSneaking())
+        if(world.isRemote && !player.isSneaking())
             CommonUtils.openGui(player, world, pos);
         return true;
     }

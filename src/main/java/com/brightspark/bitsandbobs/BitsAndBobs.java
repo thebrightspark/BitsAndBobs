@@ -7,6 +7,7 @@ import com.brightspark.bitsandbobs.handler.EntityEventHandler;
 import com.brightspark.bitsandbobs.init.*;
 import com.brightspark.bitsandbobs.message.MessageSpawnGhostOnServer;
 import com.brightspark.bitsandbobs.message.MessageSetClientGhostData;
+import com.brightspark.bitsandbobs.message.MessageUpdateChatter;
 import com.brightspark.bitsandbobs.reference.Reference;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -63,6 +64,7 @@ public class BitsAndBobs
         NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
         NETWORK.registerMessage(MessageSpawnGhostOnServer.Handler.class, MessageSpawnGhostOnServer.class, 0, Side.SERVER);
         NETWORK.registerMessage(MessageSetClientGhostData.Handler.class, MessageSetClientGhostData.class, 1, Side.CLIENT);
+        NETWORK.registerMessage(MessageUpdateChatter.Handler.class, MessageUpdateChatter.class, 2, Side.SERVER);
 
         BABItems.regItems();
         BABBlocks.regBlocks();
@@ -81,7 +83,7 @@ public class BitsAndBobs
         //Initialize textures/models, GUIs, tile entities, recipies, event handlers here
 
         BABRecipes.init();
-        BABTileEntities.init();
+        BABBlocks.regTEs();
         //TODO: Uncomment this when I want to try xp juice again...
         //BABFluids.init();
 

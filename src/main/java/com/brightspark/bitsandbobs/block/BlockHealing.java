@@ -2,7 +2,6 @@ package com.brightspark.bitsandbobs.block;
 
 import com.brightspark.bitsandbobs.tileentity.TileHealing;
 import com.brightspark.bitsandbobs.util.LogHelper;
-import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -13,7 +12,7 @@ public class BlockHealing extends BABBlockContainer
 
     public BlockHealing(String name, int maxFuelStorage, int ticksBetweenChecks)
     {
-        super(Material.ROCK, name);
+        super(name);
         fuelMax = maxFuelStorage;
         ticks = ticksBetweenChecks;
     }

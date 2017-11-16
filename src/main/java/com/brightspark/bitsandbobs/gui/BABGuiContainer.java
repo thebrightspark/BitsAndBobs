@@ -20,7 +20,7 @@ public class BABGuiContainer extends GuiContainer
     public BABGuiContainer(Container container, String guiImageName, String inventoryName)
     {
         super(container);
-        guiImage = new ResourceLocation(Reference.MOD_ID, Reference.GUI_TEXTURE_DIR + guiImageName + ".png");
+        guiImage = guiImageName == null ? null : new ResourceLocation(Reference.MOD_ID, Reference.GUI_TEXTURE_DIR + guiImageName + ".png");
         this.inventoryName = inventoryName;
         xSize = 176;
         ySize = 168;
@@ -31,8 +31,11 @@ public class BABGuiContainer extends GuiContainer
     {
         //Draw gui
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.getTextureManager().bindTexture(guiImage);
-        drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+        if(guiImage != null)
+        {
+            mc.getTextureManager().bindTexture(guiImage);
+            drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+        }
     }
 
     @Override
