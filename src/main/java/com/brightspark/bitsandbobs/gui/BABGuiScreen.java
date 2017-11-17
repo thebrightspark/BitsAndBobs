@@ -69,7 +69,7 @@ public class BABGuiScreen extends GuiScreen
 
     public void drawString(String text, int x, int y, int color, boolean drawShadow)
     {
-        fontRendererObj.drawString(text, (float)x, (float)y, color, drawShadow);
+        fontRenderer.drawString(text, (float)x, (float)y, color, drawShadow);
     }
 
     public void drawString(String text, int x, int y, int color)
@@ -84,7 +84,7 @@ public class BABGuiScreen extends GuiScreen
 
     public void drawCenteredString(String text, int x, int y, int color, boolean drawShadow)
     {
-        fontRendererObj.drawString(text, (float)(x - fontRendererObj.getStringWidth(text) / 2), (float)y, color, drawShadow);
+        fontRenderer.drawString(text, (float)(x - fontRenderer.getStringWidth(text) / 2), (float)y, color, drawShadow);
     }
 
     public void drawCenteredString(String text, int x, int y, int color)
@@ -134,14 +134,14 @@ public class BABGuiScreen extends GuiScreen
         public void drawButton(Minecraft mc, int mouseX, int mouseY)
         {
             if(!visible) return;
-            FontRenderer fontrenderer = mc.fontRendererObj;
+            FontRenderer fontrenderer = mc.fontRenderer;
             mc.getTextureManager().bindTexture(guiImage);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-            this.hovered = mouseX >= xPosition && mouseY >= yPosition && mouseX < xPosition + width && mouseY < yPosition + height;
+            this.hovered = mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + height;
             //Draw button
-            drawTexturedModalRect(xPosition, yPosition, iconX, iconY, width, height);
+            drawTexturedModalRect(x, y, iconX, iconY, width, height);
             if(!displayString.equals(""))
-                drawCenteredString(fontrenderer, displayString, xPosition + width / 2, yPosition + (height - 8) / 2);
+                drawCenteredString(fontrenderer, displayString, x + width / 2, y + (height - 8) / 2);
         }
     }
 }

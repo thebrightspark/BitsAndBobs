@@ -1,7 +1,7 @@
 {
 	"parent": "block/dragon_egg",
 	"textures": {
-		"particle": "bitsandbobs:blocks/stellarEgg2",
-		"all": "bitsandbobs:blocks/stellarEgg2"
+		"particle": "bitsandbobs:blocks/stellaregg2",
+		"all": "bitsandbobs:blocks/stellaregg2"
 	}
 }

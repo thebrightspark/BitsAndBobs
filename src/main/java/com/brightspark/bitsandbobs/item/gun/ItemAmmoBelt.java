@@ -30,11 +30,11 @@ public class ItemAmmoBelt extends ItemBasic
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand)
     {
         if(!worldIn.isRemote && !playerIn.isSneaking())
             CommonUtils.openGui(playerIn, worldIn, EnumGuiID.AMMO_BELT);
-        return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
+        return new ActionResult<>(EnumActionResult.PASS, playerIn.getHeldItem(hand));
     }
 
     public static ItemStackHandler getInventoryHandler(ItemStack stack)

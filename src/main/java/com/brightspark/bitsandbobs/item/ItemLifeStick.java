@@ -49,15 +49,16 @@ public class ItemLifeStick extends ItemBasic
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand)
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand)
     {
+        ItemStack stack = player.getHeldItem(hand);
         float storage = NBTHelper.getFloat(stack, STORAGE);
         if(player.isSneaking())
         {
             if(storage < STORAGE_MAX)
             {
                 //Store health
-                if(player.attackEntityFrom(DamageSource.generic, 2))
+                if(player.attackEntityFrom(DamageSource.GENERIC, 2))
                 {
                     addToStorage(stack, 1);
                     float rand = (float) ((Math.random() / 2f) + 1.5f);
@@ -91,7 +92,7 @@ public class ItemLifeStick extends ItemBasic
                 }
             }
         }
-        return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
+        return new ActionResult<>(EnumActionResult.FAIL, stack);
     }
 
     @Override

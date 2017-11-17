@@ -19,10 +19,11 @@ public class ItemGrenade extends ItemBasic
         setMaxStackSize(16);
     }
 
-    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand)
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand)
     {
+        ItemStack stack = player.getHeldItem(hand);
         if(!player.capabilities.isCreativeMode)
-            stack.stackSize--;
+            stack.shrink(1);
 
         world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_EGG_THROW, SoundCategory.NEUTRAL, 0.5f, 0.4f / (itemRand.nextFloat() * 0.4f + 0.8f));
 
@@ -31,6 +32,6 @@ public class ItemGrenade extends ItemBasic
 
         player.addStat(StatList.getObjectUseStats(this));
 
-        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+        return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
 }

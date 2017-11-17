@@ -23,7 +23,7 @@ public class TileHealing extends BABTileInventory implements ITickable, IInterac
     private static final String KEY_TICKS = "ticks";
     private static final String KEY_HAS_ITEM = "hasItem";
 
-    private ItemStack inputStack;
+    private ItemStack inputStack = ItemStack.EMPTY;
     private boolean addingFuel = false;
     private int ticks;
     private int fuelMax;
@@ -59,7 +59,7 @@ public class TileHealing extends BABTileInventory implements ITickable, IInterac
         fuelMax = tag.getInteger(KEY_FUEL_MAX);
         ticks = tag.getInteger(KEY_TICKS);
         if(tag.hasKey(KEY_HAS_ITEM))
-            inputStack = ItemStack.loadItemStackFromNBT(tag);
+            inputStack = new ItemStack(tag);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class TileHealing extends BABTileInventory implements ITickable, IInterac
         tag.setInteger(KEY_FUEL, fuel);
         tag.setInteger(KEY_FUEL_MAX, fuelMax);
         tag.setInteger(KEY_TICKS, ticks);
-        if(inputStack != null)
+        if(!inputStack.isEmpty())
         {
             tag.setBoolean(KEY_HAS_ITEM, true);
             inputStack.writeToNBT(tag);
@@ -82,25 +82,25 @@ public class TileHealing extends BABTileInventory implements ITickable, IInterac
     {
         if(addingFuel && !world.isRemote)
         {
-            if(inputStack != null && inputStack.stackSize > 0)
+            if(!inputStack.isEmpty() && inputStack.getCount() > 0)
             {
                 int fuelToAdd = getFuelForItem(inputStack);
                 if(fuel + fuelToAdd <= fuelMax)
                 {
                     fuel += fuelToAdd;
-                    inputStack.stackSize--;
+                    inputStack.shrink(1);
                 }
             }
             else
                 addingFuel = false;
-            if(inputStack != null && inputStack.stackSize <= 0)
-                inputStack = null;
+            if(!inputStack.isEmpty() && inputStack.getCount() <= 0)
+                inputStack = ItemStack.EMPTY;
         }
 
         if(world.getTotalWorldTime() % ticks == 0) //Check every so many ticks (20 ticks for first healing block)
         {
             //Check fuel slot
-            if(!world.isRemote && inputStack != null && inputStack.stackSize > 0)
+            if(!world.isRemote && !inputStack.isEmpty() && inputStack.getCount() > 0)
                 addingFuel = true;
 
             //Heal players!
@@ -157,9 +157,15 @@ public class TileHealing extends BABTileInventory implements ITickable, IInterac
     }
 
     @Override
+    public boolean isEmpty()
+    {
+        return inputStack.isEmpty();
+    }
+
+    @Override
     public ItemStack getStackInSlot(int index)
     {
-        return index == 0 ? inputStack : null;
+        return index == 0 ? inputStack : ItemStack.EMPTY;
     }
 
     @Override
@@ -167,13 +173,13 @@ public class TileHealing extends BABTileInventory implements ITickable, IInterac
     {
         if(index == 0 && inputStack != null)
         {
-            if(inputStack.stackSize <= count) //If trying to take all or more of items in slot
+            if(inputStack.getCount() <= count) //If trying to take all or more of items in slot
                 return removeStackFromSlot(index);
             else //If needing to split the stack
             {
                 ItemStack stack = inputStack.splitStack(count);
-                if(inputStack.stackSize == 0)
-                    inputStack = null;
+                if(inputStack.getCount() == 0)
+                    inputStack = ItemStack.EMPTY;
                 return stack;
             }
         }
@@ -185,8 +191,8 @@ public class TileHealing extends BABTileInventory implements ITickable, IInterac
     {
         if(index == 0 && inputStack != null)
         {
-            ItemStack stack = ItemStack.copyItemStack(inputStack);
-            inputStack = null;
+            ItemStack stack = inputStack.copy();
+            inputStack = ItemStack.EMPTY;
             return stack;
         }
         return null;
@@ -238,7 +244,7 @@ public class TileHealing extends BABTileInventory implements ITickable, IInterac
     @Override
     public void clear()
     {
-        inputStack = null;
+        inputStack = ItemStack.EMPTY;
     }
 
     @Override

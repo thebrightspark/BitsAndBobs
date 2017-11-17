@@ -14,13 +14,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Created by Mark on 13/02/2017.
- */
 public class BABGuiFactory implements IModGuiFactory
 {
     @Override
     public void initialize(Minecraft minecraftInstance) {}
+
+    @Override
+    public boolean hasConfigGui()
+    {
+        return true;
+    }
+
+    @Override
+    public GuiScreen createConfigGui(GuiScreen parentScreen)
+    {
+        return new BABGuiConfig(parentScreen);
+    }
 
     @Override
     public Class<? extends GuiScreen> mainConfigGuiClass()

@@ -6,9 +6,11 @@ import com.brightspark.bitsandbobs.handler.EnumGuiID;
 import com.brightspark.bitsandbobs.reference.Reference;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -84,5 +86,14 @@ public class CommonUtils
     {
         BlockPos pos = te.getPos();
         return te.getWorld().getTileEntity(pos) == te && player.getDistanceSq((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D) <= 64.0D;
+    }
+
+    public static boolean isStackListEmpty(NonNullList<ItemStack> list)
+    {
+        if(list.isEmpty()) return true;
+        for(ItemStack stack : list)
+            if(!stack.isEmpty())
+                return false;
+        return true;
     }
 }

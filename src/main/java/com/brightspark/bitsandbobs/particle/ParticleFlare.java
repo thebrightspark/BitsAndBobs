@@ -10,13 +10,15 @@ import java.util.List;
 
 public class ParticleFlare extends Particle
 {
+    private boolean isCollided = false;
+
     public ParticleFlare(World world, double posX, double posY, double posZ, Vec3d lookVec)
     {
         super(world, posX, posY, posZ);
         float velocity = 3f + ((rand.nextFloat() / 5f) - 0.025f);
-        motionX = lookVec.xCoord * velocity;
-        motionY = lookVec.yCoord * velocity;
-        motionZ = lookVec.zCoord * velocity;
+        motionX = lookVec.x * velocity;
+        motionY = lookVec.y * velocity;
+        motionZ = lookVec.z * velocity;
         particleMaxAge = 100; //5 secs
         setParticleTextureIndex(144);
         setRBGColorF(1f, 0f, 0f);
@@ -62,7 +64,7 @@ public class ParticleFlare extends Particle
         double d0 = x;
         double d1 = y;
         double d2 = z;
-        List<AxisAlignedBB> list = world.getCollisionBoxes(null, getBoundingBox().addCoord(x, y, z));
+        List<AxisAlignedBB> list = world.getCollisionBoxes(null, getBoundingBox().offset(x, y, z));
 
         for(AxisAlignedBB axisalignedbb : list)
             y = axisalignedbb.calculateYOffset(getBoundingBox(), y);

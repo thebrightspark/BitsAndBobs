@@ -50,10 +50,11 @@ public class ContainerBlockTrash extends BABContainerInventory
                 {
                     return false;
                 }
-                public void onPickupFromSlot(EntityPlayer playerIn, ItemStack stack)
+                public ItemStack onTake(EntityPlayer playerIn, ItemStack stack)
                 {
-                    super.onPickupFromSlot(playerIn, stack);
+                    ItemStack returnStack = super.onTake(playerIn, stack);
                     ContainerBlockTrash.this.detectAndSendChanges();
+                    return returnStack;
                 }
             });
         }
@@ -62,7 +63,7 @@ public class ContainerBlockTrash extends BABContainerInventory
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slot)
     {
-        ItemStack stack = null;
+        ItemStack stack = ItemStack.EMPTY;
         Slot slotObject = this.inventorySlots.get(slot);
 
         if (slotObject != null && slotObject.getHasStack())
@@ -74,25 +75,25 @@ public class ContainerBlockTrash extends BABContainerInventory
             if (slot > 0 && slot < slotInvStart)
             {
                 if (!this.mergeItemStack(stackInSlot, slotInvStart, slotInvStart+36, false))
-                    return null;
+                    return ItemStack.EMPTY;
                 slotObject.onSlotChange(stackInSlot, stack);
             }
             //If slot Inventory
             else if (slot >= slotInvStart && slot <= slotInvStart+36 && inventory.isItemValidForSlot(0, stackInSlot))
             {
                 if (!this.mergeItemStack(stackInSlot, 0, 1, false))
-                    return null;
+                    return ItemStack.EMPTY;
             }
 
-            if (stackInSlot.stackSize == 0)
-                slotObject.putStack(null);
+            if (stackInSlot.getCount() == 0)
+                slotObject.putStack(ItemStack.EMPTY);
             else
                 slotObject.onSlotChanged();
 
-            if (stackInSlot.stackSize == stack.stackSize)
-                return null;
+            if (stackInSlot.getCount() == stack.getCount())
+                return ItemStack.EMPTY;
 
-            slotObject.onPickupFromSlot(player, stackInSlot);
+            slotObject.onTake(player, stackInSlot);
         }
 
         return stack;

@@ -19,6 +19,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -135,7 +136,8 @@ public class CommandKill extends CommandBase
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos)
     {
         List<String> list = Lists.newArrayList("help", "passive", "p", "aggressive", "a", "item", "i");
-        List<String> entityNames = EntityList.getEntityNameList();
+        List<String> entityNames = new ArrayList<>();
+        EntityList.getEntityNameList().forEach((name) -> entityNames.add(name.toString()));
         CommonUtils.sortStringList(entityNames);
         list.addAll(entityNames);
         return getListOfStringsMatchingLastWord(args, list);

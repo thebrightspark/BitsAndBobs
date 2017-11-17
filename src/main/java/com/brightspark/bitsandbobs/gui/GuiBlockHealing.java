@@ -21,8 +21,8 @@ public class GuiBlockHealing extends BABGuiContainer
     protected void drawText()
     {
         super.drawText();
-        fontRendererObj.drawString("Fuel:", 77, 50, 0);
+        fontRenderer.drawString("Fuel:", 77, 50, 0);
         String fuelString = Integer.toString(te.getFuelAmount());
-        fontRendererObj.drawString(fuelString, 88 - (fontRendererObj.getStringWidth(fuelString) / 2), 61, 0);
+        fontRenderer.drawString(fuelString, 88 - (fontRenderer.getStringWidth(fuelString) / 2), 61, 0);
     }
 }

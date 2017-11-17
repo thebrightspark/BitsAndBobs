@@ -3,9 +3,7 @@ package com.brightspark.bitsandbobs.gui;
 import com.brightspark.bitsandbobs.BitsAndBobs;
 import com.brightspark.bitsandbobs.message.MessageUpdateChatter;
 import com.brightspark.bitsandbobs.tileentity.TileChatter;
-import com.brightspark.bitsandbobs.util.LogHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
@@ -30,7 +28,7 @@ public class GuiBlockChatter extends BABGuiScreen
     public void initGui()
     {
         super.initGui();
-        textField = new GuiTextField(0, fontRendererObj, width / 2 - 150, 50, 300, 20);
+        textField = new GuiTextField(0, fontRenderer, width / 2 - 150, 50, 300, 20);
         textField.setFocused(true);
         textField.setCanLoseFocus(false);
         textField.setMaxStringLength(100);
@@ -45,7 +43,7 @@ public class GuiBlockChatter extends BABGuiScreen
             for(int x = 0; x < 4; x++)
             {
                 String colour = TextFormatting.fromColorIndex(colourI++).toString();
-                addButton(new ColourButton(xStart + x * 20, yStart + y * 20, colour, mc.fontRendererObj.getColorCode(colour.charAt(1))));
+                addButton(new ColourButton(xStart + x * 20, yStart + y * 20, colour, mc.fontRenderer.getColorCode(colour.charAt(1))));
             }
     }
 
@@ -154,9 +152,9 @@ public class GuiBlockChatter extends BABGuiScreen
         {
             if(!visible) return;
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-            hovered = mouseX >= xPosition && mouseY >= yPosition && mouseX < xPosition + width && mouseY < yPosition + height;
-            drawRect(xPosition, yPosition, xPosition + width, yPosition + height, 0xFF303030);
-            drawRect(xPosition + greyMargin, yPosition + greyMargin, xPosition + width - greyMargin, yPosition + height - greyMargin, 0xFF000000 + colourCode);
+            hovered = mouseX >= x && mouseY >= y && mouseX < x + width && mouseY < y + height;
+            drawRect(x, y, x + width, y + height, 0xFF303030);
+            drawRect(x + greyMargin, y + greyMargin, x + width - greyMargin, y + height - greyMargin, 0xFF000000 + colourCode);
         }
     }
 }

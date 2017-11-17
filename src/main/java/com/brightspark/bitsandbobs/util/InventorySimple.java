@@ -4,18 +4,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
-
-import javax.annotation.Nullable;
 
 public class InventorySimple implements IInventory
 {
     private String title;
     private final boolean hasCustomName;
     private final int slotCount, stackLimit;
-    private final ItemStack[] contents;
+    private final NonNullList<ItemStack> contents;
 
     public InventorySimple(String title, boolean hasCustomName, int slotCount, int stackLimit)
     {
@@ -23,7 +22,7 @@ public class InventorySimple implements IInventory
         this.hasCustomName = hasCustomName;
         this.slotCount = slotCount;
         this.stackLimit = stackLimit;
-        this.contents = new ItemStack[slotCount];
+        this.contents = NonNullList.withSize(slotCount, ItemStack.EMPTY);
     }
 
     public ItemStack addItem(ItemStack stack)
@@ -34,7 +33,7 @@ public class InventorySimple implements IInventory
         {
             ItemStack itemstack1 = getStackInSlot(i);
 
-            if(itemstack1 == null && isItemValidForSlot(i, itemstack))
+            if(itemstack1.isEmpty() && isItemValidForSlot(i, itemstack))
             {
                 setInventorySlotContents(i, itemstack);
                 markDirty();
@@ -44,14 +43,14 @@ public class InventorySimple implements IInventory
             if(ItemStack.areItemsEqual(itemstack1, itemstack))
             {
                 int j = Math.min(getInventoryStackLimit(), itemstack1.getMaxStackSize());
-                int k = Math.min(itemstack.stackSize, j - itemstack1.stackSize);
+                int k = Math.min(itemstack.getCount(), j - itemstack1.getCount());
 
                 if(k > 0)
                 {
-                    itemstack1.stackSize += k;
-                    itemstack.stackSize -= k;
+                    itemstack1.grow(k);
+                    itemstack.shrink(k);
 
-                    if(itemstack.stackSize <= 0)
+                    if(itemstack.getCount() <= 0)
                     {
                         markDirty();
                         return null;
@@ -60,7 +59,7 @@ public class InventorySimple implements IInventory
             }
         }
 
-        if(itemstack.stackSize != stack.stackSize)
+        if(itemstack.getCount() != stack.getCount())
             markDirty();
 
         return itemstack;
@@ -72,33 +71,36 @@ public class InventorySimple implements IInventory
         return slotCount;
     }
 
-    @Nullable
+    @Override
+    public boolean isEmpty()
+    {
+        return false;
+    }
+
     @Override
     public ItemStack getStackInSlot(int index)
     {
-        return index >= 0 && index < slotCount ? contents[index] : null;
+        return index >= 0 && index < slotCount ? contents.get(index) : ItemStack.EMPTY;
     }
 
-    @Nullable
     @Override
     public ItemStack decrStackSize(int index, int count)
     {
         ItemStack itemStack = ItemStackHelper.getAndSplit(contents, index, count);
 
-        if(itemStack != null)
+        if(!itemStack.isEmpty())
             markDirty();
 
         return itemStack;
     }
 
-    @Nullable
     @Override
     public ItemStack removeStackFromSlot(int index)
     {
-        if (contents[index] != null)
+        if(!contents.get(index).isEmpty())
         {
-            ItemStack itemstack = contents[index];
-            contents[index] = null;
+            ItemStack itemstack = contents.get(index);
+            contents.set(index, ItemStack.EMPTY);
             return itemstack;
         }
         else
@@ -106,12 +108,12 @@ public class InventorySimple implements IInventory
     }
 
     @Override
-    public void setInventorySlotContents(int index, @Nullable ItemStack stack)
+    public void setInventorySlotContents(int index, ItemStack stack)
     {
-        contents[index] = stack;
+        contents.set(index, stack);
 
-        if (stack != null && stack.stackSize > getInventoryStackLimit())
-            stack.stackSize = getInventoryStackLimit();
+        if(stack.getCount() > getInventoryStackLimit())
+            stack.setCount(getInventoryStackLimit());
 
         markDirty();
     }
@@ -161,8 +163,7 @@ public class InventorySimple implements IInventory
     @Override
     public void clear()
     {
-        for(int i = 0; i < contents.length; ++i)
-            contents[i] = null;
+        contents.clear();
     }
 
     @Override

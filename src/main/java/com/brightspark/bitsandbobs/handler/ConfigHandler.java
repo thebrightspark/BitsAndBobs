@@ -7,12 +7,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+@Mod.EventBusSubscriber
 public class ConfigHandler
 {
     public static class Categories
@@ -77,7 +79,7 @@ public class ConfigHandler
     }
 
     @SubscribeEvent
-    public void onConfigurationChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event)
+    public static void onConfigurationChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event)
     {
         if(event.getModID().equalsIgnoreCase(Reference.MOD_ID))
             //Resync configs

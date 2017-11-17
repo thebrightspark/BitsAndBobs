@@ -2,6 +2,7 @@ package com.brightspark.bitsandbobs.tileentity;
 
 import com.brightspark.bitsandbobs.gui.ContainerBlockTrash;
 import com.brightspark.bitsandbobs.reference.Reference;
+import com.brightspark.bitsandbobs.util.CommonUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -10,12 +11,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.IInteractionObject;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 public class TileTrash extends BABTileInventory implements ISidedInventory, IInteractionObject
 {
@@ -23,7 +23,7 @@ public class TileTrash extends BABTileInventory implements ISidedInventory, IInt
     private final String KEY_SLOT = "slot";
     private int[] allSlots = new int[] {0,1,2,3,4,5,6,7,8,9};
     protected ItemStack inputStack;
-    protected List<ItemStack> stacks = new ArrayList<ItemStack>(9);
+    protected NonNullList<ItemStack> stacks = NonNullList.withSize(9, ItemStack.EMPTY);
 
     public TileTrash() {}
 
@@ -32,18 +32,18 @@ public class TileTrash extends BABTileInventory implements ISidedInventory, IInt
         //Remove any null values
         Iterator<ItemStack> iterator = stacks.iterator();
         while(iterator.hasNext())
-            if(iterator.next() == null)
+            if(iterator.next().isEmpty())
                 iterator.remove();
         //Remove any values at indices greater than 8 (keeping 9 values)
         while(stacks.size() > 9)
-            stacks.remove(9);
+            stacks.set(9, ItemStack.EMPTY);
     }
 
     public void addItem()
     {
-        if(inputStack == null) return;
+        if(inputStack.isEmpty()) return;
         stacks.add(0, inputStack.copy());
-        inputStack = null;
+        inputStack = ItemStack.EMPTY;
         removeNulls();
     }
 
@@ -59,7 +59,7 @@ public class TileTrash extends BABTileInventory implements ISidedInventory, IInt
 
     private ItemStack getStack(int index)
     {
-        return stacks.size() > index ? stacks.get(index) : null;
+        return stacks.size() > index ? stacks.get(index) : ItemStack.EMPTY;
     }
 
     @Override
@@ -67,7 +67,7 @@ public class TileTrash extends BABTileInventory implements ISidedInventory, IInt
     {
         super.readFromNBT(tag);
 
-        inputStack = tag.hasKey("id") ? ItemStack.loadItemStackFromNBT(tag) : null;
+        inputStack = tag.hasKey("id") ? new ItemStack(tag) : ItemStack.EMPTY;
 
         stacks.clear();
         NBTTagList nbttaglist = tag.getTagList(KEY_INVENTORY, 10);
@@ -75,7 +75,7 @@ public class TileTrash extends BABTileInventory implements ISidedInventory, IInt
         {
             NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
             int slotNum = nbttagcompound.getByte(KEY_SLOT);
-            stacks.set(slotNum, ItemStack.loadItemStackFromNBT(nbttagcompound));
+            stacks.set(slotNum, new ItemStack(nbttagcompound));
         }
         removeNulls();
     }
@@ -85,13 +85,13 @@ public class TileTrash extends BABTileInventory implements ISidedInventory, IInt
     {
         super.writeToNBT(tag);
 
-        if(inputStack != null)
+        if(!inputStack.isEmpty())
             inputStack.writeToNBT(tag);
 
         NBTTagList nbttaglist = new NBTTagList();
-        for (int i = 0; i < stacks.size(); ++i)
+        for(int i = 0; i < stacks.size(); ++i)
         {
-            if (stacks.get(i) != null)
+            if(!stacks.get(i).isEmpty())
             {
                 NBTTagCompound nbttagcompound = new NBTTagCompound();
                 nbttagcompound.setByte(KEY_SLOT, (byte)i);
@@ -127,22 +127,28 @@ public class TileTrash extends BABTileInventory implements ISidedInventory, IInt
         return 10;
     }
 
+    @Override
+    public boolean isEmpty()
+    {
+        return inputStack.isEmpty() && CommonUtils.isStackListEmpty(stacks);
+    }
+
     @Nullable
     @Override
     public ItemStack getStackInSlot(int index)
     {
-        return isOutputSlot(index) ? getStack(index) : null;
+        return isOutputSlot(index) ? getStack(index) : ItemStack.EMPTY;
     }
 
     @Nullable
     @Override
     public ItemStack decrStackSize(int index, int count)
     {
-        if(!isOutputSlot(index) || stacks.get(index) == null) return null;
+        if(!isOutputSlot(index) || stacks.get(index).isEmpty()) return ItemStack.EMPTY;
         ItemStack stack = getStack(index);
         ItemStack returnStack = stack.splitStack(count);
-        if(stack.stackSize <= 0)
-            stacks.remove(index);
+        if(stack.getCount() <= 0)
+            stacks.set(index, ItemStack.EMPTY);
         else
             stacks.set(index, stack);
         return returnStack;
@@ -152,15 +158,15 @@ public class TileTrash extends BABTileInventory implements ISidedInventory, IInt
     @Override
     public ItemStack removeStackFromSlot(int index)
     {
-        if(!isOutputSlot(index) || stacks.get(index) == null) return null;
+        if(!isOutputSlot(index) || stacks.get(index).isEmpty()) return ItemStack.EMPTY;
         ItemStack stack = getStack(index - 1);
-        if(stack != null) stack = stack.copy();
-        stacks.remove(index - 1);
+        if(!stack.isEmpty()) stack = stack.copy();
+        stacks.set(index - 1, ItemStack.EMPTY);
         return stack;
     }
 
     @Override
-    public void setInventorySlotContents(int index, @Nullable ItemStack stack)
+    public void setInventorySlotContents(int index, ItemStack stack)
     {
         if(!isInputSlot(index) || !isOutputSlot(index)) return;
         stacks.set(index, stack);
@@ -182,7 +188,7 @@ public class TileTrash extends BABTileInventory implements ISidedInventory, IInt
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack)
     {
-        return isInputSlot(index) && stack != null;
+        return isInputSlot(index) && !stack.isEmpty();
     }
 
     @Override

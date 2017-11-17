@@ -1,8 +1,6 @@
 package com.brightspark.bitsandbobs.entity;
 
 import com.brightspark.bitsandbobs.util.CommonUtils;
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -23,17 +21,12 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class EntityBullet extends Entity implements IProjectile
 {
     //Copied from EntityArrow
-    private static final Predicate<Entity> BULLET_TARGETS = Predicates.and(new Predicate[] {EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE, new Predicate<Entity>()
-    {
-        public boolean apply(@Nullable Entity entity)
-        {
-            return entity.canBeCollidedWith();
-        }
-    }});
+    private static final Predicate<Entity> BULLET_TARGETS = ((Predicate<Entity>) EntitySelectors.NOT_SPECTATING::apply).and(EntitySelectors.IS_ALIVE::apply).and(Entity::canBeCollidedWith);
 
     private float damage = 4f;
     private int knockbackStrength = 1;
@@ -265,7 +258,7 @@ public class EntityBullet extends Entity implements IProjectile
     protected Entity findEntityOnPath(Vec3d start, Vec3d end)
     {
         Entity closestEntity = null;
-        List<Entity> list = world.getEntitiesInAABBexcluding(this, getEntityBoundingBox().addCoord(motionX, motionY, motionZ).expandXyz(1.0D), BULLET_TARGETS);
+        List<Entity> list = world.getEntitiesInAABBexcluding(this, getEntityBoundingBox().offset(motionX, motionY, motionZ).grow(1.0D), BULLET_TARGETS::test);
         double closestDistance = 0.0D;
 
         for (int i = 0; i < list.size(); ++i)
@@ -274,7 +267,7 @@ public class EntityBullet extends Entity implements IProjectile
 
             if (entity != shooter || ticksInAir >= 5)
             {
-                AxisAlignedBB aabb = entity.getEntityBoundingBox().expandXyz(0.3D);
+                AxisAlignedBB aabb = entity.getEntityBoundingBox().grow(0.3D);
                 RayTraceResult raytraceresult = aabb.calculateIntercept(start, end);
 
                 if (raytraceresult != null)

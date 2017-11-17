@@ -1,12 +1,10 @@
 package com.brightspark.bitsandbobs.entity;
 
-import com.brightspark.bitsandbobs.util.LogHelper;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -87,10 +85,10 @@ public class RenderFlare extends Render<EntityFlare>
         buf.pos(-0.5f, -0.4f, 0f).tex(u, v);
         */
 
-        buf.pos((double) actualX + vec[0].xCoord, (double) actualY + vec[0].yCoord, (double) actualZ + vec[0].zCoord).tex((double) uu, (double) vv).color(1f, 0f, 0, 1f).endVertex(); //.lightmap(bright1, bright2).endVertex();
-        buf.pos((double) actualX + vec[1].xCoord, (double) actualY + vec[1].yCoord, (double) actualZ + vec[1].zCoord).tex((double) uu, (double) v).color(1f, 0f, 0, 1f).endVertex(); //.lightmap(bright1, bright2).endVertex();
-        buf.pos((double) actualX + vec[2].xCoord, (double) actualY + vec[2].yCoord, (double) actualZ + vec[2].zCoord).tex((double) u, (double) v).color(1f, 0f, 0, 1f).endVertex(); //.lightmap(bright1, bright2).endVertex();
-        buf.pos((double) actualX + vec[3].xCoord, (double) actualY + vec[3].yCoord, (double) actualZ + vec[3].zCoord).tex((double) u, (double) vv).color(1f, 0f, 0, 1f).endVertex(); //.lightmap(bright1, bright2).endVertex();
+        buf.pos((double) actualX + vec[0].x, (double) actualY + vec[0].y, (double) actualZ + vec[0].z).tex((double) uu, (double) vv).color(1f, 0f, 0, 1f).endVertex(); //.lightmap(bright1, bright2).endVertex();
+        buf.pos((double) actualX + vec[1].x, (double) actualY + vec[1].y, (double) actualZ + vec[1].z).tex((double) uu, (double) v).color(1f, 0f, 0, 1f).endVertex(); //.lightmap(bright1, bright2).endVertex();
+        buf.pos((double) actualX + vec[2].x, (double) actualY + vec[2].y, (double) actualZ + vec[2].z).tex((double) u, (double) v).color(1f, 0f, 0, 1f).endVertex(); //.lightmap(bright1, bright2).endVertex();
+        buf.pos((double) actualX + vec[3].x, (double) actualY + vec[3].y, (double) actualZ + vec[3].z).tex((double) u, (double) vv).color(1f, 0f, 0, 1f).endVertex(); //.lightmap(bright1, bright2).endVertex();
 
         tes.draw();
 

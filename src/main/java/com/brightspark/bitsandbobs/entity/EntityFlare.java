@@ -1,8 +1,5 @@
 package com.brightspark.bitsandbobs.entity;
 
-import com.brightspark.bitsandbobs.particle.ParticleFlareChild;
-import com.brightspark.bitsandbobs.util.ClientUtils;
-import com.brightspark.bitsandbobs.util.LogHelper;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
@@ -34,9 +31,9 @@ public class EntityFlare extends Entity
         prevPosY = posY;
         prevPosZ = posZ;
         float velocity = 3f + ((rand.nextFloat() / 5f) - 0.025f);
-        motionX = lookVec.xCoord * velocity;
-        motionY = lookVec.yCoord * velocity;
-        motionZ = lookVec.zCoord * velocity;
+        motionX = lookVec.x * velocity;
+        motionY = lookVec.y * velocity;
+        motionZ = lookVec.z * velocity;
     }
 
     public EntityFlare(World world, Entity entity)
@@ -46,7 +43,7 @@ public class EntityFlare extends Entity
 
     public void onEntityUpdate()
     {
-        world.theProfiler.startSection("entityBaseTick");
+        world.profiler.startSection("entityBaseTick");
 
         prevPosX = posX;
         prevPosY = posY;
@@ -80,7 +77,7 @@ public class EntityFlare extends Entity
 
         if(!world.isRemote && world instanceof WorldServer)
         {
-            world.theProfiler.startSection("portal");
+            world.profiler.startSection("portal");
 
             if(inPortal)
             {
@@ -110,21 +107,21 @@ public class EntityFlare extends Entity
             }
 
             decrementTimeUntilPortal();
-            world.theProfiler.endSection();
+            world.profiler.endSection();
         }
 
         handleWaterMovement();
 
         if(posY < -64.0D)
-            kill();
+            outOfWorld();
 
         firstUpdate = false;
-        world.theProfiler.endSection();
+        world.profiler.endSection();
     }
 
     public void moveEntity(double x, double y, double z)
     {
-        world.theProfiler.startSection("move");
+        world.profiler.startSection("move");
 
         double d0 = x;
         double d1 = y;
@@ -141,7 +138,7 @@ public class EntityFlare extends Entity
             motionZ = 0.0D;
         }
 
-        List<AxisAlignedBB> list = world.getCollisionBoxes(null, getEntityBoundingBox().addCoord(x, y, z));
+        List<AxisAlignedBB> list = world.getCollisionBoxes(null, getEntityBoundingBox().offset(x, y, z));
 
         for(AxisAlignedBB axisalignedbb : list)
             y = axisalignedbb.calculateYOffset(getEntityBoundingBox(), y);
@@ -167,8 +164,8 @@ public class EntityFlare extends Entity
         if(d2 != z)
             motionZ *= -1;
 
-        world.theProfiler.endSection();
-        world.theProfiler.startSection("rest");
+        world.profiler.endSection();
+        world.profiler.startSection("rest");
         resetPositionToBB();
 
         try
@@ -183,7 +180,7 @@ public class EntityFlare extends Entity
             throw new ReportedException(crashreport);
         }
 
-        world.theProfiler.endSection();
+        world.profiler.endSection();
     }
 
     @Override

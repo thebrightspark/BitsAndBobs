@@ -1,6 +1,6 @@
 {
 	"parent": "item/handheld",
 	"textures": {
-		"layer0": "BitsAndBobs:items/lifeStick"
+		"layer0": "bitsandbobs:items/lifestick"
 	}
 }

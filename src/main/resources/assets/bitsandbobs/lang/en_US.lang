@@ -1,7 +1,7 @@
 //Items
 
 item.lifeStick.name=Life Stick
-item.liftStick.disco=Disco Stick
+item.lifeStick.disco=Disco Stick
 item.lifeStick.tooltip.1=Held hearts:
 item.lifeStick.tooltip.2.1=Right Click
 item.lifeStick.tooltip.2.2= to heal health
@@ -25,12 +25,21 @@ item.pistolClip.name=Pistol Clip
 item.minigun.name=Minigun
 item.minigunClip.name=Minigun Clip
 item.shotgun.name=Shotgun
-item.shotgunClip.name=Shotgun Clip
+item.shotgunShell.name=Shotgun Shell
 
 item.grenade.name=Grenade
+item.ammoBelt.name=Ammo Belt
+
+item.entityNoDespawn=Entity Persister
+
+item.basic.bloodPrismarine.name=Blood-Infused Prismarine Shard
+item.basic.bullet.name=Bullet
+item.basic.gunBarrel.name=Gun Barrel
+item.basic.pistolAssembly.name=Pistol Assembly
+item.basic.minigunBarrel.name=Minigun Barrel
+item.basic.minigunAssembly.name=Minigun Assembly
 
 item.debug.name=Debug Item
-item.bloodPrismarine.name=Blood-Infused Prismarine Shard
 
 //Blocks
 

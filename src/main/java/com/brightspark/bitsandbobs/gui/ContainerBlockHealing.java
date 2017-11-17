@@ -49,7 +49,7 @@ public class ContainerBlockHealing extends BABContainerInventory
         {
             IContainerListener icontainerlistener = this.listeners.get(i);
             if (this.fuel != this.inventory.getField(0))
-                icontainerlistener.sendProgressBarUpdate(this, 0, this.inventory.getField(0));
+                icontainerlistener.sendWindowProperty(this, 0, this.inventory.getField(0));
         }
 
         this.fuel = this.inventory.getField(0);

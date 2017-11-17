@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHandSide;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -79,18 +80,18 @@ public class EntityPlayerGhost extends EntityLivingBase implements IEntityAdditi
     }
 
     @Override
-    protected void kill()
+    protected void outOfWorld()
     {
         this.setDead();
     }
 
     @Override
-    public void knockBack(Entity entityIn, float strenght, double xRatio, double zRatio) {}
+    public void knockBack(Entity entityIn, float strength, double xRatio, double zRatio) {}
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount)
     {
-        if(source.equals(DamageSource.outOfWorld))
+        if(source.equals(DamageSource.OUT_OF_WORLD))
         {
             damageEntity(source, amount);
             return true;
@@ -113,14 +114,14 @@ public class EntityPlayerGhost extends EntityLivingBase implements IEntityAdditi
     @Override
     public Iterable<ItemStack> getArmorInventoryList()
     {
-        return null;
+        return NonNullList.withSize(4, ItemStack.EMPTY);
     }
 
     @Nullable
     @Override
     public ItemStack getItemStackFromSlot(EntityEquipmentSlot slotIn)
     {
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override

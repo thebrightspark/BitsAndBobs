@@ -54,21 +54,22 @@ public class ItemMinigun extends ItemBasic implements IGun
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand)
     {
-        int ammo = getAmmoAmount(itemStackIn);
+        ItemStack stack = playerIn.getHeldItem(hand);
+        int ammo = getAmmoAmount(stack);
 
         if(playerIn.isSneaking())
         {
             if(!worldIn.isRemote && ammo < getMaxAmmo())
-                ItemSimpleGun.reloadAll(playerIn, itemStackIn);
+                ItemSimpleGun.reloadAll(playerIn, stack);
         }
         else
         {
             if(!playerIn.capabilities.isCreativeMode && ammo == 0)
             {
                 //TODO: Play gun out of ammo sound
-                return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
+                return new ActionResult<>(EnumActionResult.PASS, stack);
             }
             //Start shooting
             lastShotTick = 0;
@@ -78,7 +79,7 @@ public class ItemMinigun extends ItemBasic implements IGun
                 curSpeed = maxSpeed;
             playerIn.setActiveHand(hand);
         }
-        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
+        return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
 
     /**

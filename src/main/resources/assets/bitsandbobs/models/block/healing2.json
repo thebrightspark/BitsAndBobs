@@ -1,12 +1,12 @@
 {
 	"parent": "block/cube",
 	"textures": {
-		"particle": "bitsandbobs:blocks/healing2Side",
-		"down": "bitsandbobs:blocks/healing2Bottom",
-		"up": "bitsandbobs:blocks/healing2Top",
-		"north": "bitsandbobs:blocks/healing2Side",
-		"east": "bitsandbobs:blocks/healing2Side",
-		"south": "bitsandbobs:blocks/healing2Side",
-		"west": "bitsandbobs:blocks/healing2Side"
+		"particle": "bitsandbobs:blocks/healing2side",
+		"down": "bitsandbobs:blocks/healing2bottom",
+		"up": "bitsandbobs:blocks/healing2top",
+		"north": "bitsandbobs:blocks/healing2side",
+		"east": "bitsandbobs:blocks/healing2side",
+		"south": "bitsandbobs:blocks/healing2side",
+		"west": "bitsandbobs:blocks/healing2side"
 	}
 }

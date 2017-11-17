@@ -10,7 +10,7 @@ import com.brightspark.bitsandbobs.message.MessageSetClientGhostData;
 import com.brightspark.bitsandbobs.message.MessageUpdateChatter;
 import com.brightspark.bitsandbobs.reference.Reference;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -31,9 +31,9 @@ public class BitsAndBobs
     public static final CreativeTabs BAB_TAB = new CreativeTabs(Reference.MOD_ID)
     {
         @Override
-        public Item getTabIconItem()
+        public ItemStack getTabIconItem()
         {
-            return BABItems.itemLifeStick;
+            return new ItemStack(BABItems.itemLifeStick);
         }
 
         @Override
@@ -57,9 +57,7 @@ public class BitsAndBobs
         //Initialize item, blocks and configs here
 
         ConfigHandler.init(event.getSuggestedConfigurationFile());
-        MinecraftForge.EVENT_BUS.register(new ConfigHandler());
         ConfigHandler.getHealingBlockInputs();
-        MinecraftForge.EVENT_BUS.register(new EntityEventHandler());
 
         NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MOD_ID);
         NETWORK.registerMessage(MessageSpawnGhostOnServer.Handler.class, MessageSpawnGhostOnServer.class, 0, Side.SERVER);

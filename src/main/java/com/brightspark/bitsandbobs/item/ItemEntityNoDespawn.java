@@ -21,7 +21,7 @@ public class ItemEntityNoDespawn extends ItemBasic
         if(!(target instanceof EntityLiving) || ((EntityLiving) target).isNoDespawnRequired())
             return false;
         ((EntityLiving) target).enablePersistence();
-        stack.stackSize--;
+        stack.shrink(1);
         return true;
     }
 }

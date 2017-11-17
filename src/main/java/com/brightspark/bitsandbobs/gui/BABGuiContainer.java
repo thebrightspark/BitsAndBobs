@@ -53,8 +53,8 @@ public class BABGuiContainer extends GuiContainer
 
     protected void drawText()
     {
-        fontRendererObj.drawString(inventoryName, 8, 6, textColour);
-        fontRendererObj.drawString(I18n.format("container.inventory"), 8, textPlayerInvY, textColour);
+        fontRenderer.drawString(inventoryName, 8, 6, textColour);
+        fontRenderer.drawString(I18n.format("container.inventory"), 8, textPlayerInvY, textColour);
     }
 
     protected void drawTooltips(List<String> tooltip, int mouseX, int mouseY) {}

@@ -3,10 +3,9 @@ package com.brightspark.bitsandbobs.item;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.List;
 
 public class ItemBasicMeta extends ItemBasic
 {
@@ -24,7 +23,7 @@ public class ItemBasicMeta extends ItemBasic
      */
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems)
+    public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems)
     {
         if(hasSubtypes)
             for(int i = 0; i < getSubNames().length; i++)

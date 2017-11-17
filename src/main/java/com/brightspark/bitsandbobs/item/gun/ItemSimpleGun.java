@@ -73,7 +73,7 @@ public abstract class ItemSimpleGun extends ItemCooldownBasic implements IGun
 
     private static boolean isAmmoForGun(ItemStack gun, ItemStack ammo)
     {
-        if(gun == null || ammo == null || !(gun.getItem() instanceof IGun) || !(ammo.getItem() instanceof IShootable))
+        if(!(gun.getItem() instanceof IGun) || !(ammo.getItem() instanceof IShootable))
             return false;
         return ((IGun) gun.getItem()).getAmmoItem() == ammo.getItem();
     }
@@ -83,7 +83,7 @@ public abstract class ItemSimpleGun extends ItemCooldownBasic implements IGun
      */
     public static void reloadAll(EntityPlayer player, ItemStack gunStack)
     {
-        if(gunStack == null || !(gunStack.getItem() instanceof IGun))
+        if(!(gunStack.getItem() instanceof IGun))
         {
             LogHelper.error("Trying to reload an ItemStack that is null or it's Item isn't an instance of IUseAmmo!");
             return;
@@ -94,16 +94,16 @@ public abstract class ItemSimpleGun extends ItemCooldownBasic implements IGun
         {
             ItemStack heldStack = player.getHeldItem(hand);
             int remaining = reloadWithStack(gunStack, heldStack);
-            if(heldStack == null || heldStack.stackSize == 0) player.setHeldItem(hand, null);
+            if(heldStack.getCount() == 0) player.setHeldItem(hand, ItemStack.EMPTY);
             if(remaining == 0) return;
         }
 
         //Check any ammo belts before any loose ones in inventory
-        for(int i = 0; i < player.inventory.mainInventory.length; i++)
+        for(int i = 0; i < player.inventory.mainInventory.size(); i++)
         {
             //Find ammo belts
-            ItemStack stack = player.inventory.mainInventory[i];
-            if(stack != null && stack.getItem() == BABItems.itemAmmoBelt)
+            ItemStack stack = player.inventory.mainInventory.get(i);
+            if(stack.getItem() == BABItems.itemAmmoBelt)
             {
                 //Find ammo clips within the ammo belt
                 ItemStackHandler ammoHandler = ItemAmmoBelt.getInventoryHandler(stack);
@@ -111,18 +111,18 @@ public abstract class ItemSimpleGun extends ItemCooldownBasic implements IGun
                 {
                     ItemStack ammoClip = ammoHandler.getStackInSlot(j);
                     int remaining = reloadWithStack(gunStack, ammoClip);
-                    if(ammoClip == null || ammoClip.stackSize == 0) ammoHandler.setStackInSlot(j, null);
+                    if(ammoClip.getCount() == 0) ammoHandler.setStackInSlot(j, ItemStack.EMPTY);
                     if(remaining == 0) return;
                 }
             }
         }
 
         //Check main inventory
-        for(int i = 0; i < player.inventory.mainInventory.length; i++)
+        for(int i = 0; i < player.inventory.mainInventory.size(); i++)
         {
-            ItemStack stack = player.inventory.mainInventory[i];
+            ItemStack stack = player.inventory.mainInventory.get(i);
             int remaining = reloadWithStack(gunStack, stack);
-            if(stack == null || stack.stackSize == 0) player.inventory.mainInventory[i] = null;
+            if(stack.getCount() == 0) player.inventory.mainInventory.set(i, ItemStack.EMPTY);
             if(remaining == 0) return;
         }
     }
@@ -135,12 +135,12 @@ public abstract class ItemSimpleGun extends ItemCooldownBasic implements IGun
     {
         if(!isAmmoForGun(gunStack, clipStack) || !(clipStack.getItem() instanceof IShootable)) return -1;
         boolean isClip = ((IShootable) clipStack.getItem()).isClip();
-        int ammo = isClip ? ItemBulletClip.getBulletsAmount(clipStack) : clipStack.stackSize;
+        int ammo = isClip ? ItemBulletClip.getBulletsAmount(clipStack) : clipStack.getCount();
         int remaining = reload(gunStack, ammo);
         if(isClip)
             ItemBulletClip.setBulletsAmount(clipStack, remaining);
         else
-            clipStack.stackSize = remaining;
+            clipStack.setCount(remaining);
         return ((IGun) gunStack.getItem()).getAmmoSpace(gunStack);
     }
 

@@ -76,13 +76,13 @@ public class MessageSpawnGhostOnServer implements IMessage
         @Override
         public IMessage onMessage(final MessageSpawnGhostOnServer message, final MessageContext ctx)
         {
-            IThreadListener mainThread = (WorldServer) ctx.getServerHandler().playerEntity.world;
+            IThreadListener mainThread = (WorldServer) ctx.getServerHandler().player.world;
             mainThread.addScheduledTask(new Runnable()
             {
                 @Override
                 public void run()
                 {
-                    WorldServer server = (WorldServer) ctx.getServerHandler().playerEntity.world;
+                    WorldServer server = (WorldServer) ctx.getServerHandler().player.world;
                     EntityPlayer player = server.getPlayerEntityByName(message.playerName);
                     if(player == null)
                     {
@@ -100,7 +100,7 @@ public class MessageSpawnGhostOnServer implements IMessage
 
                     //Get nearby mobs
                     BlockPos playerPos = player.getPosition();
-                    List<Entity> entities = server.getEntitiesWithinAABBExcludingEntity(player, new AxisAlignedBB(playerPos).expandXyz(20));
+                    List<Entity> entities = server.getEntitiesWithinAABBExcludingEntity(player, new AxisAlignedBB(playerPos).grow(20));
 
                     //Set nearby attacking mobs to attack the ghost
                     for(Entity e : entities)

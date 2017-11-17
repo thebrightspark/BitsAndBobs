@@ -43,12 +43,13 @@ public class ItemCooldownBasic extends ItemBasic
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand)
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand)
     {
+        ItemStack stack = player.getHeldItem(hand);
         int cooldown = NBTHelper.getInt(stack, KEY_COOLDOWN);
         if(cooldown > 0)
             //Item currently active
-            return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
+            return new ActionResult<>(EnumActionResult.PASS, stack);
 
         boolean startCooldown = doRightClickAction(stack, world, player, hand);
 
@@ -56,7 +57,7 @@ public class ItemCooldownBasic extends ItemBasic
         if(!player.isCreative() && startCooldown)
             NBTHelper.setInteger(stack, KEY_COOLDOWN, MAX_COOLDOWN);
 
-        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+        return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
 
     @Override

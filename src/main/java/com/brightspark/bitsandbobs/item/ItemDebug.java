@@ -20,11 +20,11 @@ public class ItemDebug extends ItemBasic
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand)
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand)
     {
         if(world.isRemote)
             ClientUtils.spawnTwirlEffect(world, player);
-        return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
+        return new ActionResult<>(EnumActionResult.FAIL, player.getHeldItem(hand));
     }
 
     /**
