@@ -20,6 +20,7 @@ import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -253,34 +254,72 @@ public class EntityBullet extends Entity implements IProjectile
         doBlockCollisions();
     }
 
+    private List<Entity> getEntitiesInArea(AxisAlignedBB area, List<Entity> entities)
+    {
+        List<Entity> entitiesInArea = new ArrayList<>();
+        entities.forEach((entity) ->
+        {
+            if(entity.getEntityBoundingBox().intersects(area) && BULLET_TARGETS.test(entity))
+                entitiesInArea.add(entity);
+        });
+        return entitiesInArea;
+    }
+
     //Copied from EntityArrow
     @Nullable
     protected Entity findEntityOnPath(Vec3d start, Vec3d end)
     {
         Entity closestEntity = null;
-        List<Entity> list = world.getEntitiesInAABBexcluding(this, getEntityBoundingBox().offset(motionX, motionY, motionZ).grow(1.0D), BULLET_TARGETS::test);
         double closestDistance = 0.0D;
 
-        for (int i = 0; i < list.size(); ++i)
+        AxisAlignedBB startAABB = getEntityBoundingBox();
+        AxisAlignedBB endAABB = startAABB.offset(motionX, motionY, motionZ);
+        Vec3d startCenter = getEntityBoundingBox().getCenter();
+        Vec3d endCenter = endAABB.getCenter();
+
+        AxisAlignedBB area = new AxisAlignedBB(startCenter, endCenter).grow(startAABB.getAverageEdgeLength());
+        List<Entity> possibleEntities = world.getEntitiesInAABBexcluding(this, area, BULLET_TARGETS::test);
+        if(possibleEntities.isEmpty())
+            return null;
+
+        //This will scan down the path of the projectile to its next position for any entities
+
+        //We'll use this AABB to scan down the path
+        AxisAlignedBB movingAABB = new AxisAlignedBB(startAABB.minX, startAABB.minY, startAABB.minZ, startAABB.maxX, startAABB.maxY, startAABB.maxZ);
+        //The direct distance between the centers of the start and end AABBs
+        double distanceToEnd = startCenter.distanceTo(endCenter);
+        //The direct distance we want to move the scanning AABB each iteration
+        double stepMove = startAABB.getAverageEdgeLength() * 1.5;
+        //How many iterations (minus the end position) it will take to scan the path
+        int steps = (int) Math.floor(distanceToEnd / stepMove);
+        //The vector we'll add to the scanning AABB every iteration
+        Vec3d stepVec = steps == 0 ?
+                new Vec3d(motionX, motionY, motionZ) :
+                endCenter.subtract(startCenter).scale(1D / (double) steps);
+
+        for(int i = 0; i < steps; i++)
         {
-            Entity entity = list.get(i);
-
-            if (entity != shooter || ticksInAir >= 5)
+            if(i > 0) movingAABB = movingAABB.offset(stepVec);
+            List<Entity> list = getEntitiesInArea(movingAABB, possibleEntities);
+            for(Entity entity : list)
             {
-                AxisAlignedBB aabb = entity.getEntityBoundingBox().grow(0.3D);
-                RayTraceResult raytraceresult = aabb.calculateIntercept(start, end);
-
-                if (raytraceresult != null)
+                if(entity != shooter)
                 {
-                    double distance = start.squareDistanceTo(raytraceresult.hitVec);
-
-                    if (distance < closestDistance || closestDistance == 0.0D)
+                    AxisAlignedBB aabb = entity.getEntityBoundingBox();
+                    RayTraceResult raytraceresult = aabb.calculateIntercept(start, end);
+                    if(raytraceresult != null)
                     {
-                        closestEntity = entity;
-                        closestDistance = distance;
+                        double distance = start.squareDistanceTo(raytraceresult.hitVec);
+                        if(distance < closestDistance || closestDistance == 0.0D)
+                        {
+                            closestEntity = entity;
+                            closestDistance = distance;
+                        }
                     }
                 }
             }
+            if(closestEntity != null)
+                break;
         }
 
         return closestEntity;
