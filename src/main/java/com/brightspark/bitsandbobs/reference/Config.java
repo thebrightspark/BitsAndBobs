@@ -32,4 +32,10 @@ public class Config
             "Who did that!? (%s)",
             "What does this button do? (%s)"
     };
+
+    /** The radius for the area of effect for the interdiction torches */
+    public static int interdictionTorchRadius = 4;
+
+    /** The strength for the interdiction torches */
+    public static float interdictionTorchStrength = 2F;
 }

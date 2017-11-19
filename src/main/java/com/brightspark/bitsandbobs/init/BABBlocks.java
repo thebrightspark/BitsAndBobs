@@ -3,6 +3,7 @@ package com.brightspark.bitsandbobs.init;
 import com.brightspark.bitsandbobs.block.*;
 import com.brightspark.bitsandbobs.tileentity.TileChatter;
 import com.brightspark.bitsandbobs.tileentity.TileHealing;
+import com.brightspark.bitsandbobs.tileentity.TileInterdictionTorch;
 import com.brightspark.bitsandbobs.tileentity.TileTrash;
 import com.brightspark.bitsandbobs.util.ClientUtils;
 import net.minecraft.block.Block;
@@ -18,7 +19,8 @@ public class BABBlocks
     //Contains all of the registered blocks
     public static List<Block> BLOCKS = new ArrayList<Block>();
 
-    public static Block blockHealing, blockHealing2, blockStellarEgg, blockTrash, blockLightning, blockChatter;
+    public static Block blockHealing, blockHealing2, blockStellarEgg, blockTrash, blockLightning, blockChatter,
+            blockTorchItem, blockTorchLiving, blockTorchPlayer, blockTorchOther, blockTorchAll;
 
     public static void regBlock(Block block)
     {
@@ -40,6 +42,9 @@ public class BABBlocks
         regBlock(blockTrash = new BlockTrash());
         regBlock(blockLightning = new BlockLightning());
         //regBlock(blockChatter = new BlockChatter());
+        regBlock(blockTorchItem = new BlockInterdictionTorchItem());
+        regBlock(blockTorchLiving = new BlockInterdictionTorchLiving());
+        regBlock(blockTorchPlayer = new BlockInterdictionTorchPlayer());
     }
 
     public static void regModels()
@@ -53,5 +58,6 @@ public class BABBlocks
         regTE(TileHealing.class, blockHealing);
         regTE(TileTrash.class, blockTrash);
         //regTE(TileChatter.class, blockChatter);
+        regTE(TileInterdictionTorch.class, blockTorchItem);
     }
 }

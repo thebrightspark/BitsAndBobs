@@ -20,7 +20,6 @@ public class BlockHealing extends BABBlockContainer
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta)
     {
-        LogHelper.info("Creating TileHealing");
         TileHealing te = new TileHealing();
         te.setFuelMax(fuelMax);
         te.setTicksBetweenChecks(ticks);
