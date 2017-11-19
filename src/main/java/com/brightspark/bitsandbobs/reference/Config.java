@@ -37,5 +37,5 @@ public class Config
     public static int interdictionTorchRadius = 4;
 
     /** The strength for the interdiction torches */
-    public static float interdictionTorchStrength = 2F;
+    public static float interdictionTorchStrength = 0.5F;
 }

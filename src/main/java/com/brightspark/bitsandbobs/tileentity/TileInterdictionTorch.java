@@ -17,6 +17,7 @@ public class TileInterdictionTorch extends BABTileEntity implements ITickable
     private Class<? extends Entity> entityToAffect;
     private Predicate<Entity> entityFilter;
     private AxisAlignedBB area;
+    private Vec3d centerPos;
 
     public TileInterdictionTorch(Class<? extends Entity> entityToAffect)
     {
@@ -36,6 +37,7 @@ public class TileInterdictionTorch extends BABTileEntity implements ITickable
     {
         super.onLoad();
         area = new AxisAlignedBB(pos).grow(Config.interdictionTorchRadius);
+        centerPos = new Vec3d(pos).addVector(0.5D, 0.5D, 0.5D);
     }
 
     public void setPlacer(EntityPlayer player)
@@ -45,11 +47,7 @@ public class TileInterdictionTorch extends BABTileEntity implements ITickable
 
     private Vec3d getNormalDirVec(Entity entity)
     {
-        Vec3d entityPos = entity.getPositionVector();
-        Vec3d blockPos = new Vec3d(pos);
-        Vec3d difference = entityPos.subtract(blockPos);
-        Vec3d normal = difference.normalize();
-        return normal.scale(Config.interdictionTorchStrength);
+        return entity.getPositionVector().subtract(centerPos).normalize().scale(Config.interdictionTorchStrength);
     }
 
     @Override
@@ -61,6 +59,7 @@ public class TileInterdictionTorch extends BABTileEntity implements ITickable
             List<Entity> entities = world.getEntitiesWithinAABB(entityToAffect, area, entityFilter::test);
             for(Entity entity : entities)
             {
+                if(entity.equals(placer)) continue;
                 Vec3d motion = getNormalDirVec(entity);
                 entity.motionX += motion.x;
                 entity.motionY += motion.y;
