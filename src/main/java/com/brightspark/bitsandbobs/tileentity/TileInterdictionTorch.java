@@ -29,7 +29,8 @@ public class TileInterdictionTorch extends BABTileEntity implements ITickable
         this.entityToAffect = entityToAffect;
         entityFilter = ((Predicate<Entity>) EntitySelectors.NOT_SPECTATING::apply)
                 .and(EntitySelectors.IS_ALIVE::apply)
-                .and((entity) -> entityToExclude == null || !entityToExclude.isInstance(entity));
+                .and((entity) -> entityToExclude == null || !entityToExclude.isInstance(entity))
+                .and((entity) -> !(entity instanceof EntityPlayer) || !((EntityPlayer) entity).capabilities.isCreativeMode);
     }
 
     @Override

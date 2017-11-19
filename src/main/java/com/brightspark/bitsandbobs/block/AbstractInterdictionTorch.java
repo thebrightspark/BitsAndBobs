@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
 
 public abstract class AbstractInterdictionTorch extends BABBlockContainer
 {
-    private static final AxisAlignedBB STANDING_AABB = new AxisAlignedBB(0.4D, 0D, 0.4D, 0.6D, 0.6D, 0.6D);
+    private static final AxisAlignedBB STANDING_AABB = new AxisAlignedBB(0.375D, 0D, 0.375D, 0.625D, 0.875D, 0.625D);
 
     public AbstractInterdictionTorch(String name)
     {

@@ -1,10 +1,7 @@
 package com.brightspark.bitsandbobs.init;
 
 import com.brightspark.bitsandbobs.block.*;
-import com.brightspark.bitsandbobs.tileentity.TileChatter;
-import com.brightspark.bitsandbobs.tileentity.TileHealing;
-import com.brightspark.bitsandbobs.tileentity.TileInterdictionTorch;
-import com.brightspark.bitsandbobs.tileentity.TileTrash;
+import com.brightspark.bitsandbobs.tileentity.*;
 import com.brightspark.bitsandbobs.util.ClientUtils;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
@@ -58,6 +55,8 @@ public class BABBlocks
         regTE(TileHealing.class, blockHealing);
         regTE(TileTrash.class, blockTrash);
         //regTE(TileChatter.class, blockChatter);
-        regTE(TileInterdictionTorch.class, blockTorchItem);
+        regTE(TileInterdictionTorchItem.class, blockTorchItem);
+        regTE(TileInterdictionTorchLiving.class, blockTorchLiving);
+        regTE(TileInterdictionTorchPlayer.class, blockTorchPlayer);
     }
 }

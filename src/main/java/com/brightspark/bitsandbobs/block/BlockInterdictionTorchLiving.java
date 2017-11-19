@@ -1,8 +1,6 @@
 package com.brightspark.bitsandbobs.block;
 
-import com.brightspark.bitsandbobs.tileentity.TileInterdictionTorch;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.player.EntityPlayer;
+import com.brightspark.bitsandbobs.tileentity.TileInterdictionTorchLiving;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
@@ -12,13 +10,13 @@ public class BlockInterdictionTorchLiving extends AbstractInterdictionTorch
 {
     public BlockInterdictionTorchLiving()
     {
-        super("interdictionTorchLiving");
+        super("interdiction_torch_living");
     }
 
     @Nullable
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta)
     {
-        return new TileInterdictionTorch(EntityLiving.class, EntityPlayer.class);
+        return new TileInterdictionTorchLiving();
     }
 }

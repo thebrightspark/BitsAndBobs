@@ -1,6 +1,6 @@
 package com.brightspark.bitsandbobs.block;
 
-import com.brightspark.bitsandbobs.tileentity.TileInterdictionTorch;
+import com.brightspark.bitsandbobs.tileentity.TileInterdictionTorchPlayer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,14 +15,14 @@ public class BlockInterdictionTorchPlayer extends AbstractInterdictionTorch
 {
     public BlockInterdictionTorchPlayer()
     {
-        super("interdictionTorchPlayer");
+        super("interdiction_torch_player");
     }
 
     @Nullable
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta)
     {
-        return new TileInterdictionTorch(EntityPlayer.class);
+        return new TileInterdictionTorchPlayer();
     }
 
     @Override
@@ -31,8 +31,8 @@ public class BlockInterdictionTorchPlayer extends AbstractInterdictionTorch
         if(placer instanceof EntityPlayer)
         {
             TileEntity te = world.getTileEntity(pos);
-            if(te != null && te instanceof TileInterdictionTorch)
-                ((TileInterdictionTorch) te).setPlacer((EntityPlayer) placer);
+            if(te != null && te instanceof TileInterdictionTorchPlayer)
+                ((TileInterdictionTorchPlayer) te).setPlacer((EntityPlayer) placer);
         }
         super.onBlockPlacedBy(world, pos, state, placer, stack);
     }
