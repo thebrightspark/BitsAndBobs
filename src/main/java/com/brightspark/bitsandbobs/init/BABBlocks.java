@@ -17,7 +17,7 @@ public class BABBlocks
     public static List<Block> BLOCKS = new ArrayList<Block>();
 
     public static Block blockHealing, blockHealing2, blockStellarEgg, blockTrash, blockLightning, blockChatter,
-            blockTorchItem, blockTorchLiving, blockTorchPlayer, blockTorchOther, blockTorchAll;
+            blockTorchItem, blockTorchLiving, blockTorchPlayer, blockTorchAll;
 
     public static void regBlock(Block block)
     {
@@ -42,6 +42,7 @@ public class BABBlocks
         regBlock(blockTorchItem = new BlockInterdictionTorchItem());
         regBlock(blockTorchLiving = new BlockInterdictionTorchLiving());
         regBlock(blockTorchPlayer = new BlockInterdictionTorchPlayer());
+        regBlock(blockTorchAll = new BlockInterdictionTorchAll());
     }
 
     public static void regModels()
@@ -58,5 +59,6 @@ public class BABBlocks
         regTE(TileInterdictionTorchItem.class, blockTorchItem);
         regTE(TileInterdictionTorchLiving.class, blockTorchLiving);
         regTE(TileInterdictionTorchPlayer.class, blockTorchPlayer);
+        regTE(TileInterdictionTorchAll.class, blockTorchAll);
     }
 }

@@ -1,4 +1,4 @@
-//Items
+#Items
 
 item.lifeStick.name=Life Stick
 item.lifeStick.disco=Disco Stick
@@ -41,7 +41,7 @@ item.basic.minigunAssembly.name=Minigun Assembly
 
 item.debug.name=Debug Item
 
-//Blocks
+#Blocks
 
 tile.stellarEgg.name=Stellar Egg
 tile.healing.name=Healing Block
@@ -49,22 +49,26 @@ tile.healing2.name=Fast Healing Block
 tile.trash.name=Trash Block
 tile.lightning.name=Lightning Block
 tile.fakeBeacon.name=Aesthetic Beacon
+tile.interdiction_torch_item.name=Interdiction Torch (Item)
+tile.interdiction_torch_living.name=Interdiction Torch (Mob)
+tile.interdiction_torch_player.name=Interdiction Torch (Player)
+tile.interdiction_torch_all.name=Interdiction Torch (All)
 
 tile.fluid.xpjuice.name=XP Juice
 
-//Fluids
+#Fluids
 
 fluid.xpjuice=XP Juice
 
-//Entiies
+#Entiies
 
 entity.BitsAndBobs.PlayerGhost.name=Player Ghost
 
-//Generic
+#Generic
 
 tooltip.shift=Hold SHIFT for extra info
 
-//Misc
+#Misc
 
 bitsandbobs.config.title=Bits And Bobs Config
 bitsandbobs.config.titleGeneral=General Config

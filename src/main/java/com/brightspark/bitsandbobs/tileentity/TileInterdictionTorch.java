@@ -72,7 +72,7 @@ public class TileInterdictionTorch extends BABTileEntity implements ITickable
                 entity.motionZ += motion.z;
             }
         }
-        else if(world.rand.nextFloat() > 0.5F)
+        else if(world.rand.nextFloat() >= 0.9F)
             ClientUtils.spawnEffect(new ParticleInterdiction(world, pos, particleColour, area));
     }
 }

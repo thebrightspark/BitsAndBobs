@@ -41,7 +41,7 @@ public class BABRecipes
         GameRegistry.addRecipe(new ItemStack(BABItems.itemFlareGun), "iib", " oi", 'i', Items.IRON_INGOT, 'o', new ItemStack(Items.DYE, 1, 14), 'b', Blocks.STONE_BUTTON);
 
         //Bullet
-        GameRegistry.addShapelessRecipe(new ItemStack(BABItems.itemFlareAmmo, 4), Items.IRON_INGOT, Items.GUNPOWDER);
+        GameRegistry.addShapelessRecipe(BABItems.getBasicItem(EItemBasic.BULLET, 8), Items.IRON_INGOT, Items.GUNPOWDER);
         //Empty Bullet Clip
         ItemStack emptyClip = new ItemStack(BABItems.itemPistolClip);
         ItemBulletClip.setBulletsAmount(emptyClip, 0);
@@ -66,6 +66,9 @@ public class BABRecipes
                 GameRegistry.addRecipe(new ShapelessNBTRecipe(outputClip, (Object[]) bullets));
             }
         }
+        //Minigun Clip
+        GameRegistry.addRecipe(new ItemStack(BABItems.itemMinigunClip), "ccc", "ccc", "ccc", 'c', BABItems.itemPistolClip);
+        //TODO: Shotgun Shell recipe
 
         //Pistol
         GameRegistry.addRecipe(BABItems.getBasicItem(EItemBasic.GUN_BARREL), "iii", "iii", 'i', Items.IRON_INGOT);
@@ -75,6 +78,14 @@ public class BABRecipes
         GameRegistry.addRecipe(BABItems.getBasicItem(EItemBasic.MINIGUN_BARREL), "ii", "ii", 'i', BABItems.getBasicItem(EItemBasic.GUN_BARREL));
         GameRegistry.addRecipe(BABItems.getBasicItem(EItemBasic.MINIGUN_ASSEMBLY), "iii", "dni", "ii ", 'i', Items.IRON_INGOT, 'd', Items.DIAMOND, 'n', Items.NETHER_STAR);
         GameRegistry.addRecipe(new ItemStack(BABItems.itemMinigun), "ab", 'b', BABItems.getBasicItem(EItemBasic.MINIGUN_BARREL), 'a', BABItems.getBasicItem(EItemBasic.MINIGUN_ASSEMBLY));
+        //TODO: Shotgun recipe
+        //GameRegistry.addRecipe(new ItemStack(BABItems.itemShotgun), "");
+
+        //Interdiction Torches
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BABBlocks.blockTorchItem), " e ", "vmv", " b ", 'e', Items.ENDER_EYE, 'm', Items.MAGMA_CREAM, 'b', Items.BLAZE_ROD, 'v', "chest"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BABBlocks.blockTorchLiving), " e ", "vmv", " b ", 'e', Items.ENDER_EYE, 'm', Items.MAGMA_CREAM, 'b', Items.BLAZE_ROD, 'v', "egg"));
+        GameRegistry.addRecipe(new ItemStack(BABBlocks.blockTorchPlayer), " e ", "vmv", " b ", 'e', Items.ENDER_EYE, 'm', Items.MAGMA_CREAM, 'b', Items.BLAZE_ROD, 'v', Blocks.SKULL);
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BABBlocks.blockTorchAll), " e ", "vmv", " b ", 'e', "netherStar", 'm', Items.MAGMA_CREAM, 'b', Items.BLAZE_ROD, 'v', Items.ENDER_EYE));
     }
 
     /**

@@ -1,0 +1,6 @@
+{
+    "parent": "block/cross",
+    "textures": {
+        "cross": "bitsandbobs:blocks/interdiction_torch_all"
+    }
+}

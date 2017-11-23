@@ -55,6 +55,13 @@ public class ConfigHandler
         return prop.getInt();
     }
 
+    private static double getDouble(String key, double defaultValue, double min, double max, String comment)
+    {
+        Property prop = config.get(Categories.GENERAL, key, defaultValue, comment).setMinValue(min).setMaxValue(max);
+        setPropDefaults(prop, key);
+        return prop.getDouble();
+    }
+
     private static void setPropDefaults(Property prop, String key)
     {
         prop.setLanguageKey(Reference.MOD_ID + ".config." + key);
@@ -68,6 +75,9 @@ public class ConfigHandler
         Config.healingBlockValidFuel = getStringList("healingBlockValidFuel", Config.healingBlockValidFuel, "A list of all item IDs which are valid to be used as fuel in the healing block. Put all metadata for an id in the next entry in the array with individual metadata separated by commas (See default for example).");
         Config.mirageOrbCooldown = getInt("mirageOrbCooldown", Config.mirageOrbCooldown, 0, Integer.MAX_VALUE, "The Mirage Orb's cooldown in seconds");
         Config.mirageOrbGhostLife = getInt("mirageOrbGhostLife", Config.mirageOrbGhostLife, 1, Integer.MAX_VALUE, "The Mirage Orb ghost's life in seconds");
+
+        Config.interdictionTorchRadius = getInt("interdictionTorchRadius", Config.interdictionTorchRadius, 1, 32, "The radius for the area of effect for the interdiction torches");
+        Config.interdictionTorchStrength = getDouble("interdictionTorchStrength", Config.interdictionTorchStrength, 0.01D, 5D, "The strength for the interdiction torches");
 
         Config.commandKillName = getString("commandKillName", Config.commandKillName, "Name for the kill command - configurable in-case of conflicting command names");
         Config.commandKillMessages = getStringList("commandKillMessages", Config.commandKillMessages, "Kill command result messages. Use one '%s' somewhere in the message to insert the kill count there.");
