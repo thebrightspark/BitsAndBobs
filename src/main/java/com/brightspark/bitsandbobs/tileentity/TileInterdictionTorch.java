@@ -1,6 +1,8 @@
 package com.brightspark.bitsandbobs.tileentity;
 
+import com.brightspark.bitsandbobs.particle.ParticleInterdiction;
 import com.brightspark.bitsandbobs.reference.Config;
+import com.brightspark.bitsandbobs.util.ClientUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EntitySelectors;
@@ -8,6 +10,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 
+import java.awt.*;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -18,14 +21,16 @@ public class TileInterdictionTorch extends BABTileEntity implements ITickable
     private Predicate<Entity> entityFilter;
     private AxisAlignedBB area;
     private Vec3d centerPos;
+    private Color particleColour;
 
-    public TileInterdictionTorch(Class<? extends Entity> entityToAffect)
+    public TileInterdictionTorch(Color particleColour, Class<? extends Entity> entityToAffect)
     {
-        this(entityToAffect, null);
+        this(particleColour, entityToAffect, null);
     }
 
-    public TileInterdictionTorch(Class<? extends Entity> entityToAffect, Class<? extends Entity> entityToExclude)
+    public TileInterdictionTorch(Color particleColour, Class<? extends Entity> entityToAffect, Class<? extends Entity> entityToExclude)
     {
+        this.particleColour = particleColour;
         this.entityToAffect = entityToAffect;
         entityFilter = ((Predicate<Entity>) EntitySelectors.NOT_SPECTATING::apply)
                 .and(EntitySelectors.IS_ALIVE::apply)
@@ -67,12 +72,7 @@ public class TileInterdictionTorch extends BABTileEntity implements ITickable
                 entity.motionZ += motion.z;
             }
         }
-        else
-        {
-            if(world.rand.nextFloat() > 0.4F)
-            {
-                //TODO: Particles!
-            }
-        }
+        else if(world.rand.nextFloat() > 0.5F)
+            ClientUtils.spawnEffect(new ParticleInterdiction(world, pos, particleColour, area));
     }
 }
