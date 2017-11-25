@@ -18,13 +18,14 @@ import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.IThrowableEntity;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class EntityBullet extends Entity implements IProjectile
+public class EntityBullet extends Entity implements IProjectile, IThrowableEntity
 {
     //Copied from EntityArrow
     private static final Predicate<Entity> BULLET_TARGETS = ((Predicate<Entity>) EntitySelectors.NOT_SPECTATING::apply).and(EntitySelectors.IS_ALIVE::apply).and(Entity::canBeCollidedWith);
@@ -54,7 +55,7 @@ public class EntityBullet extends Entity implements IProjectile
     public EntityBullet(World world, EntityLivingBase shooter, float inaccuracy)
     {
         this(world, shooter.posX, shooter.posY + shooter.getEyeHeight() - 0.1d, shooter.posZ);
-        this.shooter = shooter;
+        setThrower(shooter);
         setHeadingFromShooter(shooter, 5f, inaccuracy);
     }
 
@@ -328,5 +329,17 @@ public class EntityBullet extends Entity implements IProjectile
         }
 
         return closestEntity;
+    }
+
+    @Override
+    public Entity getThrower()
+    {
+        return shooter;
+    }
+
+    @Override
+    public void setThrower(Entity entity)
+    {
+        this.shooter = entity;
     }
 }
