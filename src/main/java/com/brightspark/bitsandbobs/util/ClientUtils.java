@@ -2,6 +2,7 @@ package com.brightspark.bitsandbobs.util;
 
 import com.brightspark.bitsandbobs.item.ItemBasicMeta;
 import com.brightspark.bitsandbobs.particle.ParticleFlare;
+import com.brightspark.bitsandbobs.particle.ParticleInterdiction;
 import com.brightspark.bitsandbobs.particle.ParticleTrailing;
 import com.brightspark.bitsandbobs.reference.Reference;
 import net.minecraft.block.Block;
@@ -15,9 +16,13 @@ import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fluids.IFluidBlock;
+
+import java.awt.*;
 
 public class ClientUtils
 {
@@ -96,5 +101,13 @@ public class ClientUtils
     public static void spawnFlareEffect(World world, Entity entity)
     {
         spawnEffect(new ParticleFlare(world, entity.posX - 0.5d, entity.posY + 1d, entity.posZ - 0.5d, entity.getLookVec()));
+    }
+
+    /**
+     * Spawns an interdiction torch effect which will have a random direction and motion
+     */
+    public static void spawnInterdictionEffect(World world, BlockPos pos, Color colour, AxisAlignedBB area)
+    {
+        spawnEffect(new ParticleInterdiction(world, pos, colour, area));
     }
 }

@@ -265,6 +265,11 @@ public class EntityBullet extends Entity implements IProjectile
         return entitiesInArea;
     }
 
+    public Vec3d getCenter(AxisAlignedBB box)
+    {
+        return new Vec3d(box.minX + (box.maxX - box.minX) * 0.5D, box.minY + (box.maxY - box.minY) * 0.5D, box.minZ + (box.maxZ - box.minZ) * 0.5D);
+    }
+
     //Copied from EntityArrow
     @Nullable
     protected Entity findEntityOnPath(Vec3d start, Vec3d end)
@@ -274,8 +279,8 @@ public class EntityBullet extends Entity implements IProjectile
 
         AxisAlignedBB startAABB = getEntityBoundingBox();
         AxisAlignedBB endAABB = startAABB.offset(motionX, motionY, motionZ);
-        Vec3d startCenter = getEntityBoundingBox().getCenter();
-        Vec3d endCenter = endAABB.getCenter();
+        Vec3d startCenter = getCenter(getEntityBoundingBox());
+        Vec3d endCenter = getCenter(endAABB);
 
         AxisAlignedBB area = new AxisAlignedBB(startCenter, endCenter).grow(startAABB.getAverageEdgeLength());
         List<Entity> possibleEntities = world.getEntitiesInAABBexcluding(this, area, BULLET_TARGETS::test);

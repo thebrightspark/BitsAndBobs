@@ -1,6 +1,5 @@
 package com.brightspark.bitsandbobs.tileentity;
 
-import com.brightspark.bitsandbobs.particle.ParticleInterdiction;
 import com.brightspark.bitsandbobs.reference.Config;
 import com.brightspark.bitsandbobs.util.ClientUtils;
 import net.minecraft.entity.Entity;
@@ -73,6 +72,6 @@ public class TileInterdictionTorch extends BABTileEntity implements ITickable
             }
         }
         else if(world.rand.nextFloat() >= 0.9F)
-            ClientUtils.spawnEffect(new ParticleInterdiction(world, pos, particleColour, area));
+            ClientUtils.spawnInterdictionEffect(world, pos, particleColour, area);
     }
 }
